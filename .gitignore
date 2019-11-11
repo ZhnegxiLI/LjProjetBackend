@@ -4,3 +4,5 @@
 /LjWebApplication/Logs
 /LjData/obj
 /.vs
+/LjData/bin
+/LjDataAccess/bin
