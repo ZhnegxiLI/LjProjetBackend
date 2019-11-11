@@ -1,0 +1,7 @@
+C:\Users\Martin\source\repos\LjWebApplication\LjData\bin\Debug\netcoreapp2.2\LjData.deps.json
+C:\Users\Martin\source\repos\LjWebApplication\LjData\bin\Debug\netcoreapp2.2\LjData.dll
+C:\Users\Martin\source\repos\LjWebApplication\LjData\bin\Debug\netcoreapp2.2\LjData.pdb
+C:\Users\Martin\source\repos\LjWebApplication\LjData\obj\Debug\netcoreapp2.2\LjData.AssemblyInfoInputs.cache
+C:\Users\Martin\source\repos\LjWebApplication\LjData\obj\Debug\netcoreapp2.2\LjData.AssemblyInfo.cs
+C:\Users\Martin\source\repos\LjWebApplication\LjData\obj\Debug\netcoreapp2.2\LjData.dll
+C:\Users\Martin\source\repos\LjWebApplication\LjData\obj\Debug\netcoreapp2.2\LjData.pdb
