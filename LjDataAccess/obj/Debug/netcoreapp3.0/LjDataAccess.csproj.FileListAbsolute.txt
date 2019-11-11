@@ -1,8 +1,0 @@
-C:\Users\Martin\source\repos\LjWebApplication\LjDataAccess\bin\Debug\netcoreapp3.0\LjDataAccess.deps.json
-C:\Users\Martin\source\repos\LjWebApplication\LjDataAccess\bin\Debug\netcoreapp3.0\LjDataAccess.dll
-C:\Users\Martin\source\repos\LjWebApplication\LjDataAccess\bin\Debug\netcoreapp3.0\LjDataAccess.pdb
-C:\Users\Martin\source\repos\LjWebApplication\LjDataAccess\obj\Debug\netcoreapp3.0\LjDataAccess.csprojAssemblyReference.cache
-C:\Users\Martin\source\repos\LjWebApplication\LjDataAccess\obj\Debug\netcoreapp3.0\LjDataAccess.AssemblyInfoInputs.cache
-C:\Users\Martin\source\repos\LjWebApplication\LjDataAccess\obj\Debug\netcoreapp3.0\LjDataAccess.AssemblyInfo.cs
-C:\Users\Martin\source\repos\LjWebApplication\LjDataAccess\obj\Debug\netcoreapp3.0\LjDataAccess.dll
-C:\Users\Martin\source\repos\LjWebApplication\LjDataAccess\obj\Debug\netcoreapp3.0\LjDataAccess.pdb
