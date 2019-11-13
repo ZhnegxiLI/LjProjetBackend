@@ -26,7 +26,7 @@ namespace LjWebApplication.Controllers
             _accountRepositoryRepository = accountRepositoryRepository;
         }
         // GET api/values
-        [Authorize]
+       // [Authorize]
         [HttpGet]
         public JsonResult Get()
         {

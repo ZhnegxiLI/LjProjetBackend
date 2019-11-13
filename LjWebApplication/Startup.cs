@@ -70,6 +70,7 @@ namespace LjWebApplication
             services.AddSingleton<IStudentRepository, MockStudentRepository>(); // Only for test
             services.AddScoped<IAuthRepository, AuthRepositoryRepository>();
             services.AddScoped<IAccountRepository, AccountRepositoryRepository>();
+            services.AddScoped<ICargoRepository, CargoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
