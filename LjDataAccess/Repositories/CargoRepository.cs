@@ -27,8 +27,9 @@ namespace LjDataAccess.Repositories
             return await result.ToListAsync();
         }
 
-        public List<dynamic> GetCargosListByNameAsync(string keyword)
+        public List<dynamic> GetCargosListByNameAsync(string keyword,int limit)
         {
+ 
             var result = from it in context.Itemmst
                 where EF.Functions.Like(it.DescIt, "%" + keyword + "%")
                 select new
@@ -38,7 +39,7 @@ namespace LjDataAccess.Repositories
                     unit = it.UnitIt,
                     typePrice = it.PunitIt
                 };
-            return result.ToList<dynamic>();
+            return limit!=-1? result.Take(limit).ToList<dynamic>(): result.ToList<dynamic>();
         }
     }
 }

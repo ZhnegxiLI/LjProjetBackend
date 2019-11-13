@@ -20,9 +20,9 @@ namespace LjWebApplication.Controllers
         }
         // GET: api/Cargo
         [HttpGet]
-        public JsonResult Get(string keyword)
+        public JsonResult Get(string keyword,int limit)
         {
-           var result =  _cargoRepository.GetCargosListByNameAsync(keyword);
+           var result =  _cargoRepository.GetCargosListByNameAsync(keyword,limit);
            return Json(result);
         }
 
