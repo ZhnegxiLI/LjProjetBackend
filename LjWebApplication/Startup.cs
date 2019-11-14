@@ -25,7 +25,7 @@ namespace LjWebApplication
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        //readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         public readonly IConfiguration Configuration;
         public Startup(IConfiguration configuration)
@@ -70,7 +70,7 @@ namespace LjWebApplication
 
             services.AddCors(options =>
             {
-                options.AddPolicy(MyAllowSpecificOrigins,
+                options.AddPolicy("_myAllowSpecificOrigins",
                     builder =>
                     {
                         builder.WithOrigins("ionic://localhost","http://localhost", "http://localhost:8100")
@@ -95,7 +95,7 @@ namespace LjWebApplication
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors("_myAllowSpecificOrigins");
 
             app.UseStatusCodePages();
 

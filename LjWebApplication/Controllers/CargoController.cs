@@ -11,7 +11,7 @@ namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors]
+    //[EnableCors]
     public class CargoController : Controller
     {
         private readonly ICargoRepository _cargoRepository;

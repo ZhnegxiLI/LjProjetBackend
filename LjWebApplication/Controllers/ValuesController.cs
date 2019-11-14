@@ -16,7 +16,7 @@ namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors]
+   // [EnableCors]
     public class ValuesController : Controller
     {
         private readonly IStudentRepository _studentRepository;
