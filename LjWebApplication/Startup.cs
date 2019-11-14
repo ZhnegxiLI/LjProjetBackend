@@ -85,6 +85,7 @@ namespace LjWebApplication
             services.AddScoped<IAccountRepository, AccountRepositoryRepository>();
             services.AddScoped<ICargoRepository, CargoRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<ISalesOrderRepository, SalesOrderRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,7 +100,7 @@ namespace LjWebApplication
 
             app.UseStatusCodePages();
 
-            app.UseAuthentication();
+          //  app.UseAuthentication();
             app.UseMvc();
         }
     }

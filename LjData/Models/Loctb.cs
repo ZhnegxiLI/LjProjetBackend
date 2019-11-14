@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace LjData.Models
 {
     public partial class Loctb
     {
+        [JsonProperty(PropertyName = "id")]
         public string LocnLtb { get; set; }
+        [JsonProperty(PropertyName = "name")]
         public string DescLtb { get; set; }
+        [JsonProperty(PropertyName = "shortLabel")]
         public string SdesLtb { get; set; }
+        [JsonProperty(PropertyName = "type")]
         public string TypeLtb { get; set; }
         public string PybmLtb { get; set; }
         public bool? BivnLtb { get; set; }

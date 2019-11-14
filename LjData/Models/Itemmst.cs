@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace LjData.Models
 {
     public partial class Itemmst
     {
+        [JsonProperty(PropertyName = "FooBar")]
         public string PartIt { get; set; }
         public string BarcIt { get; set; }
         public string PybmIt { get; set; }

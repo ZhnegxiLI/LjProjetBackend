@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace LjData.Models
 {
     public partial class Pomst
     {
+        [JsonProperty(propertyName:"commandeId")]
         public string PonbPo { get; set; }
+        // TODO
         public string TypePo { get; set; }
+        [JsonProperty(propertyName: "commandeCreateDate")]
         public DateTime? DatePo { get; set; }
         public DateTime? CrtdPo { get; set; }
         public bool? CmplPo { get; set; }
+        [JsonProperty(propertyName:"receiver")]
         public string TnamPo { get; set; }
         public string TcpyPo { get; set; }
         public string TfaxPo { get; set; }
@@ -32,6 +37,7 @@ namespace LjData.Models
         public string RvmkPo { get; set; }
         public string CachetPo { get; set; }
         public string PlntPo { get; set; }
+        [JsonProperty(propertyName:"department")]
         public string CstmPo { get; set; }
         public string CreaPo { get; set; }
         public DateTime? ClsdPo { get; set; }
@@ -43,6 +49,7 @@ namespace LjData.Models
         public string CwyjPo { get; set; }
         public string JlPo { get; set; }
         public string JlyjPo { get; set; }
+        [JsonProperty(propertyName:"status")]
         public string StatPo { get; set; }
     }
 }
