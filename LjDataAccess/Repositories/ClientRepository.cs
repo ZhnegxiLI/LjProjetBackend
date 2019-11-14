@@ -7,7 +7,7 @@ using LjDataAccess.Interfaces;
 
 namespace LjDataAccess.Repositories
 {
-    class ClientRepository : IClientRepository
+    public class ClientRepository : IClientRepository
     {
         private readonly ERPDATA2Context context;
 

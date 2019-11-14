@@ -25,6 +25,8 @@ namespace LjWebApplication
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public readonly IConfiguration Configuration;
         public Startup(IConfiguration configuration)
         {
@@ -66,11 +68,23 @@ namespace LjWebApplication
                 };
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("ionic://localhost","http://localhost", "http://localhost:8100")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod(); ;
+                    });
+            });
+
             // Dependencies injection
             services.AddSingleton<IStudentRepository, MockStudentRepository>(); // Only for test
             services.AddScoped<IAuthRepository, AuthRepositoryRepository>();
             services.AddScoped<IAccountRepository, AccountRepositoryRepository>();
             services.AddScoped<ICargoRepository, CargoRepository>();
+            services.AddScoped<IClientRepository, ClientRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,6 +94,8 @@ namespace LjWebApplication
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseStatusCodePages();
 

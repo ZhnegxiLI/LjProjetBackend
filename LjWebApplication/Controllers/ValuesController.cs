@@ -8,6 +8,7 @@ using LjDataAccess.Repositories;
 using LjWebApplication.Auth;
 using LjWebApplication.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -15,6 +16,7 @@ namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class ValuesController : Controller
     {
         private readonly IStudentRepository _studentRepository;
