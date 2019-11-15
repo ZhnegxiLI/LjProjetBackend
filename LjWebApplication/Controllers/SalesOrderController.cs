@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LjDataAccess.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace LjWebApplication.Controllers
 {
@@ -29,6 +30,7 @@ namespace LjWebApplication.Controllers
         public JsonResult GetSalesOrderByOrderId(string orderId)
         {
             var result = _saleOrderRepository.GetSalesOrderListByOrderId(orderId);
+            //string output = JsonConvert.SerializeObject(result);
             return Json(result);
         }
 

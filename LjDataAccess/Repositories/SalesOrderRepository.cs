@@ -28,10 +28,19 @@ namespace LjDataAccess.Repositories
             return result;
         }
 
-        public List<Pomst> GetSalesOrderListByOrderId(string orderId)
+        public dynamic GetSalesOrderListByOrderId(string orderId)
         {
             var result = context.Pomst.Where(p => p.PonbPo == orderId).ToList();
-            return result;
+            var newResult = from r in result
+                select (new
+                {
+                    salesOrderDetail=r,
+                    cargo= (from po in context.Popart
+                            where po.PonbPp== r.PonbPo
+                            select po).ToList()
+                });
+           var r2 = newResult.FirstOrDefault();
+            return r2;
         }
     }
 }

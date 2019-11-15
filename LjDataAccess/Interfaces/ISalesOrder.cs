@@ -9,6 +9,6 @@ namespace LjDataAccess.Interfaces
     {
         List<dynamic> GetSalesOrderByUserId(string userId);
 
-        List<Pomst> GetSalesOrderListByOrderId(string orderId);
+        dynamic GetSalesOrderListByOrderId(string orderId);
     }
 }
