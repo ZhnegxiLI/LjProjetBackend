@@ -15,14 +15,14 @@ namespace LjDataAccess.Repositories
         {
             this.context = context;
         }
-        public List<dynamic> GetClieListByVagueNameSearch(string name)
+        public List<dynamic> GetClieListByVagueNameSearch(string name, int limit)
         {
             var result = context.Loctb.Where(p=>p.DescLtb.Contains(name)).Select(p => new
             {
                 id =  p.LocnLtb,
                 name = p.DescLtb
             });
-            return result.ToList<dynamic>() ;
+            return limit != -1 ? result.Take(limit).ToList<dynamic>() : result.ToList<dynamic>();
         }
 
         public List<Loctb> GetClientsListByType(string type)

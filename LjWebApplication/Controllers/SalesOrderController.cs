@@ -6,7 +6,6 @@ using LjDataAccess.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-
 namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]/{action}/{id?}")]
@@ -32,6 +31,14 @@ namespace LjWebApplication.Controllers
             var result = _saleOrderRepository.GetSalesOrderListByOrderId(orderId);
             //string output = JsonConvert.SerializeObject(result);
             return Json(result);
+        }
+   
+
+        public JsonResult InsertSalesOrderByOrderId(dynamic orderInfo)
+        {
+
+            var status = _saleOrderRepository.InsertSalesOrderByOrderId(orderInfo);
+            return Json(status);
         }
 
 

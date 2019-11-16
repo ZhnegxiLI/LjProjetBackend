@@ -21,9 +21,9 @@ namespace LjWebApplication.Controllers
         }
         // GET: api/Client
         [HttpGet]
-        public JsonResult Get(string name)
+        public JsonResult Get(string name, int limit)
         {
-            var result = _clientRepository.GetClieListByVagueNameSearch(name);
+            var result = _clientRepository.GetClieListByVagueNameSearch(name, limit);
             return Json(result);
         }
 

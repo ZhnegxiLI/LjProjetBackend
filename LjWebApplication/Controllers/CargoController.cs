@@ -24,6 +24,7 @@ namespace LjWebApplication.Controllers
         [HttpGet]
         public JsonResult Get(string keyword,int limit)
         {
+     
            var result =  _cargoRepository.GetCargosListByNameAsync(keyword,limit);
            return Json(result);
         }

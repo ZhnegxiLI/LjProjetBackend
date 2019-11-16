@@ -20,7 +20,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "ancmHostingModel": "InProcess",
+      "ancmHostingModel": "OutOfProcess",
       "applicationUrl": "http://localhost:5000"
     },
     "IIS Express": {
