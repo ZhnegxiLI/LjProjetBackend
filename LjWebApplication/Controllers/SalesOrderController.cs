@@ -35,12 +35,12 @@ namespace LjWebApplication.Controllers
         }
    
 
-        public JsonResult InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
-        {
+        //public JsonResult InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
+        //{
 
-            //dynamic status = _saleOrderRepository.InsertSalesOrderByOrderId(orderInfo, products);
-            return Json(orderInfo);
-        }
+        //    //dynamic status = _saleOrderRepository.InsertSalesOrderByOrderId(orderInfo, products);
+        //    return Json(orderInfo);
+        //}
 
 
     }

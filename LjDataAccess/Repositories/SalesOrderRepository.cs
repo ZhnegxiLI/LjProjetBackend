@@ -10,8 +10,12 @@ namespace LjDataAccess.Repositories
     public class SalesOrderRepository : ISalesOrderRepository
     {
         private readonly ERPDATA2Context context;
-
-        public string GetStatus(int code)
+        /// <summary>
+        /// Get the status label by code id
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        private string GetStatus(int code)
         {
             switch (code)
             {
@@ -31,14 +35,19 @@ namespace LjDataAccess.Repositories
                     return "已作废";
                 case 7:
                     return "冲单";
+                default:
+                    return "未定义状态";
             }
-            throw new Exception("状态骂错误");
         }
         public SalesOrderRepository(ERPDATA2Context context)
         {
             this.context = context;
         }
-
+        /// <summary>
+        /// Get sales order list by user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public List<dynamic> GetSalesOrderByUserId(string userId)
         {
             var result = context.Pomst.Where(p => p.CreaPo == userId).Select(p => new
@@ -46,12 +55,16 @@ namespace LjDataAccess.Repositories
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
                 receiver = p.TnamPo,
-                status = p.StatPo,
+                status = GetStatus(Int32.Parse(p.StatPo)),
                 type = p.TypePo
             }).ToList<dynamic>();
             return result;
         }
-
+        /// <summary>
+        ///  Get the detail information about a order and its cargo detail
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public dynamic GetSalesOrderListByOrderId(string orderId)
         {
             var result = context.Pomst.Where(p => p.PonbPo == orderId).ToList();
@@ -67,13 +80,15 @@ namespace LjDataAccess.Repositories
             return r2;
         }
 
+
         public dynamic InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
         {
-            
+
             string orderId = orderInfo.title;
 
             var oldOrder = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
-            try {
+            try
+            {
                 if (oldOrder != null)
                 {
                     oldOrder.DatePo = orderInfo.date;
@@ -164,20 +179,23 @@ namespace LjDataAccess.Repositories
                     }
                     context.SaveChanges();
                 }
-            }catch(Exception e)
-            {
-                
-                return new{
-                            status = 1,
-                            msg = e.Message
-                          };
             }
-            
+            catch (Exception e)
+            {
 
-            return new{   
-                        status = 0,
-                        msg = "OK"
-                       };
+                return new
+                {
+                    status = 1,
+                    msg = e.Message
+                };
+            }
+
+
+            return new
+            {
+                status = 0,
+                msg = "OK"
+            };
         }
     }
 
