@@ -12,6 +12,7 @@ using LjWebApplication.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +26,7 @@ namespace LjWebApplication
 {
     public class Startup
     {
-        //readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         public readonly IConfiguration Configuration;
         public Startup(IConfiguration configuration)
@@ -70,10 +71,10 @@ namespace LjWebApplication
 
             services.AddCors(options =>
             {
-                options.AddPolicy("_myAllowSpecificOrigins",
+                options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("ionic://localhost","http://localhost", "http://localhost:8100")
+                        builder.WithOrigins("http://localhost:8080", "ionic://localhost","http://localhost", "http://localhost:8100", "http://176.176.221.117", "capacitor://localhost")
                             .AllowAnyHeader()
                             .AllowAnyMethod(); ;
                     });
@@ -91,12 +92,21 @@ namespace LjWebApplication
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // Proxy
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("_myAllowSpecificOrigins");
+            if (!env.IsDevelopment())
+            {
+                app.UseForwardedHeaders(new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                });
+            }
+ 
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseStatusCodePages();
 

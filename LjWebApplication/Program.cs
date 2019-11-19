@@ -19,7 +19,10 @@ namespace LjWebApplication
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args).UseSerilog()
+            WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseSerilog()
                 .UseStartup<Startup>();
     }
 }

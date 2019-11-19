@@ -20,14 +20,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "ancmHostingModel": "InProcess",
+      "ancmHostingModel": "OutOfProcess",
       "applicationUrl": "http://localhost:5000"
     },
     "IIS Express": {
-      "commandName": "IISExpress",
+      "commandName": "IIS",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "nativeDebugging": true
     }
   }
 }
