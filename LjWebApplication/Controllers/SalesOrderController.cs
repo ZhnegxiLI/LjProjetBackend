@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LjDataAccess.Interfaces;
+using LjData.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -34,11 +35,11 @@ namespace LjWebApplication.Controllers
         }
    
 
-        public JsonResult InsertSalesOrderByOrderId(dynamic orderInfo)
+        public JsonResult InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
         {
 
-            var status = _saleOrderRepository.InsertSalesOrderByOrderId(orderInfo);
-            return Json(status);
+            //dynamic status = _saleOrderRepository.InsertSalesOrderByOrderId(orderInfo, products);
+            return Json(orderInfo);
         }
 
 

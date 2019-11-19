@@ -21,35 +21,11 @@ namespace LjWebApplication.Controllers
         }
         // GET: api/Client
         [HttpGet]
-        public JsonResult Get(string name, int limit)
+        public JsonResult Get(int limit)
         {
-            var result = _clientRepository.GetClieListByVagueNameSearch(name, limit);
+            var result = _clientRepository.GetClieListByVagueNameSearch(limit);
             return Json(result);
         }
 
-        // GET: api/Client/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Client
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT: api/Client/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

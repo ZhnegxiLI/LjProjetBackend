@@ -11,6 +11,29 @@ namespace LjDataAccess.Repositories
     {
         private readonly ERPDATA2Context context;
 
+        public string GetStatus(int code)
+        {
+            switch (code)
+            {
+                case 0:
+                    return "未提交";
+                case 1:
+                    return "提交到财务";
+                case 2:
+                    return "财务不同意";
+                case 3:
+                    return "财务同意";
+                case 4:
+                    return "经理不同意";
+                case 5:
+                    return "经理同意";
+                case 6:
+                    return "已作废";
+                case 7:
+                    return "冲单";
+            }
+            throw new Exception("状态骂错误");
+        }
         public SalesOrderRepository(ERPDATA2Context context)
         {
             this.context = context;
@@ -44,102 +67,117 @@ namespace LjDataAccess.Repositories
             return r2;
         }
 
-        public void InsertSalesOrderByOrderId(dynamic orderInfo)
+        public dynamic InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
         {
-            var order = orderInfo.salesOrderDetail;
-            string orderId = orderInfo.PonbPo;
-            var products = orderInfo.cargo;
+            
+            string orderId = orderInfo.title;
 
             var oldOrder = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
-            if (oldOrder != null)
-            {
-                oldOrder.DatePo = order.date;
-                oldOrder.TnamPo = order.receiver;
-                oldOrder.TcpyPo = order.departmentLabel;
-                oldOrder.TfaxPo = order.receiverFax;
-                oldOrder.TtelPo = order.receiverTelephoneNumber;
-                oldOrder.FnamPo = order.sender;
-                oldOrder.FtelPo = order.senderTelephoneNumber;
-                oldOrder.FfaxPo = order.senderFax;
-                oldOrder.Rmk1Po = order.Remark1;
-                oldOrder.RvmkPo = order.remarkfeedback;
-                oldOrder.CstmPo = order.departmentId;
-                oldOrder.CreaPo = order.commandCreator;
-                oldOrder.FqryjPo = order.messageForAuditor;
-                oldOrder.StatPo = order.status;
-
-                var state = context.Pomst.Update(oldOrder).State;
-
-                foreach (var product in products)
+            try {
+                if (oldOrder != null)
                 {
-                    string cargoId = product.cargoId;
-                    var productOld = context.Popart.Where(p => p.PartPp == cargoId).FirstOrDefault();
+                    oldOrder.DatePo = orderInfo.date;
+                    oldOrder.TnamPo = orderInfo.receiver;
+                    oldOrder.TcpyPo = orderInfo.dept;
+                    oldOrder.TfaxPo = orderInfo.faxReceiver;
+                    oldOrder.TtelPo = orderInfo.telReceiver;
+                    oldOrder.FnamPo = orderInfo.sender;
+                    oldOrder.FtelPo = orderInfo.telSender;
+                    oldOrder.FfaxPo = orderInfo.faxSender;
+                    oldOrder.Rmk1Po = orderInfo.descript;
+                    oldOrder.RvmkPo = orderInfo.remarkfeedback;
+                    oldOrder.CstmPo = orderInfo.deptId;
+                    oldOrder.CreaPo = orderInfo.userId;
+                    oldOrder.FqryjPo = orderInfo.messageForAuditor;
+                    oldOrder.StatPo = orderInfo.statusCode.ToString();
 
-                    productOld.DescPp = product.cargoName;
-                    productOld.TqtyPp = product.cargoQuantity;
-                    productOld.UnitPp = product.cargoUnit;
-                    productOld.PricPp = product.cargoUnitPrice;
-                    productOld.SchdPp = product.scheduleCargoDate;
+                    context.Pomst.Update(oldOrder);
 
-                    context.Popart.Update(productOld);
-                }
-
-            }
-            else
-            {
-                Pomst newOrder = new Pomst
-                {
-                    DatePo = order.commandeCreateDate,
-                    TnamPo = order.receiver,
-                    TcpyPo = order.departmentLabel,
-                    TfaxPo = order.receiverFax,
-                    TtelPo = order.receiverTelephoneNumber,
-                    FnamPo = order.sender,
-                    FtelPo = order.senderTelephoneNumber,
-                    FfaxPo = order.senderFax,
-                    Rmk1Po = order.Remark1,
-                    RvmkPo = order.remarkfeedback,
-                    CstmPo = order.departmentId,
-                    CreaPo = order.commandCreator,
-                    FqryjPo = order.messageForAuditor,
-                    StatPo = order.status,
-                    TypePo = "",
-                    LedtPo = "",
-                    MrmkPo = "",
-                    CachetPo = "",
-                    PlntPo = "",
-                    SpyjPo = "",
-                    FqrPo = "",
-                    CwPo = "",
-                    CwyjPo = "",
-                    JlPo = "",
-                    JlyjPo = "",
-                    Rmk2Po = "",
-                    Rmk3Po = "",
-                    Rmk4Po = "",
-                    Rmk5Po = "",
-                    Rmk6Po = "",
-                    Rmk7Po = ""
-                };
-
-                context.Pomst.Add(orderInfo);
-
-                foreach (var product in products)
-                {
-                    Popart newCargo = new Popart
+                    foreach (var product in products)
                     {
-                        DescPp = product.cargoName,
-                        TqtyPp = product.cargoQuantity,
-                        UnitPp = product.cargoUnit,
-                        PricPp = product.cargoUnitPrice,
-                        SchdPp = product.scheduleCargoDate
+                        string cargoId = product.idProduct;
+                        var productOld = context.Popart.Where(p => p.PartPp == cargoId).FirstOrDefault();
+
+                        productOld.DescPp = product.nameProduct;
+                        productOld.TqtyPp = product.numberProduct;
+                        productOld.UnitPp = product.unitProduct;
+                        productOld.PricPp = product.priceProduct;
+                        productOld.SchdPp = product.datePayProduct;
+
+                        context.Popart.Update(productOld);
+                    }
+
+                }
+                else
+                {
+                    Pomst newOrder = new Pomst
+                    {
+                        PonbPo = orderInfo.title,
+                        DatePo = orderInfo.date,
+                        TnamPo = orderInfo.receiver,
+                        TcpyPo = orderInfo.dept,
+                        TfaxPo = orderInfo.faxReceiver,
+                        TtelPo = orderInfo.telReceiver,
+                        FnamPo = orderInfo.sender,
+                        FtelPo = orderInfo.telSender,
+                        FfaxPo = orderInfo.faxSender,
+                        Rmk1Po = orderInfo.descript,
+                        RvmkPo = orderInfo.remarkfeedback,
+                        CstmPo = orderInfo.deptId,
+                        CreaPo = orderInfo.userId,
+                        FqryjPo = orderInfo.messageForAuditor,
+                        StatPo = orderInfo.statusCode.ToString(),
+                        TypePo = "",
+                        LedtPo = "",
+                        MrmkPo = "",
+                        CachetPo = "",
+                        PlntPo = "",
+                        SpyjPo = "",
+                        FqrPo = "",
+                        CwPo = "",
+                        CwyjPo = "",
+                        JlPo = "",
+                        JlyjPo = "",
+                        Rmk2Po = "",
+                        Rmk3Po = "",
+                        Rmk4Po = "",
+                        Rmk5Po = "",
+                        Rmk6Po = "",
+                        Rmk7Po = ""
                     };
 
-                    context.Popart.Add(newCargo);
+                    context.Pomst.Add(newOrder);
 
+                    foreach (var product in products)
+                    {
+                        Popart newCargo = new Popart
+                        {
+                            DescPp = product.nameProduct,
+                            TqtyPp = product.numberProduct,
+                            UnitPp = product.unitProduct,
+                            PricPp = product.priceProduct,
+                            SchdPp = product.datePayProduct
+                        };
+
+                        context.Popart.Add(newCargo);
+
+                    }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
+            }catch(Exception e)
+            {
+                
+                return new{
+                            status = 1,
+                            msg = e.Message
+                          };
             }
+            
+
+            return new{   
+                        status = 0,
+                        msg = "OK"
+                       };
         }
     }
 

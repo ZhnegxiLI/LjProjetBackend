@@ -15,9 +15,9 @@ namespace LjDataAccess.Repositories
         {
             this.context = context;
         }
-        public List<dynamic> GetClieListByVagueNameSearch(string name, int limit)
+        public List<dynamic> GetClieListByVagueNameSearch(int limit)
         {
-            var result = context.Loctb.Where(p=>p.DescLtb.Contains(name)).Select(p => new
+            var result = context.Loctb.Select(p => new
             {
                 id =  p.LocnLtb,
                 name = p.DescLtb
