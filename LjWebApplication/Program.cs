@@ -16,6 +16,7 @@ namespace LjWebApplication
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
+
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
@@ -24,5 +25,9 @@ namespace LjWebApplication
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseSerilog()
                 .UseStartup<Startup>();
+
+        
     }
+
+    
 }

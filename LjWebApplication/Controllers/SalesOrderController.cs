@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LjDataAccess.Interfaces;
+using LjData.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-
 namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]/{action}/{id?}")]
@@ -32,6 +32,14 @@ namespace LjWebApplication.Controllers
             var result = _saleOrderRepository.GetSalesOrderListByOrderId(orderId);
             //string output = JsonConvert.SerializeObject(result);
             return Json(result);
+        }
+   
+
+        public JsonResult InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
+        {
+
+            //dynamic status = _saleOrderRepository.InsertSalesOrderByOrderId(orderInfo, products);
+            return Json(orderInfo);
         }
 
 

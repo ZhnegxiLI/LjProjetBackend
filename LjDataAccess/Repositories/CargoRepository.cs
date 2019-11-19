@@ -27,11 +27,10 @@ namespace LjDataAccess.Repositories
             return await result.ToListAsync();
         }
 
-        public List<dynamic> GetCargosListByNameAsync(string keyword,int limit)
+        public List<dynamic> GetCargosListByNameAsync(int limit)
         {
- 
             var result = from it in context.Itemmst
-                where EF.Functions.Like(it.DescIt, "%" + keyword + "%")
+               // where EF.Functions.Like(it.DescIt, "%" + keyword + "%")
                 select new
                 {
                     id = it.PartIt,

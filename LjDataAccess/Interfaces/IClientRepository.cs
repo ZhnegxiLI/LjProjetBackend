@@ -9,6 +9,6 @@ namespace LjDataAccess.Interfaces
     {
         List<Loctb> GetClientsListByType(string type);
 
-        List<dynamic> GetClieListByVagueNameSearch(string name);
+        List<dynamic> GetClieListByVagueNameSearch(int limit);
     }
 }

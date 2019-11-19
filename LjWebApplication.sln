@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LjWebApplication", "LjWebApplication\LjWebApplication.csproj", "{7C5084D6-84C7-4C00-9A79-9ADCD116D9A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LjData", "LjData\LjData.csproj", "{B0406803-82EE-4AF4-ACDC-21C27C87EF60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LjData", "LjData\LjData.csproj", "{B0406803-82EE-4AF4-ACDC-21C27C87EF60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LjDataAccess", "LjDataAccess\LjDataAccess.csproj", "{A0EA38F1-FCD1-4A68-85B0-32927077F63F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LjDataAccess", "LjDataAccess\LjDataAccess.csproj", "{A0EA38F1-FCD1-4A68-85B0-32927077F63F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
