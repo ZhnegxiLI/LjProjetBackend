@@ -11,6 +11,6 @@ namespace LjDataAccess.Interfaces
 
         dynamic GetSalesOrderListByOrderId(string orderId);
 
-        dynamic InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products);
+        int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products);
     }
 }

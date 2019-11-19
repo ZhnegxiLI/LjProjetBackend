@@ -67,9 +67,8 @@ namespace LjDataAccess.Repositories
             return r2;
         }
 
-        public dynamic InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
+        public int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
         {
-            
             string orderId = orderInfo.title;
 
             var oldOrder = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
@@ -162,22 +161,18 @@ namespace LjDataAccess.Repositories
                         context.Popart.Add(newCargo);
 
                     }
-                    context.SaveChanges();
+                    
                 }
-            }catch(Exception e)
+                context.SaveChanges();
+            }
+            catch(Exception e)
             {
-                
-                return new{
-                            status = 1,
-                            msg = e.Message
-                          };
+
+                return 1;
             }
             
 
-            return new{   
-                        status = 0,
-                        msg = "OK"
-                       };
+            return 0;
         }
     }
 

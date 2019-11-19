@@ -7,6 +7,9 @@ using LjData.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.IO;
+using System.Text;
+
 namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]/{action}/{id?}")]
@@ -33,13 +36,23 @@ namespace LjWebApplication.Controllers
             //string output = JsonConvert.SerializeObject(result);
             return Json(result);
         }
-   
 
-        public JsonResult InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
+        [HttpPost]
+        public JsonResult InsertSalesOrderByOrderId()
         {
-
-            //dynamic status = _saleOrderRepository.InsertSalesOrderByOrderId(orderInfo, products);
-            return Json(orderInfo);
+            var result = string.Empty;
+            using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
+            {
+                result = reader.ReadToEnd();
+            }
+            InsertOrderParam resultJson = JsonConvert.DeserializeObject<InsertOrderParam>(result);
+            int status = _saleOrderRepository.InsertSalesOrderByOrderId(resultJson.orderInfo, resultJson.products);
+            var ret = new
+            {
+                status = status,
+                message = "OK"
+            };
+            return Json(ret);
         }
 
 
