@@ -49,12 +49,10 @@ namespace LjWebApplication.Controllers
             int status = _saleOrderRepository.InsertSalesOrderByOrderId(resultJson.orderInfo, resultJson.products);
             var ret = new
             {
-                status = status,
+                status,
                 message = "OK"
             };
             return Json(ret);
         }
-
-
     }
 }

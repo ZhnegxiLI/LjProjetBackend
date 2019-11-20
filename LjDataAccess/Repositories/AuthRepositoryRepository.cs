@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Web.Http.ModelBinding;
+//using System.Web.Http.ModelBinding;
 using LjData.Models.ViewModel;
 using LjDataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -36,9 +36,10 @@ namespace LjDataAccess.Repositories
         }
 
     
-        private async System.Threading.Tasks.Task<bool> IsValidUserAndPasswordCombinationAsync(string username, string password)
+        private async System.Threading.Tasks.Task<bool> IsValidUserAndPasswordCombinationAsync(string userId, string password)
         {
-            var user = await context.User.Where(p => p.Name == username && p.Password == password).FirstOrDefaultAsync();
+            var e = encode(password);
+            var user = await context.User.Where(p => p.Id == userId && p.Password == encode(password)).FirstOrDefaultAsync();
             return user!=null;
         }
 
@@ -65,6 +66,23 @@ namespace LjDataAccess.Repositories
                 new JwtPayload("issuer", "audience", claims, null, DateTime.Now.AddMinutes(5)));
             //JwtPayload(string issuer, string audience, IEnumerable<Claim> claims, DateTime? notBefore, DateTime? expires);
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        // Encode password function
+         private string encode(string arg)
+        {
+            string res = "";
+            string codage = "C3D4E5";
+            int codeLen = codage.Length;
+            int m = 0;
+            for (int i = 0; i < arg.Length; i++, m++)
+            {
+                if (m >= codeLen) m = 0;
+                res += (char)(arg[i] + codage[m]);
+            }
+
+            res = res + "cSdT";
+            return res;
         }
 
     }

@@ -10,8 +10,12 @@ namespace LjDataAccess.Repositories
     public class SalesOrderRepository : ISalesOrderRepository
     {
         private readonly ERPDATA2Context context;
-
-        public string GetStatus(int code)
+        /// <summary>
+        /// Get the status label by code id
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        private string GetStatus(int code)
         {
             switch (code)
             {
@@ -31,14 +35,19 @@ namespace LjDataAccess.Repositories
                     return "已作废";
                 case 7:
                     return "冲单";
+                default:
+                    return "未定义状态";
             }
-            throw new Exception("状态骂错误");
         }
         public SalesOrderRepository(ERPDATA2Context context)
         {
             this.context = context;
         }
-
+        /// <summary>
+        /// Get sales order list by user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public List<dynamic> GetSalesOrderByUserId(string userId)
         {
             var result = context.Pomst.Where(p => p.CreaPo == userId).Select(p => new
@@ -46,12 +55,16 @@ namespace LjDataAccess.Repositories
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
                 receiver = p.TnamPo,
-                status = p.StatPo,
+                status = GetStatus(Int32.Parse(p.StatPo)),
                 type = p.TypePo
             }).ToList<dynamic>();
             return result;
         }
-
+        /// <summary>
+        ///  Get the detail information about a order and its cargo detail
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public dynamic GetSalesOrderListByOrderId(string orderId)
         {
             var result = context.Pomst.Where(p => p.PonbPo == orderId).ToList();
@@ -67,12 +80,20 @@ namespace LjDataAccess.Repositories
             return r2;
         }
 
+        /// <summary>
+        ///  Insert or Update the sals order
+        /// </summary>
+        /// <param name="orderInfo"></param>
+        /// /// <param name="products"></param>
+        /// <returns></returns>
         public int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
         {
+
             string orderId = orderInfo.title;
 
             var oldOrder = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
-            try {
+            try
+            {
                 if (oldOrder != null)
                 {
                     oldOrder.DatePo = orderInfo.date;
@@ -92,26 +113,14 @@ namespace LjDataAccess.Repositories
 
                     context.Pomst.Update(oldOrder);
 
-                    foreach (var product in products)
-                    {
-                        string cargoId = product.idProduct;
-                        var productOld = context.Popart.Where(p => p.PartPp == cargoId).FirstOrDefault();
-
-                        productOld.DescPp = product.nameProduct;
-                        productOld.TqtyPp = product.numberProduct;
-                        productOld.UnitPp = product.unitProduct;
-                        productOld.PricPp = product.priceProduct;
-                        productOld.SchdPp = product.datePayProduct;
-
-                        context.Popart.Update(productOld);
-                    }
+                    
 
                 }
                 else
                 {
                     Pomst newOrder = new Pomst
                     {
-                        PonbPo = orderInfo.title,
+                        PonbPo = "My-Order",
                         DatePo = orderInfo.date,
                         TnamPo = orderInfo.receiver,
                         TcpyPo = orderInfo.dept,
@@ -146,11 +155,30 @@ namespace LjDataAccess.Repositories
                     };
 
                     context.Pomst.Add(newOrder);
+                    
+                }
 
-                    foreach (var product in products)
+                foreach (var product in products)
+                {
+                    string cargoId = product.idProduct;
+                    var productOld = context.Popart.Where(p => (p.PonbPp == orderId && p.OrdrPp == product.salesOrderCommandOrder)).FirstOrDefault();
+
+                    if (productOld != null)
+                    {
+                        productOld.DescPp = product.nameProduct;
+                        productOld.TqtyPp = product.numberProduct;
+                        productOld.UnitPp = product.unitProduct;
+                        productOld.PricPp = product.priceProduct;
+                        productOld.SchdPp = product.datePayProduct;
+
+                        context.Popart.Update(productOld);
+                    }
+                    else
                     {
                         Popart newCargo = new Popart
                         {
+                            PonbPp = orderId,
+                            OrdrPp = product.salesOrderCommandOrder,
                             DescPp = product.nameProduct,
                             TqtyPp = product.numberProduct,
                             UnitPp = product.unitProduct,
@@ -159,9 +187,7 @@ namespace LjDataAccess.Repositories
                         };
 
                         context.Popart.Add(newCargo);
-
                     }
-                    
                 }
                 context.SaveChanges();
             }
@@ -170,7 +196,6 @@ namespace LjDataAccess.Repositories
 
                 return 1;
             }
-            
 
             return 0;
         }

@@ -16,5 +16,6 @@ namespace LjData.Models
         public string nameOffical { get; set; }
         public string hadPaidProduct { get; set; }
         public string descriptProduct { get; set; }
+        public string salesOrderCommandOrder { get; set; }
     }
 }
