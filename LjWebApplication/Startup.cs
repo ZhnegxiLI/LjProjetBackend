@@ -8,6 +8,7 @@ using LjData.Models;
 using LjDataAccess;
 using LjDataAccess.Interfaces;
 using LjDataAccess.Repositories;
+using LjWebApplication.Middleware;
 using LjWebApplication.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -105,10 +106,11 @@ namespace LjWebApplication
                     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                 });
             }
- 
+            app.UseErrorHandling();
+
             app.UseCors(MyAllowSpecificOrigins);
 
-            app.UseStatusCodePages();
+          //  app.UseStatusCodePages();
 
           //  app.UseAuthentication();
             app.UseMvc();
