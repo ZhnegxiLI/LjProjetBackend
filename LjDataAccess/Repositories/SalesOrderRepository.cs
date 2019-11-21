@@ -71,7 +71,7 @@ namespace LjDataAccess.Repositories
             var newResult = from r in result
                             select (new
                             {
-                                salesOrderDetail = r,
+                                salesOrderDetail = r, ///TODO ; 没有回传statusCode
                                 cargo = (from po in context.Popart
                                          where po.PonbPp == r.PonbPo
                                          select po).ToList()
@@ -113,14 +113,21 @@ namespace LjDataAccess.Repositories
 
                     context.Pomst.Update(oldOrder);
 
-                    
+                    var productOld = context.Popart.Where(p => p.PonbPp == orderId);
+
+                    foreach (Popart p in productOld)
+                    {
+                        context.Popart.Remove(p);
+                    }
 
                 }
                 else
                 {
+
+                    orderId = "LJ-" + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");
                     Pomst newOrder = new Pomst
                     {
-                        PonbPo = "My-Order",
+                        PonbPo = orderId,
                         DatePo = orderInfo.date,
                         TnamPo = orderInfo.receiver,
                         TcpyPo = orderInfo.dept,
@@ -157,35 +164,22 @@ namespace LjDataAccess.Repositories
                     context.Pomst.Add(newOrder);
                     
                 }
-
+                int index = 1;
                 foreach (var product in products)
                 {
-                    string cargoId = product.idProduct;
-                    var productOld = context.Popart.Where(p => (p.PonbPp == orderId && p.OrdrPp == product.salesOrderCommandOrder)).FirstOrDefault();
-
-                    if (productOld != null)
-                    {
-                        productOld.DescPp = product.nameProduct;
-                        productOld.TqtyPp = product.numberProduct;
-                        productOld.UnitPp = product.unitProduct;
-                        productOld.PricPp = product.priceProduct;
-                        productOld.SchdPp = product.datePayProduct;
-
-                        context.Popart.Update(productOld);
-                    }
-                    else
+                    
                     {
                         Popart newCargo = new Popart
                         {
                             PonbPp = orderId,
-                            OrdrPp = product.salesOrderCommandOrder,
+                            OrdrPp = index.ToString("00"),
                             DescPp = product.nameProduct,
                             TqtyPp = product.numberProduct,
                             UnitPp = product.unitProduct,
                             PricPp = product.priceProduct,
                             SchdPp = product.datePayProduct
                         };
-
+                        index++;
                         context.Popart.Add(newCargo);
                     }
                 }
@@ -198,7 +192,14 @@ namespace LjDataAccess.Repositories
             }
 
             return 0;
+
+            /*productOld.DescPp = product.nameProduct;
+            productOld.TqtyPp = product.numberProduct;
+            productOld.UnitPp = product.unitProduct;   更新模板是使用
+            productOld.PricPp = product.priceProduct; 
+            productOld.SchdPp = product.datePayProduct;*/
         }
     }
 
 }
+
