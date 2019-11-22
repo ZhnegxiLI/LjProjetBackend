@@ -21,25 +21,40 @@ namespace LjDataAccess.Repositories
         {
             this.context = context;
         }
-        public async System.Threading.Tasks.Task<string> LoginAsync(User user)
+        public dynamic Login(User user)
         {
             string token = "";
-            string username = user.Name;
+            string userId = user.Id;
             string password = user.Password;
             // Add login logic
-            if (await IsValidUserAndPasswordCombinationAsync(username, password))
+            if (IsValidUserAndPasswordCombination(userId, password))
             {
                 token = GenerateToken(user.Id);
+                return new
+                {
+                    token = token
+                };
             }
 
-            return token;
+            return null;
+
         }
 
-    
-        private async System.Threading.Tasks.Task<bool> IsValidUserAndPasswordCombinationAsync(string userId, string password)
+        public List<dynamic> GetUserList()
+        {
+            var result = context.User.Select(p => new
+            {
+                id = p.Id,
+                username = p.Name
+            }).ToList<dynamic>();
+            return result;
+        }
+
+
+        private bool IsValidUserAndPasswordCombination(string userId, string password)
         {
             var e = encode(password);
-            var user = await context.User.Where(p => p.Id == userId && p.Password == encode(password)).FirstOrDefaultAsync();
+            var user = context.User.Where(p => p.Id == userId && p.Password == encode(password)).FirstOrDefault();
             return user!=null;
         }
 

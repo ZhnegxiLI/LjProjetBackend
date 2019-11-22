@@ -7,6 +7,8 @@ namespace LjDataAccess.Interfaces
 {
     public interface IAuthRepository
     {
-        System.Threading.Tasks.Task<string> LoginAsync(User user);
+        dynamic Login(User user);
+
+        List<dynamic> GetUserList();
     }
 }

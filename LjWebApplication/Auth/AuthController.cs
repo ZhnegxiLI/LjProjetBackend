@@ -4,14 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using LjData.Models.ViewModel;
 using LjDataAccess.Interfaces;
+using LjWebApplication.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace LjWebApplication.Auth
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/[controller]/{action}/{id?}")]
+    //[ApiController]
     public class AuthController : Controller
     {
         private readonly IAuthRepository _authRepositoryRepository;
@@ -19,21 +20,49 @@ namespace LjWebApplication.Auth
         {
             _authRepositoryRepository = authRepositoryRepository;
         }
-        // GET: api/Auth
+
         [HttpPost]
-        public async Task<JsonResult> PostAsync([FromForm] User user)
+        public JsonResult Login([FromBody] User user)
         {
+            Object result = new object();
             if (ModelState.IsValid)
             { 
-             string token = await _authRepositoryRepository.LoginAsync(user);
-             // var result = new object();
-             return Json(token);
+             dynamic token =  _authRepositoryRepository.Login(user);
+           
+             if (token!=null)
+             {
+                 result = new ApiResult()
+                 {
+                     Data = token,
+                     Msg = "OK",
+                     Success = true
+                 };
+             }
+             else
+             {
+                 result = new ApiResult()
+                 {
+                     Msg = "FAIL",
+                     Success = false
+                 };
+             }
             }
             else
             {
-                //TODO
-                return Json("error");
+                result = new ApiResult()
+                {
+                    Msg = "FAIL",
+                    Success = false
+                };
             }
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public JsonResult GetUserList()
+        {
+          return Json(_authRepositoryRepository.GetUserList());
         }
 
     }
