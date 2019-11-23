@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LjDataAccess;
 using LjDataAccess.Interfaces;
+using LjWebApplication.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,8 @@ namespace LjWebApplication.Controllers
         [HttpGet]
         public JsonResult Get(int limit)
         {
-            var result = _clientRepository.GetClieListByVagueNameSearch(limit);
+            var data = _clientRepository.GetClieListByVagueNameSearch(limit);
+            ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
 
