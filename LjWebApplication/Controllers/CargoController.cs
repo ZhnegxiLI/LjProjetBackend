@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LjDataAccess.Interfaces;
 using LjWebApplication.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     //[EnableCors]
     public class CargoController : Controller
     {

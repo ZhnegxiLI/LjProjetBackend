@@ -16,6 +16,7 @@ namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
    // [EnableCors]
     public class ValuesController : Controller
     {

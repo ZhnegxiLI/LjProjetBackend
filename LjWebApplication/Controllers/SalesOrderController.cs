@@ -10,11 +10,13 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Text;
 using LjWebApplication.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]/{action}/{id?}")]
     //[ApiController]
+    [Authorize]
     public class SalesOrderController : Controller
     {
         private readonly ISalesOrderRepository _saleOrderRepository;

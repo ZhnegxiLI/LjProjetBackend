@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LjDataAccess;
 using LjDataAccess.Interfaces;
 using LjWebApplication.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClientController : Controller
     {
       
