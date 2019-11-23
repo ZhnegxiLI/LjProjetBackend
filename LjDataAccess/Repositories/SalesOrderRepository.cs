@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using LjData.Models;
 using LjDataAccess.Interfaces;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace LjDataAccess.Repositories
 {
@@ -198,6 +200,27 @@ namespace LjDataAccess.Repositories
             productOld.UnitPp = product.unitProduct;   更新模板是使用
             productOld.PricPp = product.priceProduct; 
             productOld.SchdPp = product.datePayProduct;*/
+        }
+
+        public List<dynamic> GetSalesOrderCategoriesByUserId(string userId)
+        {
+            //var result = context.Pomst.Where(p => p.CreaPo == userId).GroupBy(p => p.StatPo).Select(g=> new
+            //{
+            //    count = g.Count(),
+            //    categoryName = g.
+            //}).  ToList<dynamic>();
+            var result = from command in context.Pomst
+                where command.CreaPo == userId
+                group command by command.StatPo
+                into g
+                select new
+                {
+                    count = g.Count(),
+                    categoryId = g.Key,
+                    categoryName = GetStatus(Int32.Parse(g.Key))
+                };
+
+            return result.ToList<dynamic>();
         }
     }
 

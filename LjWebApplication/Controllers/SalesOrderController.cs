@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
+using LjWebApplication.Model;
 
 namespace LjWebApplication.Controllers
 {
@@ -53,6 +54,18 @@ namespace LjWebApplication.Controllers
                 message = "OK"
             };
             return Json(ret);
+        }
+
+        [HttpGet]
+        public JsonResult GetSalesOrderCategoriesByUserId(string userId)
+        {
+           var result = new ApiResult()
+            {
+                Data = _saleOrderRepository.GetSalesOrderCategoriesByUserId(userId),
+                Msg = "OK",
+                Success = true
+            };
+            return Json(result);
         }
     }
 }
