@@ -62,7 +62,15 @@ namespace LjWebApplication.Auth
         [HttpGet]
         public JsonResult GetUserList()
         {
-          return Json(_authRepositoryRepository.GetUserList());
+            var data = _authRepositoryRepository.GetUserList();
+            ApiResult result = new ApiResult()
+            {
+                Msg = "OK",
+                Success = true,
+                Data = data,
+                Type = "200"
+            };
+            return Json(result);
         }
 
     }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
+using LjWebApplication.Model;
 
 namespace LjWebApplication.Controllers
 {
@@ -26,14 +27,16 @@ namespace LjWebApplication.Controllers
         [HttpGet]
         public JsonResult GetSalesOrderByUserId(string userId)
         {
-            var result = _saleOrderRepository.GetSalesOrderByUserId(userId);
+            var data = _saleOrderRepository.GetSalesOrderByUserId(userId);
+            ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
         [HttpGet]
         public JsonResult GetSalesOrderByOrderId(string orderId)
         {
-            var result = _saleOrderRepository.GetSalesOrderListByOrderId(orderId);
+            var data = _saleOrderRepository.GetSalesOrderListByOrderId(orderId);
             //string output = JsonConvert.SerializeObject(result);
+            ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data=data };
             return Json(result);
         }
 
@@ -41,17 +44,20 @@ namespace LjWebApplication.Controllers
         public JsonResult InsertSalesOrderByOrderId()
         {
             var result = string.Empty;
+            ApiResult ret;
             using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 result = reader.ReadToEnd();
             }
             InsertOrderParam resultJson = JsonConvert.DeserializeObject<InsertOrderParam>(result);
             int status = _saleOrderRepository.InsertSalesOrderByOrderId(resultJson.orderInfo, resultJson.products);
-            var ret = new
+            if (status == 0) {
+                ret = new ApiResult() { Success = true, Msg = "OK", Type = "200" };
+            }
+            else
             {
-                status,
-                message = "OK"
-            };
+                ret = new ApiResult() { Success = false, Msg = "服务器内部错误", Type = "500" };
+            }
             return Json(ret);
         }
     }
