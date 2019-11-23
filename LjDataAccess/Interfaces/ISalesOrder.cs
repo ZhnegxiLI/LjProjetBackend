@@ -7,7 +7,7 @@ namespace LjDataAccess.Interfaces
 {
     public  interface ISalesOrderRepository
     {
-        List<dynamic> GetSalesOrderByUserId(string userId);
+        List<dynamic> GetSalesOrderByUserId(string userId, int? categoryId);
 
         dynamic GetSalesOrderListByOrderId(string orderId);
 

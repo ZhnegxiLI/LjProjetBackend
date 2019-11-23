@@ -25,9 +25,9 @@ namespace LjWebApplication.Controllers
         }
         // GET: SalesOrder
         [HttpGet]
-        public JsonResult GetSalesOrderByUserId(string userId)
+        public JsonResult GetSalesOrderByUserId(string userId, int? categoryId)
         {
-            var data = _saleOrderRepository.GetSalesOrderByUserId(userId);
+            var data = _saleOrderRepository.GetSalesOrderByUserId(userId, categoryId);
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }

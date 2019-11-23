@@ -45,14 +45,17 @@ namespace LjDataAccess.Repositories
         {
             this.context = context;
         }
+
         /// <summary>
         /// Get sales order list by user
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<dynamic> GetSalesOrderByUserId(string userId)
+        public List<dynamic> GetSalesOrderByUserId(string userId, int? orderStatus)
         {
-            var result = context.Pomst.Where(p => p.CreaPo == userId).Select(p => new
+            try
+            {
+                var result = context.Pomst.Where(p => p.CreaPo == userId && orderStatus == null || p.StatPo == orderStatus.ToString()).Select(p => new
             {
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
@@ -61,6 +64,12 @@ namespace LjDataAccess.Repositories
                 type = p.TypePo
             }).ToList<dynamic>();
             return result;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+      
         }
         /// <summary>
         ///  Get the detail information about a order and its cargo detail
