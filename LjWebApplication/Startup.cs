@@ -40,7 +40,11 @@ namespace LjWebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             // No convert the upper case for the json property
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options => { options.SerializerSettings.ContractResolver = new DefaultContractResolver(); }); ;
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
+            {
+                options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            }); ;
             
             services.AddDbContext<ERPDATA2Context>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"))

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
 namespace LjData.Models
@@ -34,8 +35,8 @@ namespace LjData.Models
 
         public string PtypPp { get; set; }
         public decimal? EquivPp { get; set; }
-        public decimal? SumPp { get; set; }
-
+        public decimal? SumPp { get; set; }// Total price
+       
         [JsonProperty("scheduleCargoDate")]
         public DateTime? SchdPp { get; set; }
 

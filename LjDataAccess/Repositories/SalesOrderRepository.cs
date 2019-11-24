@@ -55,7 +55,7 @@ namespace LjDataAccess.Repositories
         {
             try
             {
-                var result = context.Pomst.Where(p => p.CreaPo == userId && orderStatus == null || p.StatPo == orderStatus.ToString()).Select(p => new
+                var result = context.Pomst.Where(p => p.CreaPo == userId && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
             {
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
@@ -188,7 +188,8 @@ namespace LjDataAccess.Repositories
                             TqtyPp = product.numberProduct,
                             UnitPp = product.unitProduct,
                             PricPp = product.priceProduct,
-                            SchdPp = product.datePayProduct
+                            SchdPp = product.datePayProduct,
+                            SumPp = product.numberProduct * product.priceProduct
                         };
                         index++;
                         context.Popart.Add(newCargo);
