@@ -27,9 +27,9 @@ namespace LjWebApplication.Controllers
         }
         // GET: SalesOrder
         [HttpGet]
-        public JsonResult GetSalesOrderByUserId(string userId, int? categoryId)
+        public JsonResult GetSalesOrderByUserId(string userId, int? categoryId, string type)
         {
-            var data = _saleOrderRepository.GetSalesOrderByUserId(userId, categoryId);
+            var data = _saleOrderRepository.GetSalesOrderByUserId(userId, categoryId, type);
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
@@ -64,11 +64,11 @@ namespace LjWebApplication.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetSalesOrderCategoriesByUserId(string userId)
+        public JsonResult GetSalesOrderCategoriesByUserId(string userId, string type)
         {
            var result = new ApiResult()
             {
-                Data = _saleOrderRepository.GetSalesOrderCategoriesByUserId(userId),
+                Data = _saleOrderRepository.GetSalesOrderCategoriesByUserId(userId,type),
                 Msg = "OK",
                 Success = true
             };

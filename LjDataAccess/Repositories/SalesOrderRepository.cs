@@ -41,6 +41,7 @@ namespace LjDataAccess.Repositories
                     return "未定义状态";
             }
         }
+
         public SalesOrderRepository(ERPDATA2Context context)
         {
             this.context = context;
@@ -51,11 +52,11 @@ namespace LjDataAccess.Repositories
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<dynamic> GetSalesOrderByUserId(string userId, int? orderStatus)
+        public List<dynamic> GetSalesOrderByUserId(string userId, int? orderStatus, string type)
         {
             try
             {
-                var result = context.Pomst.Where(p => p.CreaPo == userId && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
+                var result = context.Pomst.Where(p => p.CreaPo == userId && p.TypePo == type && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
             {
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
@@ -121,6 +122,7 @@ namespace LjDataAccess.Repositories
                     oldOrder.CreaPo = orderInfo.userId;
                     oldOrder.FqryjPo = orderInfo.messageForAuditor;
                     oldOrder.StatPo = orderInfo.statusCode.ToString();
+                    oldOrder.TypePo = orderInfo.type;
 
                     context.Pomst.Update(oldOrder);
 
@@ -153,7 +155,7 @@ namespace LjDataAccess.Repositories
                         CreaPo = orderInfo.userId,
                         FqryjPo = orderInfo.messageForAuditor,
                         StatPo = orderInfo.statusCode.ToString(),
-                        TypePo = "",
+                        TypePo = orderInfo.type,
                         LedtPo = "",
                         MrmkPo = "",
                         CachetPo = "",
@@ -180,7 +182,7 @@ namespace LjDataAccess.Repositories
                 {
                     
                     {
-                        Popart newCargo = new Popart
+                        Popart newCargo = new Popart // Take into the cargo repository
                         {
                             PonbPp = orderId,
                             OrdrPp = index.ToString("00"),
@@ -199,12 +201,9 @@ namespace LjDataAccess.Repositories
             }
             catch(Exception e)
             {
-
                 return 1;
             }
-
             return 0;
-
             /*productOld.DescPp = product.nameProduct;
             productOld.TqtyPp = product.numberProduct;
             productOld.UnitPp = product.unitProduct;   更新模板是使用
@@ -212,7 +211,7 @@ namespace LjDataAccess.Repositories
             productOld.SchdPp = product.datePayProduct;*/
         }
 
-        public List<dynamic> GetSalesOrderCategoriesByUserId(string userId)
+        public List<dynamic> GetSalesOrderCategoriesByUserId(string userId, string orderType)// 'I'/'0'
         {
             //var result = context.Pomst.Where(p => p.CreaPo == userId).GroupBy(p => p.StatPo).Select(g=> new
             //{
@@ -220,8 +219,8 @@ namespace LjDataAccess.Repositories
             //    categoryName = g.
             //}).  ToList<dynamic>();
             var result = from command in context.Pomst
-                where command.CreaPo == userId
-                group command by command.StatPo
+                where command.CreaPo == userId && command.TypePo == orderType
+                         group command by command.StatPo
                 into g
                 select new
                 {

@@ -9,8 +9,9 @@ namespace LjData.Models
     {
         [JsonProperty(propertyName:"commandeId")]
         public string PonbPo { get; set; }
-        // TODO
-        public string TypePo { get; set; }//TODO
+
+        [JsonProperty(propertyName: "commandeType")]
+        public string TypePo { get; set; } //订单种类 I表示采购 0 表示销售
 
         [JsonProperty(propertyName: "commandeCreateDate")]
         public DateTime? DatePo { get; set; }
@@ -88,6 +89,7 @@ namespace LjData.Models
         public string CwPo { get; set; }
         public string CwyjPo { get; set; }
         public string JlPo { get; set; }
+        
         public string JlyjPo { get; set; }
 
         [JsonProperty(propertyName:"status")]

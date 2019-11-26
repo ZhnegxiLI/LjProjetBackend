@@ -8,6 +8,7 @@ namespace LjData.Models
     {
         public string receiver { get; set; }
         public string dept { get; set; }
+        public string type { get; set; } //订单种类 I表示采购 0 表示销售
         public string faxReceiver { get; set; }
         public string telReceiver { get; set; }
         public string sender { get; set; }
