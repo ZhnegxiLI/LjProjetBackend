@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <DestinationConnectionStrings Include="DefaultConnectionString">
-      <Value>Server=120.78.217.227%3bDatabase=ERPDATA2%3bUser Id=ljuser%3bPassword=erplijin</Value>
+      <Value>Server=localhost%3bDatabase=ERPDATA2%3bUser Id=ljuser%3bPassword=erplijin</Value>
     </DestinationConnectionStrings>
   </ItemGroup>
 </Project>

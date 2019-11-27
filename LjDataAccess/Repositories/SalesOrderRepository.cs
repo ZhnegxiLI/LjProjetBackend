@@ -62,7 +62,7 @@ namespace LjDataAccess.Repositories
                 commandeCreateDate = p.DatePo,
                 receiver = p.TnamPo,
                 status = GetStatus(Int32.Parse(p.StatPo)),
-                type = p.TypePo
+                type = p.TcpyPo // 单位
             }).ToList<dynamic>();
             return result;
             }
@@ -110,7 +110,7 @@ namespace LjDataAccess.Repositories
                 {
                     oldOrder.DatePo = orderInfo.date;
                     oldOrder.TnamPo = orderInfo.receiver;
-                    oldOrder.TcpyPo = orderInfo.dept;
+                    oldOrder.TcpyPo = context.Loctb.Where(p=>p.LocnLtb == orderInfo.deptId).Select(p=>p.DescLtb).FirstOrDefault();
                     oldOrder.TfaxPo = orderInfo.faxReceiver;
                     oldOrder.TtelPo = orderInfo.telReceiver;
                     oldOrder.FnamPo = orderInfo.sender;
@@ -143,7 +143,7 @@ namespace LjDataAccess.Repositories
                         PonbPo = orderId,
                         DatePo = orderInfo.date,
                         TnamPo = orderInfo.receiver,
-                        TcpyPo = orderInfo.dept,
+                        TcpyPo = context.Loctb.Where(p => p.LocnLtb == orderInfo.deptId).Select(p => p.DescLtb).FirstOrDefault(),
                         TfaxPo = orderInfo.faxReceiver,
                         TtelPo = orderInfo.telReceiver,
                         FnamPo = orderInfo.sender,
@@ -180,13 +180,12 @@ namespace LjDataAccess.Repositories
                 int index = 1;
                 foreach (var product in products)
                 {
-                    
                     {
                         Popart newCargo = new Popart // Take into the cargo repository
                         {
                             PonbPp = orderId,
                             OrdrPp = index.ToString("00"),
-                            DescPp = product.nameProduct,
+                            DescPp = context.Itemmst.Where(p=>p.PartIt== product.idProduct).Select(p=>p.DescIt).FirstOrDefault(),//Get from the table data
                             TqtyPp = product.numberProduct,
                             UnitPp = product.unitProduct,
                             PricPp = product.priceProduct,
@@ -230,6 +229,29 @@ namespace LjDataAccess.Repositories
                 };
 
             return result.ToList<dynamic>();
+        }
+
+        public int UpdateSalesOrderStatut(string orderId, string statutCode)
+        {
+            try
+            {
+                var Order = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
+                if (Order != null)
+                {
+                    Order.StatPo = statutCode;
+                    context.Pomst.Update(Order);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            catch (Exception e)
+            {
+                return 1;
+            }
+            return 0;
         }
     }
 

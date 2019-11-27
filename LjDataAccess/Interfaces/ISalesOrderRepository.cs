@@ -13,6 +13,8 @@ namespace LjDataAccess.Interfaces
 
         int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products);
 
+        int UpdateSalesOrderStatut(string orderId, string statutCode);
+
         List<dynamic> GetSalesOrderCategoriesByUserId(string userId, string type);
     }
 }

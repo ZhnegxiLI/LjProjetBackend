@@ -40,7 +40,7 @@ namespace LjDataAccess.Repositories
                 select new
                 {
                     id = it.PartIt,
-                    name = GetCargoType(it.Typ2It) +" - "+ it.DescIt,
+                    name = it.DescIt,
                     unit = it.UnitIt,
                     typePrice = it.PunitIt
                 };

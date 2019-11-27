@@ -74,5 +74,20 @@ namespace LjWebApplication.Controllers
             };
             return Json(result);
         }
+
+        public class updateCriteria
+        {
+            public string orderId { get; set; }
+            public string statutCode { get; set; }
+        }
+
+         
+        [HttpPost]
+        public JsonResult UpdateSalesOrderStatut([FromBody]updateCriteria criteria)
+        {
+            int status = _saleOrderRepository.UpdateSalesOrderStatut(criteria.orderId, criteria.statutCode);
+            var result = status==0? new ApiResult() { Success = true, Msg = "OK", Type = "200" }: new ApiResult() { Success = false, Msg = "服务器内部错误", Type = "500" };
+            return Json(result);
+        }
     }
 }
