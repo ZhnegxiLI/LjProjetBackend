@@ -97,6 +97,16 @@ namespace LjDataAccess.Repositories
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public int CheckAvailabilityOfToken(string token)
+        {
+            if (token != null) // Add issuer and audience and expiration time check
+            {
+                return 1;
+            }
+
+            return 0;
+        }
+
         // Encode password function
          private string encode(string arg)
         {

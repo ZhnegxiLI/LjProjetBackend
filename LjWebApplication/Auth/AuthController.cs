@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LjData.Models.ViewModel;
 using LjDataAccess.Interfaces;
 using LjWebApplication.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -57,6 +58,19 @@ namespace LjWebApplication.Auth
             }
 
             return Json(result);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public JsonResult CheckAvailabilityOfToken(string token)
+        {
+            return Json( new ApiResult()
+            {
+                Msg = "OK",
+                Success = true,
+                Data = "",
+                Type = "200"
+            });
         }
 
         [HttpGet]
