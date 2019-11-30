@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+此文件由 Web 项目的发布/打包过程使用。可以通过编辑此 MSBuild 文件
+自定义此过程的行为。为了解与此相关的更多内容，请访问 https://go.microsoft.com/fwlink/?LinkID=208121。 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAOcd9VT4tRUSyXqHgnGqtXgAAAAACAAAAAAAQZgAAAAEAACAAAABwjlkq/O8NpPk4BdG6V+/5rcKKzqD6d4muzpQkYkFKugAAAAAOgAAAAAIAACAAAAA79h0dsZsLvTt/24mQ+ecZDjjz35Q0hNtlLapOsSmKkiAAAADVb1rSWCkqzlbNQqqonYq2DYFuR2kMUFBZag+5yxEf70AAAAAwWv8RrXIr89hY8211PPMN1EgT9X8h8ekqBIw1MT71rdE2cd6EK5STetC0mxBfoVdfHKy2KIiFTJftt+NdyR8M</EncryptedPassword>
+    <_PublishTargetUrl>ftp://47.100.137.77/publish</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="appsettings.Development.json">
+      <publishTime>11/23/2019 23:36:30</publishTime>
+    </File>
+    <File Include="appsettings.json">
+      <publishTime>11/24/2019 00:08:43</publishTime>
+    </File>
+    <File Include="dotnet-aspnet-codegenerator-design.dll">
+      <publishTime>09/24/2019 19:58:14</publishTime>
+    </File>
+    <File Include="LjData.dll">
+      <publishTime>11/27/2019 20:19:48</publishTime>
+    </File>
+    <File Include="LjData.pdb">
+      <publishTime>11/27/2019 20:19:48</publishTime>
+    </File>
+    <File Include="LjDataAccess.dll">
+      <publishTime>11/27/2019 20:19:50</publishTime>
+    </File>
+    <File Include="LjDataAccess.pdb">
+      <publishTime>11/27/2019 20:19:50</publishTime>
+    </File>
+    <File Include="LjWebApplication.deps.json">
+      <publishTime>11/27/2019 20:20:08</publishTime>
+    </File>
+    <File Include="LjWebApplication.dll">
+      <publishTime>11/27/2019 20:19:50</publishTime>
+    </File>
+    <File Include="LjWebApplication.pdb">
+      <publishTime>11/27/2019 20:19:50</publishTime>
+    </File>
+    <File Include="LjWebApplication.runtimeconfig.json">
+      <publishTime>11/23/2019 00:26:18</publishTime>
+    </File>
+    <File Include="Logs/log20191111.json">
+      <publishTime>11/11/2019 20:38:00</publishTime>
+    </File>
+    <File Include="Logs/log20191113.json">
+      <publishTime>11/13/2019 23:42:39</publishTime>
+    </File>
+    <File Include="Logs/log20191114.json">
+      <publishTime>11/14/2019 23:51:03</publishTime>
+    </File>
+    <File Include="Logs/log20191115.json">
+      <publishTime>11/15/2019 21:48:40</publishTime>
+    </File>
+    <File Include="Logs/log20191116.json">
+      <publishTime>11/16/2019 01:23:42</publishTime>
+    </File>
+    <File Include="Logs/log20191117.json">
+      <publishTime>11/17/2019 11:24:37</publishTime>
+    </File>
+    <File Include="Logs/log20191119.json">
+      <publishTime>11/19/2019 23:05:10</publishTime>
+    </File>
+    <File Include="Logs/log20191121.json">
+      <publishTime>11/21/2019 23:31:20</publishTime>
+    </File>
+    <File Include="Logs/log20191122.json">
+      <publishTime>11/22/2019 23:26:46</publishTime>
+    </File>
+    <File Include="Logs/log20191123.json">
+      <publishTime>11/23/2019 23:27:28</publishTime>
+    </File>
+    <File Include="Logs/log20191124.json">
+      <publishTime>11/24/2019 22:47:47</publishTime>
+    </File>
+    <File Include="Logs/log20191126.json">
+      <publishTime>11/26/2019 23:26:24</publishTime>
+    </File>
+    <File Include="Logs/log20191127.json">
+      <publishTime>11/27/2019 00:30:07</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.CSharp.Workspaces.dll">
+      <publishTime>11/09/2019 00:50:36</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.Workspaces.dll">
+      <publishTime>11/09/2019 00:50:40</publishTime>
+    </File>
+    <File Include="Microsoft.EntityFrameworkCore.Relational.Design.dll">
+      <publishTime>06/21/2018 07:54:22</publishTime>
+    </File>
+    <File Include="Microsoft.EntityFrameworkCore.SqlServer.Design.dll">
+      <publishTime>06/21/2018 07:54:22</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.JsonWebTokens.dll">
+      <publishTime>10/18/2019 23:39:24</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Logging.dll">
+      <publishTime>10/18/2019 23:40:20</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Tokens.dll">
+      <publishTime>10/18/2019 23:43:40</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll">
+      <publishTime>09/24/2019 19:57:40</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Core.dll">
+      <publishTime>09/24/2019 19:57:46</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.dll">
+      <publishTime>09/24/2019 19:57:50</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll">
+      <publishTime>09/24/2019 19:57:48</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll">
+      <publishTime>09/24/2019 19:57:42</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll">
+      <publishTime>09/24/2019 19:57:42</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll">
+      <publishTime>09/24/2019 19:57:52</publishTime>
+    </File>
+    <File Include="Newtonsoft.Json.dll">
+      <publishTime>11/09/2019 00:56:44</publishTime>
+    </File>
+    <File Include="NuGet.Frameworks.dll">
+      <publishTime>11/09/2019 00:50:38</publishTime>
+    </File>
+    <File Include="Serilog.AspNetCore.dll">
+      <publishTime>10/14/2019 09:07:42</publishTime>
+    </File>
+    <File Include="Serilog.dll">
+      <publishTime>01/16/2019 23:25:02</publishTime>
+    </File>
+    <File Include="Serilog.Enrichers.Environment.dll">
+      <publishTime>03/08/2019 21:45:14</publishTime>
+    </File>
+    <File Include="Serilog.Enrichers.Process.dll">
+      <publishTime>02/14/2017 11:12:48</publishTime>
+    </File>
+    <File Include="Serilog.Extensions.Hosting.dll">
+      <publishTime>08/27/2019 21:30:30</publishTime>
+    </File>
+    <File Include="Serilog.Extensions.Logging.dll">
+      <publishTime>08/21/2019 23:09:16</publishTime>
+    </File>
+    <File Include="Serilog.Formatting.Compact.dll">
+      <publishTime>07/05/2016 02:28:44</publishTime>
+    </File>
+    <File Include="Serilog.Settings.Configuration.dll">
+      <publishTime>06/02/2019 00:57:40</publishTime>
+    </File>
+    <File Include="Serilog.Sinks.Async.dll">
+      <publishTime>06/09/2019 21:49:06</publishTime>
+    </File>
+    <File Include="Serilog.Sinks.Console.dll">
+      <publishTime>10/22/2017 16:48:40</publishTime>
+    </File>
+    <File Include="Serilog.Sinks.Debug.dll">
+      <publishTime>03/21/2018 21:19:06</publishTime>
+    </File>
+    <File Include="Serilog.Sinks.File.dll">
+      <publishTime>10/17/2019 05:25:34</publishTime>
+    </File>
+    <File Include="System.Composition.AttributedModel.dll">
+      <publishTime>09/11/2019 00:50:35</publishTime>
+    </File>
+    <File Include="System.Composition.Convention.dll">
+      <publishTime>11/09/2019 00:50:35</publishTime>
+    </File>
+    <File Include="System.Composition.Hosting.dll">
+      <publishTime>11/09/2019 00:50:38</publishTime>
+    </File>
+    <File Include="System.Composition.Runtime.dll">
+      <publishTime>11/09/2019 00:50:38</publishTime>
+    </File>
+    <File Include="System.Composition.TypedParts.dll">
+      <publishTime>11/09/2019 00:50:38</publishTime>
+    </File>
+    <File Include="System.IdentityModel.Tokens.Jwt.dll">
+      <publishTime>10/18/2019 23:38:18</publishTime>
+    </File>
+    <File Include="web.config">
+      <publishTime>11/27/2019 20:20:08</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

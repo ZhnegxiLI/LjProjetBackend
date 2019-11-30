@@ -13,11 +13,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace LjDataAccess.Repositories
 {
-    public class AuthRepositoryRepository:IAuthRepository
+    public class AuthRepository:IAuthRepository
     {
         private readonly ERPDATA2Context context;
 
-        public AuthRepositoryRepository(ERPDATA2Context context)
+        public AuthRepository(ERPDATA2Context context)
         {
             this.context = context;
         }
