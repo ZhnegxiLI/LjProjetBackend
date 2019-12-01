@@ -123,6 +123,11 @@ namespace LjDataAccess.Repositories
                     oldOrder.FqryjPo = orderInfo.messageForAuditor;
                     oldOrder.StatPo = orderInfo.statusCode.ToString();
                     oldOrder.TypePo = orderInfo.type;
+                    oldOrder.CachetPo = orderInfo.seal;
+                    oldOrder.CtovPo = orderInfo.copyAfterCheck;
+                    oldOrder.MrmkPo = orderInfo.remarkCorrige;
+                    oldOrder.RvmkPo = orderInfo.remarkfeedback;
+
 
                     context.Pomst.Update(oldOrder);
 
@@ -156,9 +161,10 @@ namespace LjDataAccess.Repositories
                         FqryjPo = orderInfo.messageForAuditor,
                         StatPo = orderInfo.statusCode.ToString(),
                         TypePo = orderInfo.type,
+                        CtovPo = orderInfo.copyAfterCheck,
                         LedtPo = "",
-                        MrmkPo = "",
-                        CachetPo = "",
+                        MrmkPo = orderInfo.remarkCorrige,
+                        CachetPo = orderInfo.seal,
                         PlntPo = "",
                         SpyjPo = "",
                         FqrPo = "",
@@ -166,12 +172,6 @@ namespace LjDataAccess.Repositories
                         CwyjPo = "",
                         JlPo = "",
                         JlyjPo = "",
-                        Rmk2Po = "",
-                        Rmk3Po = "",
-                        Rmk4Po = "",
-                        Rmk5Po = "",
-                        Rmk6Po = "",
-                        Rmk7Po = ""
                     };
 
                     context.Pomst.Add(newOrder);

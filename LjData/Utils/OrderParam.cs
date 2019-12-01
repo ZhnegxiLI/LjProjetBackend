@@ -23,5 +23,8 @@ namespace LjData.Models
         public int statusCode { get; set; }
         public string title { get; set; }
         public DateTime? date { get; set; }
+        public string seal { get; set; }
+        public bool copyAfterCheck { get; set; }
+        public string remarkCorrige { get; set; }
     }
 }
