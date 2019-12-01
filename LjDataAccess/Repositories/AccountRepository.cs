@@ -7,11 +7,11 @@ using LjDataAccess.Interfaces;
 
 namespace LjDataAccess.Repositories
 {
-    public class AccountRepositoryRepository:IAccountRepository
+    public class AccountRepository:IAccountRepository
     {
         private readonly ERPDATA2Context context;
 
-        public AccountRepositoryRepository(ERPDATA2Context context)
+        public AccountRepository(ERPDATA2Context context)
         {
             this.context = context;
         }

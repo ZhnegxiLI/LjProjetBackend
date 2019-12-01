@@ -107,8 +107,8 @@ namespace LjWebApplication
 
             // Dependencies injection
             services.AddSingleton<IStudentRepository, MockStudentRepository>(); // Only for test
-            services.AddScoped<IAuthRepository, AuthRepositoryRepository>();
-            services.AddScoped<IAccountRepository, AccountRepositoryRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICargoRepository, CargoRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<ISalesOrderRepository, SalesOrderRepository>();
@@ -123,14 +123,11 @@ namespace LjWebApplication
                 app.UseDeveloperExceptionPage();
             }
 
-            if (!env.IsDevelopment())
-            {
-                app.UseForwardedHeaders(new ForwardedHeadersOptions
-                {
-                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                });
-            }
- 
+            //app.UseForwardedHeaders(new ForwardedHeadersOptions
+            //{
+            //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            //});
+
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseErrorHandling();

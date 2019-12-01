@@ -34,7 +34,7 @@ namespace LjWebApplication.Controllers
         public JsonResult Get()
         {
             var student = _studentRepository.GetStudent(1);
-            //AccountRepositoryRepository.GetAccounts()
+            //AccountRepository.GetAccounts()
            // _accountRepositoryRepository.GetAccounts()
             return Json(student);
         }

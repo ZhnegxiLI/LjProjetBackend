@@ -13,11 +13,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace LjDataAccess.Repositories
 {
-    public class AuthRepositoryRepository:IAuthRepository
+    public class AuthRepository:IAuthRepository
     {
         private readonly ERPDATA2Context context;
 
-        public AuthRepositoryRepository(ERPDATA2Context context)
+        public AuthRepository(ERPDATA2Context context)
         {
             this.context = context;
         }
@@ -95,6 +95,16 @@ namespace LjDataAccess.Repositories
                 new JwtPayload(claims));
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public int CheckAvailabilityOfToken(string token)
+        {
+            if (token != null) // Add issuer and audience and expiration time check
+            {
+                return 1;
+            }
+
+            return 0;
         }
 
         // Encode password function
