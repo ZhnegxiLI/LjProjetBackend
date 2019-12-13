@@ -56,24 +56,6 @@ namespace LjWebApplication
                 .CreateLogger();
             Log.Information("Start logging");
 
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = "JwtBearer";
-            //    options.DefaultChallengeScheme = "JwtBearer";
-            //}).AddJwtBearer("JwtBearer", jwtBearerOptions =>
-            //{
-            //    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret Key You Devise")),//TODO: Change into the appsetting.json
-            //        ValidateIssuer = false, //TODO: Active the issuer and audience validation and set in the appsetting.json
-            //        // ValidIssuer = "The name of the issuer",
-            //        ValidateAudience = false,
-            //        // ValidAudience = "The name of the audience",
-            //        // ValidateLifetime = true, //validate the expiration and not before values in the token
-            //        ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
-            //    };
-            //});
 
             services.AddAuthentication(options => {
                     options.DefaultAuthenticateScheme = "JwtBearer";
@@ -132,9 +114,7 @@ namespace LjWebApplication
 
             app.UseErrorHandling();
 
-            //app.UseStatusCodePages();
             app.UseAuthentication();
-
             app.UseMvc();
         }
     }

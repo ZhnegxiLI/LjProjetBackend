@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using LjData.Models;
 using LjDataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace LjDataAccess.Repositories
@@ -62,7 +63,8 @@ namespace LjDataAccess.Repositories
                 commandeCreateDate = p.DatePo,
                 receiver = p.TnamPo,
                 status = GetStatus(Int32.Parse(p.StatPo)),
-                type = p.TcpyPo // 单位
+                type = p.TcpyPo, // 单位
+                commandeCreator = context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
             }).ToList<dynamic>();
             return result;
             }
@@ -123,11 +125,11 @@ namespace LjDataAccess.Repositories
                     oldOrder.FqryjPo = orderInfo.messageForAuditor;
                     oldOrder.StatPo = orderInfo.statusCode.ToString();
                     oldOrder.TypePo = orderInfo.type;
-                    oldOrder.CachetPo = orderInfo.seal;
+                  //  oldOrder.CachetPo = orderInfo.seal; //todo
                     oldOrder.CtovPo = orderInfo.copyAfterCheck;
                     oldOrder.MrmkPo = orderInfo.remarkCorrige;
                     oldOrder.RvmkPo = orderInfo.remarkfeedback;
-
+                    oldOrder.LdatPo = DateTime.Now;
 
                     context.Pomst.Update(oldOrder);
 
@@ -164,14 +166,16 @@ namespace LjDataAccess.Repositories
                         CtovPo = orderInfo.copyAfterCheck,
                         LedtPo = "",
                         MrmkPo = orderInfo.remarkCorrige,
-                        CachetPo = orderInfo.seal,
-                        PlntPo = "",
+                       // CachetPo = orderInfo.seal,// todo: change to the id 
                         SpyjPo = "",
                         FqrPo = "",
                         CwPo = "",
                         CwyjPo = "",
                         JlPo = "",
                         JlyjPo = "",
+                        CrtdPo = DateTime.Now,
+                        PlntPo ="A",
+                        CmplPo = false
                     };
 
                     context.Pomst.Add(newOrder);
@@ -231,14 +235,17 @@ namespace LjDataAccess.Repositories
             return result.ToList<dynamic>();
         }
 
-        public int UpdateSalesOrderStatut(string orderId, string statutCode)
+        public int UpdateSalesOrderStatut(string userId,string orderId, string statutCode, string applicationContent)
         {
             try
             {
                 var Order = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
                 if (Order != null)
                 {
+                    Order.FqrPo = userId;
                     Order.StatPo = statutCode;
+                    Order.SpyjPo = applicationContent;
+                    Order.FqryjPo = applicationContent;
                     context.Pomst.Update(Order);
                     context.SaveChanges();
                 }

@@ -40,7 +40,7 @@ namespace LjDataAccess.Repositories
                 select new
                 {
                     id = it.PartIt,
-                    name = it.DescIt,
+                    name = GetCargoType(it.Typ2It) + it.DescIt,
                     unit = it.UnitIt,
                     typePrice = it.PunitIt
                 };
@@ -55,9 +55,9 @@ namespace LjDataAccess.Repositories
         {
             switch (typeId)
             {
-                case "R": return "R材料";
-                case "M": return "M半成品";
-                case "F": return "F成品";
+                case "R": return "R(材料)";
+                case "M": return "M(半成品)";
+                case "F": return "F(成品)";
                 default: return "编号错误";
             }
         }

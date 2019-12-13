@@ -77,6 +77,8 @@ namespace LjWebApplication.Controllers
 
         public class updateCriteria
         {
+            public string userId { get; set; }
+            public string applicationContent { get; set; }
             public string orderId { get; set; }
             public string statutCode { get; set; }
         }
@@ -85,7 +87,7 @@ namespace LjWebApplication.Controllers
         [HttpPost]
         public JsonResult UpdateSalesOrderStatut([FromBody]updateCriteria criteria)
         {
-            int status = _saleOrderRepository.UpdateSalesOrderStatut(criteria.orderId, criteria.statutCode);
+            int status = _saleOrderRepository.UpdateSalesOrderStatut(criteria.userId, criteria.orderId, criteria.statutCode,criteria.applicationContent);
             var result = status==0? new ApiResult() { Success = true, Msg = "OK", Type = "200" }: new ApiResult() { Success = false, Msg = "服务器内部错误", Type = "500" };
             return Json(result);
         }
