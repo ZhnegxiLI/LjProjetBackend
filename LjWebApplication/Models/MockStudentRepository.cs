@@ -12,7 +12,7 @@ namespace LjWebApplication.Model
         {
             _students = new List<Student>()
             {
-                new Student() { id = 1, name = "github111",className = "test111github1"},
+                new Student() { id = 1, name = "github1111",className = "test111github1"},
                 new Student() { id = 2, name = "dfdf",className = "test"},
                 new Student() { id = 3, name = "dfdf",className = "test"},
                 new Student() { id = 4, name = "dfdf",className = "test"},
