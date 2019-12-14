@@ -7,3 +7,5 @@
 /LjData/bin
 /LjDataAccess/bin
 Properties
+/LjWebApplication/appsettings.Development.json
+/LjWebApplication/appsettings.json

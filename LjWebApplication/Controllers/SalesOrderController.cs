@@ -75,6 +75,19 @@ namespace LjWebApplication.Controllers
             return Json(result);
         }
 
+        [HttpGet]
+        public JsonResult GetSalesOrderValidationContent(string orderId)
+        {
+            var result = new ApiResult()
+            {
+                Data = _saleOrderRepository.GetSalesOrderValidationContent(orderId),
+                Msg = "OK",
+                Success = true
+            };
+            return Json(result);
+        }
+
+
         public class updateCriteria
         {
             public string userId { get; set; }

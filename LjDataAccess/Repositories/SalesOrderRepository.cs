@@ -170,7 +170,6 @@ namespace LjDataAccess.Repositories
                 }
                 else
                 {
-
                     orderId = "LJ-" + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");
                     Pomst newOrder = new Pomst
                     {
@@ -193,7 +192,7 @@ namespace LjDataAccess.Repositories
                         CtovPo = orderInfo.copyAfterCheck,
                         LedtPo = "",
                         MrmkPo = orderInfo.remarkCorrige,
-                       // CachetPo = orderInfo.seal,// todo: change to the id 
+                        CachetPo = orderInfo.seal,// todo: change to the id 
                         SpyjPo = "",
                         FqrPo = "",
                         CwPo = "",
@@ -262,6 +261,34 @@ namespace LjDataAccess.Repositories
             return result.ToList<dynamic>();
         }
 
+        public dynamic GetSalesOrderValidationContent(string orderId)
+        {
+            var result = context.Pomst.Where(p => p.PonbPo == orderId).Select(p=>
+                new
+                {
+                    senderContent = new
+                    {
+                        senderId = p.FqrPo,
+                        senderLabel = "",//todo
+                        content= p.FqryjPo
+                    },
+                    financialContent = new
+                    {
+                        senderId = p.CwPo,
+                        senderLabel = "",//todo
+                        content = p.CwyjPo
+                    },
+                    managerContent = new
+                    {
+                        senderId = p.JlPo,
+                        senderLabel = "",//todo
+                        content = p.JlyjPo
+                    },
+                    actualContent = p.SpyjPo
+                }
+            );
+            return result.FirstOrDefault();
+        }
         public int UpdateSalesOrderStatut(string userId,string orderId, string statutCode, string applicationContent)
         {
             try
