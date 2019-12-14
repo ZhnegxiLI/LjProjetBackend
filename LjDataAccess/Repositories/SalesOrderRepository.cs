@@ -48,6 +48,26 @@ namespace LjDataAccess.Repositories
             this.context = context;
         }
 
+        private string GetCommandTypeLabelById(string commandeTypeId)
+        {
+            string label = "";
+            switch (commandeTypeId)
+            {
+                case "I":
+                    label = "采购订单";
+                    break;
+                case "O":
+                    label = "销售订单";
+                    break;
+                default:
+                    label = "订单";
+                    break;
+            }
+
+            return label;
+
+        }
+
         /// <summary>
         /// Get sales order list by user
         /// </summary>
@@ -59,12 +79,14 @@ namespace LjDataAccess.Repositories
             {
                 var result = context.Pomst.Where(p => p.CreaPo == userId && p.TypePo == type && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
             {
+                commandeTypeId = p.TypePo,
+                commandeTypeLabel = GetCommandTypeLabelById(p.TypePo),
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
                 receiver = p.TnamPo,
                 status = GetStatus(Int32.Parse(p.StatPo)),
                 type = p.TcpyPo, // 单位
-                commandeCreator = context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
+                commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
             }).ToList<dynamic>();
             return result;
             }
@@ -85,7 +107,12 @@ namespace LjDataAccess.Repositories
             var newResult = from r in result
                             select (new
                             {
-                                salesOrderDetail = r, ///TODO ; 没有回传statusCode
+                                commandeType = new
+                                {
+                                    commandeTypeId = r.TypePo,
+                                    commandeTypeLabel = GetCommandTypeLabelById(r.TypePo),
+                                },
+                                salesOrderDetail = r, 
                                 cargo = (from po in context.Popart
                                          where po.PonbPp == r.PonbPo
                                          select po).ToList()
