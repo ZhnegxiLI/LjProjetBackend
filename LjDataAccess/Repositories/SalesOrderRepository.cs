@@ -298,8 +298,8 @@ namespace LjDataAccess.Repositories
                 {
                     Order.FqrPo = userId;
                     Order.StatPo = statutCode;
-                    Order.SpyjPo = applicationContent;
-                    Order.FqryjPo = applicationContent;
+                    Order.SpyjPo = DateTime.Now + "  " +  applicationContent ;
+                    Order.FqryjPo = DateTime.Now + "  " + applicationContent;
                     context.Pomst.Update(Order);
                     context.SaveChanges();
                 }
