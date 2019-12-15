@@ -83,9 +83,11 @@ namespace LjDataAccess.Repositories
                 commandeTypeLabel = GetCommandTypeLabelById(p.TypePo),
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
+                updateOn = p.LdatPo.ToString(),
                 receiver = p.TnamPo,
                 status = GetStatus(Int32.Parse(p.StatPo)),
                 type = p.TcpyPo, // 单位
+                creator = context.User.Where(x => x.Id ==userId).Select(y=>y.Name),
                 commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
             }).ToList<dynamic>();
             return result;
@@ -137,7 +139,7 @@ namespace LjDataAccess.Repositories
             {
                 if (oldOrder != null)
                 {
-                    oldOrder.DatePo = orderInfo.date;
+                    oldOrder.DatePo = orderInfo.date.Value.Date;
                     oldOrder.TnamPo = orderInfo.receiver;
                     oldOrder.TcpyPo = context.Loctb.Where(p=>p.LocnLtb == orderInfo.deptId).Select(p=>p.DescLtb).FirstOrDefault();
                     oldOrder.TfaxPo = orderInfo.faxReceiver;
@@ -152,7 +154,7 @@ namespace LjDataAccess.Repositories
                     oldOrder.FqryjPo = orderInfo.messageForAuditor;
                     oldOrder.StatPo = orderInfo.statusCode.ToString();
                     oldOrder.TypePo = orderInfo.type;
-                  //  oldOrder.CachetPo = orderInfo.seal; //todo
+                    oldOrder.CachetPo = orderInfo.seal; //todo
                     oldOrder.CtovPo = orderInfo.copyAfterCheck;
                     oldOrder.MrmkPo = orderInfo.remarkCorrige;
                     oldOrder.RvmkPo = orderInfo.remarkfeedback;
@@ -174,7 +176,8 @@ namespace LjDataAccess.Repositories
                     Pomst newOrder = new Pomst
                     {
                         PonbPo = orderId,
-                        DatePo = orderInfo.date,
+                        DatePo = orderInfo.date.Value.Date,
+                        LdatPo = DateTime.Now,
                         TnamPo = orderInfo.receiver,
                         TcpyPo = context.Loctb.Where(p => p.LocnLtb == orderInfo.deptId).Select(p => p.DescLtb).FirstOrDefault(),
                         TfaxPo = orderInfo.faxReceiver,
@@ -190,7 +193,7 @@ namespace LjDataAccess.Repositories
                         StatPo = orderInfo.statusCode.ToString(),
                         TypePo = orderInfo.type,
                         CtovPo = orderInfo.copyAfterCheck,
-                        LedtPo = "",
+                        LedtPo = orderInfo.userId,
                         MrmkPo = orderInfo.remarkCorrige,
                         CachetPo = orderInfo.seal,// todo: change to the id 
                         SpyjPo = "",
@@ -202,7 +205,7 @@ namespace LjDataAccess.Repositories
                         CrtdPo = DateTime.Now,
                         PlntPo ="A",
                         CmplPo = false
-                    };
+                };
 
                     context.Pomst.Add(newOrder);
                     
