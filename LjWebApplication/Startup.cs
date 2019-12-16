@@ -94,6 +94,8 @@ namespace LjWebApplication
             services.AddScoped<ICargoRepository, CargoRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<ISalesOrderRepository, SalesOrderRepository>();
+            services.AddScoped<IVersionRepository, VersionRepository>();
+            services.AddScoped<IUserPermission, UserPermission>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

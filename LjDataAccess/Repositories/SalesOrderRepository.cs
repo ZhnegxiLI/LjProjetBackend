@@ -131,9 +131,7 @@ namespace LjDataAccess.Repositories
         /// <returns></returns>
         public int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
         {
-
             string orderId = orderInfo.title;
-
             var oldOrder = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
             try
             {
@@ -159,6 +157,7 @@ namespace LjDataAccess.Repositories
                     oldOrder.MrmkPo = orderInfo.remarkCorrige;
                     oldOrder.RvmkPo = orderInfo.remarkfeedback;
                     oldOrder.LdatPo = DateTime.Now;
+                    oldOrder.FcpyPo = orderInfo.entrepriseName;
 
                     context.Pomst.Update(oldOrder);
 
@@ -168,11 +167,10 @@ namespace LjDataAccess.Repositories
                     {
                         context.Popart.Remove(p);
                     }
-
                 }
                 else
                 {
-                    orderId = "LJ-" + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");
+                    orderId = "LJ-" + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");//TODO: get the last id
                     Pomst newOrder = new Pomst
                     {
                         PonbPo = orderId,
@@ -196,6 +194,7 @@ namespace LjDataAccess.Repositories
                         LedtPo = orderInfo.userId,
                         MrmkPo = orderInfo.remarkCorrige,
                         CachetPo = orderInfo.seal,// todo: change to the id 
+                        FcpyPo = orderInfo.entrepriseName,
                         SpyjPo = "",
                         FqrPo = "",
                         CwPo = "",
@@ -206,9 +205,7 @@ namespace LjDataAccess.Repositories
                         PlntPo ="A",
                         CmplPo = false
                 };
-
                     context.Pomst.Add(newOrder);
-                    
                 }
                 int index = 1;
                 foreach (var product in products)
@@ -218,6 +215,7 @@ namespace LjDataAccess.Repositories
                         {
                             PonbPp = orderId,
                             OrdrPp = index.ToString("00"),
+                            PartPp = product.idProduct,
                             DescPp = context.Itemmst.Where(p=>p.PartIt== product.idProduct).Select(p=>p.DescIt).FirstOrDefault(),//Get from the table data
                             TqtyPp = product.numberProduct,
                             UnitPp = product.unitProduct,

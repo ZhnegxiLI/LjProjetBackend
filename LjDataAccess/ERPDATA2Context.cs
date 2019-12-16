@@ -11,6 +11,10 @@ namespace LjDataAccess
         {
         }
 
+        public virtual DbSet<XyInfo> XyInfo { get; set; }
+        public virtual DbSet<MobilePermission> MobilePermission { get; set; }
+        public virtual DbSet<MobileUserPermission> MobileUserPermission { get; set; }
+
         public  virtual DbSet<User> User { get; set; }
         public virtual DbSet<Accmbk> Accmbk { get; set; }
         public virtual DbSet<Account> Account { get; set; }
@@ -6231,6 +6235,11 @@ namespace LjDataAccess
                 entity.Property(e => e.TypePo)
                     .HasColumnName("TYPE_PO")
                     .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FcpyPo)
+                    .HasColumnName("FCPY_PO")
+                    .HasMaxLength(100)
                     .IsUnicode(false);
             });
 
