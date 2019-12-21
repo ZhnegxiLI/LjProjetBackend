@@ -3,5 +3,6 @@
     public interface IVersionRepository
     {
         string getMobileVersion();
+        string getCompanyName();
     }
 }

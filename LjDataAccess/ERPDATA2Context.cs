@@ -10,7 +10,7 @@ namespace LjDataAccess
             : base(options)
         {
         }
-
+        public virtual  DbSet<CpnyInfo> CpnyInfo { get; set; }
         public virtual DbSet<XyInfo> XyInfo { get; set; }
         public virtual DbSet<MobilePermission> MobilePermission { get; set; }
         public virtual DbSet<MobileUserPermission> MobileUserPermission { get; set; }

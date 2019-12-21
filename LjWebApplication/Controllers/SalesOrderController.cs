@@ -33,6 +33,15 @@ namespace LjWebApplication.Controllers
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
+
+        [HttpPost]
+        public JsonResult GetSalesOrderValidationList(int? categoryId, string type)
+        {
+            var data = _saleOrderRepository.GetSalesOrderValidationList(categoryId, type);
+            ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
+            return Json(result);
+        }
+
         [HttpGet]
         public JsonResult GetSalesOrderByOrderId(string orderId)
         {

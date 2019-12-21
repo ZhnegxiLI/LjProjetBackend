@@ -18,5 +18,10 @@ namespace LjDataAccess.Repositories
         {
             return context.XyInfo.FirstOrDefault().mobileVersion;
         }
+
+        public string getCompanyName()
+        {
+            return context.CpnyInfo.FirstOrDefault().entrepriseName;
+        }
     }
 }

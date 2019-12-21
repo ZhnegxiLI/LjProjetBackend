@@ -98,6 +98,55 @@ namespace LjDataAccess.Repositories
             }
       
         }
+        public class CommandStaut
+        {
+            public string commandeTypeId { get; set; }
+            public string statusId { get; set; }
+        }
+        public List<dynamic> GetSalesOrderValidationList(int? categoryId, string type)
+        {
+            try
+            {//TODO: classify by order type and statuts
+                var resultGroup = (from order in context.Pomst
+                    where categoryId == null || order.StatPo == categoryId.ToString()
+                          && type == "" || order.TypePo == type
+                    orderby order.TypePo , order.StatPo, order.DatePo descending
+                    group order by new { order.TypePo, order.StatPo } into g
+                    select new CommandStaut()
+                    {
+                        commandeTypeId = g.Key.TypePo,
+                        statusId = g.Key.StatPo
+                    }).ToList<CommandStaut>();
+
+                var result = (from r in resultGroup
+                    select new
+                    {
+                        commandDetails = (from order in context.Pomst
+                            where order.TypePo == r.commandeTypeId && order.StatPo == r.statusId
+                            select new
+                            {
+                                commandeId = order.PonbPo,
+                                commandeCreateDate = order.DatePo,
+                                updateOn = order.LdatPo.ToString(),
+                                receiver = order.TnamPo,
+                                status = GetStatus(Int32.Parse(order.StatPo)),
+                                type = order.TcpyPo, // 单位
+                                creator = context.User.Where(x => x.Id == order.CreaPo).Select(y => y.Name).FirstOrDefault( ),
+                                commandeCreator = order.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
+                            }),
+                        r.commandeTypeId,
+                        commandTypeLabel = GetCommandTypeLabelById(r.commandeTypeId),
+                        statusLabel = GetStatus(Int32.Parse(r.statusId)),
+                        r.statusId
+                    }).ToList<dynamic>();
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         /// <summary>
         ///  Get the detail information about a order and its cargo detail
         /// </summary>

@@ -10,6 +10,8 @@ namespace LjDataAccess.Interfaces
         dynamic GetSalesOrderValidationContent(string orderId);
         List<dynamic> GetSalesOrderByUserId(string userId, int? categoryId, string type);
 
+        List<dynamic> GetSalesOrderValidationList(int? categoryId, string type);
+
         dynamic GetSalesOrderListByOrderId(string orderId);
 
         int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products);

@@ -1,9 +1,6 @@
-﻿using System;
+﻿using LjDataAccess.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using LjDataAccess.Interfaces;
-using Remotion.Linq.Clauses;
 
 namespace LjDataAccess.Repositories
 {
