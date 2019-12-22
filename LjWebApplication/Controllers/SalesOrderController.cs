@@ -103,13 +103,15 @@ namespace LjWebApplication.Controllers
             public string applicationContent { get; set; }
             public string orderId { get; set; }
             public string statutCode { get; set; }
+            public string financialContent { get; set; }
+            public string managerContent { get; set; }
         }
 
          
         [HttpPost]
         public JsonResult UpdateSalesOrderStatut([FromBody]updateCriteria criteria)
         {
-            int status = _saleOrderRepository.UpdateSalesOrderStatut(criteria.userId, criteria.orderId, criteria.statutCode,criteria.applicationContent);
+            int status = _saleOrderRepository.UpdateSalesOrderStatut(criteria.userId, criteria.orderId, criteria.statutCode,criteria.applicationContent,criteria.financialContent,criteria.managerContent);
             var result = status==0? new ApiResult() { Success = true, Msg = "OK", Type = "200" }: new ApiResult() { Success = false, Msg = "服务器内部错误", Type = "500" };
             return Json(result);
         }

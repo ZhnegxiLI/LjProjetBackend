@@ -339,17 +339,21 @@ namespace LjDataAccess.Repositories
             );
             return result.FirstOrDefault();
         }
-        public int UpdateSalesOrderStatut(string userId,string orderId, string statutCode, string applicationContent)
+        public int UpdateSalesOrderStatut(string userId,string orderId, string statutCode, string applicationContent, string financialContent,string managerContent)
         {
             try
             {
                 var Order = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
                 if (Order != null)
                 {
-                    Order.FqrPo = userId;
+                    Order.FqrPo = statutCode == "1" ? userId : Order.FqrPo;
+                    Order.CwPo = statutCode == "3" ? userId : Order.CwPo;
+                    Order.JlPo = statutCode == "5" ? userId : Order.JlPo;   
                     Order.StatPo = statutCode;
-                    Order.SpyjPo = DateTime.Now + "  " +  applicationContent ;
-                    Order.FqryjPo = DateTime.Now + "  " + applicationContent;
+                    Order.SpyjPo = DateTime.Now + "  " + statutCode == "1"?applicationContent: (statutCode=="3"? financialContent :(statutCode == "5"? managerContent:"")) ;
+                    Order.FqryjPo = applicationContent!=null?(DateTime.Now + "  " + applicationContent):null;
+                    Order.CwyjPo = financialContent != null ?(DateTime.Now + "  " + financialContent):null;
+                    Order.JlyjPo = managerContent != null ? (DateTime.Now + "  " + managerContent):null;
                     context.Pomst.Update(Order);
                     context.SaveChanges();
                 }

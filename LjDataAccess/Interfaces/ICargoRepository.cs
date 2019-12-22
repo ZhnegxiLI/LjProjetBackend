@@ -11,5 +11,7 @@ namespace LjDataAccess.Interfaces
         Task<List<Itemmst>> GetCargosListByConditionAsync(string name, string productPlace, string type);
 
         List<dynamic> GetCargosListByNameAsync(int limit);
+
+        List<dynamic> GetUnitList();
     }
 }
