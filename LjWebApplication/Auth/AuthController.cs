@@ -29,7 +29,6 @@ namespace LjWebApplication.Auth
             if (ModelState.IsValid)
             { 
              dynamic token =  _authRepositoryRepository.Login(user);
-           
              if (token!=null)
              {
                  result = new ApiResult()

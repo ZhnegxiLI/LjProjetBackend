@@ -46,6 +46,17 @@ namespace LjDataAccess.Repositories
                 };
             return limit != -1 ? result.Take(limit).ToList<dynamic>() : result.ToList<dynamic>();
         }
+
+        public List<dynamic> GetUnitList()
+        {
+            var result = context.Units.Select(p=>new
+            {
+                label = p.DescUn,
+                equivalence = p.EquivUn
+            }).ToList<dynamic>();
+            return result;
+        }
+
         /// <summary>
         /// cargo type code-->label
         /// </summary>

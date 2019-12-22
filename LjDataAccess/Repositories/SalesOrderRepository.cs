@@ -98,6 +98,55 @@ namespace LjDataAccess.Repositories
             }
       
         }
+        public class CommandStaut
+        {
+            public string commandeTypeId { get; set; }
+            public string statusId { get; set; }
+        }
+        public List<dynamic> GetSalesOrderValidationList(int? categoryId, string type)
+        {
+            try
+            {//TODO: classify by order type and statuts
+                var resultGroup = (from order in context.Pomst
+                    where categoryId == null || order.StatPo == categoryId.ToString()
+                          && type == "" || order.TypePo == type
+                    orderby order.TypePo , order.StatPo, order.DatePo descending
+                    group order by new { order.TypePo, order.StatPo } into g
+                    select new CommandStaut()
+                    {
+                        commandeTypeId = g.Key.TypePo,
+                        statusId = g.Key.StatPo
+                    }).ToList<CommandStaut>();
+
+                var result = (from r in resultGroup
+                    select new
+                    {
+                        commandDetails = (from order in context.Pomst
+                            where order.TypePo == r.commandeTypeId && order.StatPo == r.statusId
+                            select new
+                            {
+                                commandeId = order.PonbPo,
+                                commandeCreateDate = order.DatePo,
+                                updateOn = order.LdatPo.ToString(),
+                                receiver = order.TnamPo,
+                                status = GetStatus(Int32.Parse(order.StatPo)),
+                                type = order.TcpyPo, // 单位
+                                creator = context.User.Where(x => x.Id == order.CreaPo).Select(y => y.Name).FirstOrDefault( ),
+                                commandeCreator = order.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
+                            }),
+                        r.commandeTypeId,
+                        commandTypeLabel = GetCommandTypeLabelById(r.commandeTypeId),
+                        statusLabel = GetStatus(Int32.Parse(r.statusId)),
+                        r.statusId
+                    }).ToList<dynamic>();
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         /// <summary>
         ///  Get the detail information about a order and its cargo detail
         /// </summary>
@@ -131,9 +180,7 @@ namespace LjDataAccess.Repositories
         /// <returns></returns>
         public int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
         {
-
             string orderId = orderInfo.title;
-
             var oldOrder = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
             try
             {
@@ -159,6 +206,7 @@ namespace LjDataAccess.Repositories
                     oldOrder.MrmkPo = orderInfo.remarkCorrige;
                     oldOrder.RvmkPo = orderInfo.remarkfeedback;
                     oldOrder.LdatPo = DateTime.Now;
+                    oldOrder.FcpyPo = orderInfo.entrepriseName;
 
                     context.Pomst.Update(oldOrder);
 
@@ -168,11 +216,10 @@ namespace LjDataAccess.Repositories
                     {
                         context.Popart.Remove(p);
                     }
-
                 }
                 else
                 {
-                    orderId = "LJ-" + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");
+                    orderId = "LJ-" + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");//TODO: get the last id
                     Pomst newOrder = new Pomst
                     {
                         PonbPo = orderId,
@@ -196,6 +243,7 @@ namespace LjDataAccess.Repositories
                         LedtPo = orderInfo.userId,
                         MrmkPo = orderInfo.remarkCorrige,
                         CachetPo = orderInfo.seal,// todo: change to the id 
+                        FcpyPo = orderInfo.entrepriseName,
                         SpyjPo = "",
                         FqrPo = "",
                         CwPo = "",
@@ -206,9 +254,7 @@ namespace LjDataAccess.Repositories
                         PlntPo ="A",
                         CmplPo = false
                 };
-
                     context.Pomst.Add(newOrder);
-                    
                 }
                 int index = 1;
                 foreach (var product in products)
@@ -218,6 +264,7 @@ namespace LjDataAccess.Repositories
                         {
                             PonbPp = orderId,
                             OrdrPp = index.ToString("00"),
+                            PartPp = product.idProduct,
                             DescPp = context.Itemmst.Where(p=>p.PartIt== product.idProduct).Select(p=>p.DescIt).FirstOrDefault(),//Get from the table data
                             TqtyPp = product.numberProduct,
                             UnitPp = product.unitProduct,
@@ -292,17 +339,21 @@ namespace LjDataAccess.Repositories
             );
             return result.FirstOrDefault();
         }
-        public int UpdateSalesOrderStatut(string userId,string orderId, string statutCode, string applicationContent)
+        public int UpdateSalesOrderStatut(string userId,string orderId, string statutCode, string applicationContent, string financialContent,string managerContent)
         {
             try
             {
                 var Order = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
                 if (Order != null)
                 {
-                    Order.FqrPo = userId;
+                    Order.FqrPo = statutCode == "1" ? userId : Order.FqrPo;
+                    Order.CwPo = statutCode == "3" ? userId : Order.CwPo;
+                    Order.JlPo = statutCode == "5" ? userId : Order.JlPo;   
                     Order.StatPo = statutCode;
-                    Order.SpyjPo = DateTime.Now + "  " +  applicationContent ;
-                    Order.FqryjPo = DateTime.Now + "  " + applicationContent;
+                    Order.SpyjPo = DateTime.Now + "  " + statutCode == "1"?applicationContent: (statutCode=="3"? financialContent :(statutCode == "5"? managerContent:"")) ;
+                    Order.FqryjPo = applicationContent!=null?(DateTime.Now + "  " + applicationContent):null;
+                    Order.CwyjPo = financialContent != null ?(DateTime.Now + "  " + financialContent):null;
+                    Order.JlyjPo = managerContent != null ? (DateTime.Now + "  " + managerContent):null;
                     context.Pomst.Update(Order);
                     context.SaveChanges();
                 }

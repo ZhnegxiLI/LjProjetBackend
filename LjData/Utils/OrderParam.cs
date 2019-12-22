@@ -26,5 +26,7 @@ namespace LjData.Models
         public string seal { get; set; }
         public bool copyAfterCheck { get; set; }
         public string remarkCorrige { get; set; }
+
+        public string entrepriseName { get; set; }
     }
 }

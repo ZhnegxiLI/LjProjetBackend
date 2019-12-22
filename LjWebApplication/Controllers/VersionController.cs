@@ -12,30 +12,28 @@ using Microsoft.AspNetCore.Mvc;
 namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]/{action}/{id?}")]
-    //[ApiController]
-    [Authorize]
+
     //[EnableCors]
-    public class CargoController : Controller
+    public class VersionController : Controller
     {
-        private readonly ICargoRepository _cargoRepository;
-     
-        public CargoController(ICargoRepository cargoRepository)
+        private readonly IVersionRepository _versionRepository;
+
+        public VersionController(IVersionRepository versionRepository)
         {
-            _cargoRepository = cargoRepository;
+            _versionRepository = versionRepository;
         }
         // GET: api/Cargo
         [HttpGet]
-        public JsonResult GetCargo(int limit)
+        public JsonResult GetVersion()
         {
-            var data =  _cargoRepository.GetCargosListByNameAsync(limit);
+            var data = _versionRepository.getMobileVersion();
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
-        [AllowAnonymous]
         [HttpGet]
-        public JsonResult GetUnitList()
+        public JsonResult GetCompanyName()
         {
-            var data = _cargoRepository.GetUnitList();
+            var data = _versionRepository.getCompanyName();
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }

@@ -32,7 +32,8 @@ namespace LjDataAccess.Repositories
                 token = GenerateToken(user.Id);
                 return new
                 {
-                    token = token
+                    token = token,
+                    permission = getUserPermissionById(user.Id)
                 };
             }
 
@@ -123,6 +124,21 @@ namespace LjDataAccess.Repositories
             res = res + "cSdT";
             return res;
         }
+
+         public List<dynamic> getUserPermissionById(string userId)
+         {
+             var result = from up in context.MobileUserPermission
+                 join p in context.MobilePermission on up.PermissionId equals p.Id
+                 where up.UserId == userId
+                 select new
+                 {
+                     userId = up.UserId,
+                     permissionId = p.Id,
+                     permissionCode = p.Code,
+                     permissionLabel = p.Label
+                 };
+             return result.ToList<dynamic>();
+         }
 
     }
 }

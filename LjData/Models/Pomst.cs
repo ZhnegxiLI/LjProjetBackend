@@ -94,5 +94,7 @@ namespace LjData.Models
 
         [JsonProperty(propertyName:"status")]
         public string StatPo { get; set; }
+        [JsonProperty(propertyName:"entrepriseName")]
+        public string FcpyPo { get; set; }
     }
 }
