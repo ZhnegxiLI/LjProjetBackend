@@ -29,7 +29,7 @@ namespace LjWebApplication.Controllers
             {
                 await response.WriteAsync(_sseRepository.ProductSseData());
                 response.Body.Flush();
-                await Task.Delay(10 * 1000);
+                await Task.Delay(10 * 1000);//10秒钟发送一次
             }
 
         }

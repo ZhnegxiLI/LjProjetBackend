@@ -45,7 +45,7 @@ namespace LjWebApplication
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             }); ;
-            
+
             services.AddDbContext<ERPDATA2Context>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"))
                 );
@@ -57,17 +57,18 @@ namespace LjWebApplication
             Log.Information("Start logging");
 
 
-            services.AddAuthentication(options => {
-                    options.DefaultAuthenticateScheme = "JwtBearer";
-                    options.DefaultChallengeScheme = "JwtBearer";
-                })
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "JwtBearer";
+                options.DefaultChallengeScheme = "JwtBearer";
+            })
                 .AddJwtBearer("JwtBearer", jwtBearerOptions =>
                 {
                     jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Secret Key You Devise")),
-                        ValidateIssuer= false,
+                        ValidateIssuer = false,
                         //ValidIssuer = "The name of the issuer",
                         ValidateAudience = false,
                         //ValidAudience = "The name of the audience",
@@ -81,7 +82,7 @@ namespace LjWebApplication
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:8080", "ionic://localhost","http://localhost", "http://localhost:8100", "http://176.176.221.117", "capacitor://localhost")
+                        builder.WithOrigins("http://localhost:8080", "ionic://localhost", "http://localhost", "http://localhost:8100", "http://176.176.221.117", "capacitor://localhost")
                             .AllowAnyHeader()
                             .AllowAnyMethod(); ;
                     });
@@ -97,28 +98,29 @@ namespace LjWebApplication
             services.AddScoped<IVersionRepository, VersionRepository>();
             services.AddScoped<IUserPermission, UserPermission>();
             services.AddScoped<ISseRepository, SseRepository>();
-
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            // Proxy
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            //app.UseForwardedHeaders(new ForwardedHeadersOptions
-            //{
-            //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            //});
-
-            app.UseCors(MyAllowSpecificOrigins);
-
-            app.UseErrorHandling();
-
-            app.UseAuthentication();
-            app.UseMvc();
         }
-    }
+
+
+            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+            {
+                // Proxy
+                if (env.IsDevelopment())
+                {
+                    app.UseDeveloperExceptionPage();
+                }
+
+                //app.UseForwardedHeaders(new ForwardedHeadersOptions
+                //{
+                //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                //});
+
+                app.UseCors(MyAllowSpecificOrigins);
+
+                app.UseErrorHandling();
+
+                app.UseAuthentication();
+                app.UseMvc();
+            }
+        }
 }
