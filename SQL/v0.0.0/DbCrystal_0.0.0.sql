@@ -155,11 +155,10 @@ DECLARE @oldStatus CHAR(1), @newStatus CHAR(1);
 		DECLARE @orderId NVARCHAR(50) = (SELECT PONB_PO FROM inserted)
 		DECLARE @oldStatusId NVARCHAR(4) = (SELECT STAT_PO FROM deleted)
 		DECLARE @newStatusId NVARCHAR(4) = (SELECT STAT_PO FROM inserted)
-		DECLARE @updateBy NVARCHAR(4) = (SELECT p.NAME_PSL FROM inserted i 
-										 INNER JOIN PERSONEL p on i.LEDT_PO = p.EMPN_PSL)
+		DECLARE @updateBy NVARCHAR(4) = (SELECT p.LEDT_PO FROM inserted)
 		DECLARE @orderType NVARCHAR(4) = (SELECT TYPE_PO FROM inserted)
 		DECLARE @returnvalue INT
-		DECLARE @url NVARCHAR(1000) = 'https://api.europetechs.com/SqlListener/UpdateOrderStatus/?userId='+ @userId +'&orderId='+@orderId+'&oldStatusId='+@oldStatusId+'&newStatusId='+@newStatusId +'&updateBy='+@updateBy + '&orderType='+@orderType
+		DECLARE @url NVARCHAR(1000) = 'https://api.europetechs.com/api/SqlListener/UpdateOrderStatus/?userId='+ @userId +'&orderId='+@orderId+'&oldStatusId='+@oldStatusId+'&newStatusId='+@newStatusId +'&updateBy='+@updateBy + '&orderType='+@orderType
         EXEC @returnvalue = P_GET_HttpRequestData @url 
         select @url
 		select @returnvalue
