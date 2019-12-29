@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LjData.Models;
+using LjData.Utils;
 using LjDataAccess;
 using LjDataAccess.Interfaces;
 using LjDataAccess.Repositories;
 using LjWebApplication.Middleware;
 using LjWebApplication.Model;
+using LjWebApplication.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -44,12 +46,11 @@ namespace LjWebApplication
             {
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            });
-            ;
+            }); ;
 
             services.AddDbContext<ERPDATA2Context>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"))
-            );
+                );
 
             /* Configure the log with serilog */
             Log.Logger = new LoggerConfiguration()
@@ -59,10 +60,10 @@ namespace LjWebApplication
 
 
             services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = "JwtBearer";
-                    options.DefaultChallengeScheme = "JwtBearer";
-                })
+            {
+                options.DefaultAuthenticateScheme = "JwtBearer";
+                options.DefaultChallengeScheme = "JwtBearer";
+            })
                 .AddJwtBearer("JwtBearer", jwtBearerOptions =>
                 {
                     jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
@@ -83,13 +84,17 @@ namespace LjWebApplication
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:8080", "ionic://localhost", "http://localhost",
-                                "http://localhost:8100", "http://176.176.221.117", "capacitor://localhost")
+                        builder.WithOrigins("http://localhost:8080", "ionic://localhost", "http://localhost", "http://localhost:8100", "http://176.176.221.117", "capacitor://localhost")
                             .AllowAnyHeader()
-                            .AllowAnyMethod();
-                        ;
+                            .WithMethods()
+                            .AllowCredentials(); ;
                     });
             });
+
+            services.AddSingleton<NotificationEvent>();
+            services.AddSingleton<NotificationService>();
+            services.AddSignalR();//前后端通讯集成，支持分组发送
+
 
             // Dependencies injection
             services.AddSingleton<IStudentRepository, MockStudentRepository>(); // Only for test
@@ -101,28 +106,32 @@ namespace LjWebApplication
             services.AddScoped<IVersionRepository, VersionRepository>();
             services.AddScoped<IUserPermission, UserPermission>();
             services.AddScoped<ISseRepository, SseRepository>();
+            services.AddScoped<ISqlListenerRepository, SqlListenerRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            // Proxy
-            if (env.IsDevelopment())
+
+            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            public void Configure(IApplicationBuilder app, IHostingEnvironment env)
             {
-                app.UseDeveloperExceptionPage();
+                // Proxy
+                if (env.IsDevelopment())
+                {
+                    app.UseDeveloperExceptionPage();
+                }
+
+                //app.UseForwardedHeaders(new ForwardedHeadersOptions
+                //{
+                //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                //});
+                
+                app.UseCors(MyAllowSpecificOrigins);
+
+
+                app.UseErrorHandling();
+
+                app.UseAuthentication();
+                app.UseSignalR(routes => routes.MapHub<NotificationHub>("/notification/signalr"));
+                app.UseMvc();
             }
-
-            //app.UseForwardedHeaders(new ForwardedHeadersOptions
-            //{
-            //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            //});
-
-            app.UseCors(MyAllowSpecificOrigins);
-
-            app.UseErrorHandling();
-
-            app.UseAuthentication();
-            app.UseMvc();
         }
-    }
 }
