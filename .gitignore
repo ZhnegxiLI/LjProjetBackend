@@ -9,3 +9,5 @@
 Properties
 /LjWebApplication/appsettings.Development.json
 /LjWebApplication/appsettings.json
+/LjWebApplication/LjWebApplication.csproj.user
+/LjWebApplication/web.config
