@@ -231,7 +231,11 @@ namespace LjDataAccess.Repositories
                             UnitPp = product.unitProduct,
                             PricPp = product.priceProduct,
                             SchdPp = product.datePayProduct,
-                            SumPp = product.numberProduct * product.priceProduct
+                            SumPp = product.numberProduct * product.priceProduct,
+                            RemkPp = product.descriptProduct,
+                            Desc3Pp = product.nameOffical,
+
+
                         };
                         index++;
                         context.Popart.Add(newCargo);

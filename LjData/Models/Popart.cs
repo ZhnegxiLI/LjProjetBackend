@@ -19,7 +19,10 @@ namespace LjData.Models
         [JsonProperty(propertyName:"cargoName")]
         public string DescPp { get; set; }
 
+        [JsonProperty(propertyName: "cargoNameOfiice")]
         public string Desc3Pp { get; set; }
+
+        [JsonProperty(propertyName: "cargoAdresseProduct")]
         public string SpecPp { get; set; }
 
         [JsonProperty(propertyName:"cargoQuantity")]
@@ -40,6 +43,7 @@ namespace LjData.Models
         [JsonProperty("scheduleCargoDate")]
         public DateTime? SchdPp { get; set; }
 
+        [JsonProperty("CargoDescripe")]
         public string RemkPp { get; set; }
         public DateTime? LdatPp { get; set; }
         
