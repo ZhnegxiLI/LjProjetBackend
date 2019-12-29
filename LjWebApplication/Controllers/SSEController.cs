@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LjDataAccess.Interfaces;
+using LjWebApplication.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,7 @@ namespace LjWebApplication.Controllers
 {
     [Route("api/[controller]/{action}/{id?}")]
     //[ApiController]
-    public class SSEController : ControllerBase
+    public class SSEController : Controller
     {
         // GET: api/SSE
         private readonly ISseRepository _sseRepository;
@@ -31,7 +32,6 @@ namespace LjWebApplication.Controllers
                 response.Body.Flush();
                 await Task.Delay(10 * 1000);//10秒钟发送一次
             }
-
         }
     }
 }

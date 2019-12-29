@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LjData.Models;
+using LjData.Utils;
 using LjDataAccess;
 using LjDataAccess.Interfaces;
 using LjDataAccess.Repositories;
 using LjWebApplication.Middleware;
 using LjWebApplication.Model;
+using LjWebApplication.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -84,9 +86,15 @@ namespace LjWebApplication
                     {
                         builder.WithOrigins("http://localhost:8080", "ionic://localhost", "http://localhost", "http://localhost:8100", "http://176.176.221.117", "capacitor://localhost")
                             .AllowAnyHeader()
-                            .AllowAnyMethod(); ;
+                            .WithMethods()
+                            .AllowCredentials(); ;
                     });
             });
+
+            services.AddSingleton<NotificationEvent>();
+            services.AddSingleton<NotificationService>();
+            services.AddSignalR();//前后端通讯集成，支持分组发送
+
 
             // Dependencies injection
             services.AddSingleton<IStudentRepository, MockStudentRepository>(); // Only for test
@@ -98,6 +106,7 @@ namespace LjWebApplication
             services.AddScoped<IVersionRepository, VersionRepository>();
             services.AddScoped<IUserPermission, UserPermission>();
             services.AddScoped<ISseRepository, SseRepository>();
+            services.AddScoped<ISqlListenerRepository, SqlListenerRepository>();
         }
 
 
@@ -114,12 +123,14 @@ namespace LjWebApplication
                 //{
                 //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                 //});
-
+                
                 app.UseCors(MyAllowSpecificOrigins);
+
 
                 app.UseErrorHandling();
 
                 app.UseAuthentication();
+                app.UseSignalR(routes => routes.MapHub<NotificationHub>("/notification/signalr"));
                 app.UseMvc();
             }
         }
