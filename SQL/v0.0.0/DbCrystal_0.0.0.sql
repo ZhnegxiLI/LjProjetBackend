@@ -151,14 +151,17 @@ DECLARE @oldStatus CHAR(1), @newStatus CHAR(1);
 	SELECT @newStatus = STAT_PO FROM inserted;
     IF @oldStatus != @newStatus
         BEGIN 
-		DECLARE @userId NVARCHAR(4) = (SELECT CREA_PO FROM POMST)
-		DECLARE @orderId NVARCHAR(50) = (SELECT PONB_PO FROM POMST)
-		DECLARE @statusId NVARCHAR(4) = (SELECT STAT_PO FROM POMST)
-		DECLARE @updateBy NVARCHAR(4) = (SELECT LEDT_PO FROM POMST)
-		DECLARE @orderType NVARCHAR(4) = (SELECT TYPE_PO FROM POMST)
+		DECLARE @userId NVARCHAR(4) = (SELECT CREA_PO FROM inserted)
+		DECLARE @orderId NVARCHAR(50) = (SELECT PONB_PO FROM inserted)
+		DECLARE @statusId NVARCHAR(4) = (SELECT STAT_PO FROM inserted)
+		DECLARE @updateBy NVARCHAR(4) = (SELECT LEDT_PO FROM inserted)
+		DECLARE @orderType NVARCHAR(4) = (SELECT TYPE_PO FROM inserted)
+		DECLARE @returnvalue INT
 		DECLARE @url NVARCHAR(1000) = 'https://api.europetechs.com/SqlListener/UpdateOrderStatus/?userId='+ @userId +'&orderId='+@orderId+'&statusId='+@statusId +'&updateBy='+@updateBy + '&orderType='+@orderType
-        EXEC P_GET_HttpRequestData @url
-        END
+        EXEC @returnvalue = P_GET_HttpRequestData @url 
+        select @url
+		select @returnvalue
+		END
 GO
 /***************************************************************
 * END SCRIPT 
