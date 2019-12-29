@@ -13,60 +13,21 @@ namespace LjDataAccess.Repositories
     public class SalesOrderRepository : ISalesOrderRepository
     {
         private readonly ERPDATA2Context context;
+        private IUtils utils;
         /// <summary>
         /// Get the status label by code id
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        private string GetStatus(int code)
-        {
-            switch (code)
-            {
-                case 0:
-                    return "未提交";
-                case 1:
-                    return "提交到财务";
-                case 2:
-                    return "财务不同意";
-                case 3:
-                    return "财务同意";
-                case 4:
-                    return "经理不同意";
-                case 5:
-                    return "经理同意";
-                case 6:
-                    return "已作废";
-                case 7:
-                    return "冲单";
-                default:
-                    return "未定义状态";
-            }
-        }
+        
 
         public SalesOrderRepository(ERPDATA2Context context)
         {
             this.context = context;
+            this.utils = new Utils();
         }
 
-        private string GetCommandTypeLabelById(string commandeTypeId)
-        {
-            string label = "";
-            switch (commandeTypeId)
-            {
-                case "I":
-                    label = "采购订单";
-                    break;
-                case "O":
-                    label = "销售订单";
-                    break;
-                default:
-                    label = "订单";
-                    break;
-            }
-
-            return label;
-
-        }
+        
 
         /// <summary>
         /// Get sales order list by user
@@ -80,12 +41,12 @@ namespace LjDataAccess.Repositories
                 var result = context.Pomst.Where(p => p.CreaPo == userId && p.TypePo == type && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
             {
                 commandeTypeId = p.TypePo,
-                commandeTypeLabel = GetCommandTypeLabelById(p.TypePo),
+                commandeTypeLabel = utils.GetCommandTypeLabelById(p.TypePo),
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
                 updateOn = p.LdatPo.ToString(),
                 receiver = p.TnamPo,
-                status = GetStatus(Int32.Parse(p.StatPo)),
+                status = this.utils.GetOrdersStatus(Int32.Parse(p.StatPo)),
                 type = p.TcpyPo, // 单位
                 creator = context.User.Where(x => x.Id ==userId).Select(y=>y.Name),
                 commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
@@ -129,14 +90,14 @@ namespace LjDataAccess.Repositories
                                 commandeCreateDate = order.DatePo,
                                 updateOn = order.LdatPo.ToString(),
                                 receiver = order.TnamPo,
-                                status = GetStatus(Int32.Parse(order.StatPo)),
+                                status = utils.GetOrdersStatus(Int32.Parse(order.StatPo)),
                                 type = order.TcpyPo, // 单位
                                 creator = context.User.Where(x => x.Id == order.CreaPo).Select(y => y.Name).FirstOrDefault( ),
                                 commandeCreator = order.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
                             }),
                         r.commandeTypeId,
-                        commandTypeLabel = GetCommandTypeLabelById(r.commandeTypeId),
-                        statusLabel = GetStatus(Int32.Parse(r.statusId)),
+                        commandTypeLabel = utils.GetCommandTypeLabelById(r.commandeTypeId),
+                        statusLabel = utils.GetOrdersStatus(Int32.Parse(r.statusId)),
                         r.statusId
                     }).ToList<dynamic>();
 
@@ -161,7 +122,7 @@ namespace LjDataAccess.Repositories
                                 commandeType = new
                                 {
                                     commandeTypeId = r.TypePo,
-                                    commandeTypeLabel = GetCommandTypeLabelById(r.TypePo),
+                                    commandeTypeLabel = utils.GetCommandTypeLabelById(r.TypePo),
                                 },
                                 salesOrderDetail = r, 
                                 cargo = (from po in context.Popart
@@ -297,6 +258,7 @@ namespace LjDataAccess.Repositories
             //    count = g.Count(),
             //    categoryName = g.
             //}).  ToList<dynamic>();
+            
             var result = from command in context.Pomst
                 where command.CreaPo == userId && command.TypePo == orderType
                          group command by command.StatPo
@@ -305,7 +267,7 @@ namespace LjDataAccess.Repositories
                 {
                     count = g.Count(),
                     categoryId = g.Key,
-                    categoryName = GetStatus(Int32.Parse(g.Key))
+                    categoryName = utils.GetOrdersStatus(Int32.Parse(g.Key))
                 };
 
             return result.ToList<dynamic>();

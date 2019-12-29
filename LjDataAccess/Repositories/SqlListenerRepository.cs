@@ -16,15 +16,17 @@ namespace LjDataAccess.Repositories
     public class SqlListenerRepository : ISqlListenerRepository
     {
         private NotificationEvent _notificationEvent;
-        private static JPushClient client = new JPushClient("","");
+        private IUtils utils;
         public SqlListenerRepository(NotificationEvent notificationEvent)
         {
             _notificationEvent = notificationEvent;
+            this.utils = new Utils();
         }
 
-        public string sendNotificationRequest(string appkey, string masterSecret ,string userId, string orderId, string statusId, string updateBy, string orderType)
+        public void sendNotificationRequest(string appkey, string masterSecret ,string userId, string orderId, string oldStatusId, string newStatusId, string updateBy, string orderType)
         {
             JPushClient client = new JPushClient(appkey, masterSecret);
+            string orderTypeDescript = utils.GetCommandTypeLabelById(orderType);
             PushPayload pushPayload = new PushPayload()
             {
                 Platform = new List<string> { "android"},
@@ -36,58 +38,13 @@ namespace LjDataAccess.Repositories
                 {
                     Android = new Android
                     {
-                        Alert = "订单 : " + orderId + ", 变更为 : " + statusId,
+                        Alert = "订单 : " + orderId + 
+                        ", 变更为 : " + utils.GetOrdersStatus(int.Parse(newStatusId)),
                         Title = "订单状态变更"
                     }
                 }
             };
-            var response = client.SendPush(pushPayload);
-            return response.Content;
-            /*HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create("https://api.jpush.cn/v3/push");
-            myReq.Method = "POST";
-            myReq.ContentType = "application/json";
-            myReq.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(
-                System.Text.Encoding.Default.GetBytes("90c6ff030b3870f48a3d3e7b:2a56bcd2612382e0fee79e57"))
-                );
-
-            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-            myReq.ProtocolVersion = HttpVersion.Version10;
-
-            var data = new
-            {
-                platform = "[android]",
-                audience = "all",
-                notification = new
-                {
-                    android = new {
-                        alert = "Hi, JPush!",
-                        title =  "Send to Android",
-                        builder_id = 1,
-                        extras = new {
-                            newsid =  321
-                        }
-                    },
-                }
-            };*/
-
-            /*byte[] bs = UTF8Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
-            myReq.ContentLength = bs.Length;
-            using (Stream reqStream = myReq.GetRequestStream())
-            {
-                reqStream.Write(bs, 0, bs.Length);
-                reqStream.Close();
-            }
-
-            HttpWebResponse response = (HttpWebResponse)myReq.GetResponse();
-            HttpStatusCode statusCode = response.StatusCode;
-            if (Equals(response.StatusCode, HttpStatusCode.OK))
-            {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream(), System.Text.Encoding.UTF8))
-                {
-                    string resultJson = reader.ReadToEnd();
-                    object json = Newtonsoft.Json.JsonConvert.DeserializeObject(resultJson);
-                }
-            }*/
+            client.SendPush(pushPayload);
 
 
         }

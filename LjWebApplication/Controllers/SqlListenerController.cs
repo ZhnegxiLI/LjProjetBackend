@@ -29,18 +29,17 @@ namespace LjWebApplication.Controllers
         }
 
         [HttpGet]
-        public JsonResult UpdateOrderStatus(string userId, string orderId, string statusId, string updateBy, string orderType)
+        public void UpdateOrderStatus(string userId, string orderId, string oldStatusId, string newStatusId, string updateBy, string orderType)
         {
             _sqlListenerRepository.sendNotificationRequest(
                 Configuration["JpushConfig:appKey"],
                 Configuration["JpushConfig:MasterSecret"],
                 userId,
                 orderId,
-                statusId,
+                oldStatusId,
+                newStatusId,
                 updateBy,
                 orderType);
-            ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = "" };
-            return Json(result);
         }
     }
 }
