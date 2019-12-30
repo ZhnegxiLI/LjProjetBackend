@@ -231,9 +231,12 @@ namespace LjDataAccess.Repositories
                             UnitPp = product.unitProduct,
                             PricPp = product.priceProduct,
                             SchdPp = product.datePayProduct,
-                            SumPp = product.numberProduct * product.priceProduct,
+                            SumPp = product.totalPrice,
                             RemkPp = product.descriptProduct,
                             Desc3Pp = product.nameOffical,
+                            EquivPp = product.unitPriceType
+
+
 
 
                         };

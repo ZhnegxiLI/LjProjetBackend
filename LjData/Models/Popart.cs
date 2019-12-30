@@ -37,7 +37,11 @@ namespace LjData.Models
         public decimal? PricPp { get; set; }
 
         public string PtypPp { get; set; }
+
+        [JsonProperty(propertyName: "unitPriceType")]
         public decimal? EquivPp { get; set; }
+
+        [JsonProperty(propertyName: "totalPrice")]
         public decimal? SumPp { get; set; }// Total price
        
         [JsonProperty("scheduleCargoDate")]

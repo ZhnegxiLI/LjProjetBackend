@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -17,9 +18,11 @@ namespace LjDataAccess.Repositories
     {
         private NotificationEvent _notificationEvent;
         private IUtils utils;
-        public SqlListenerRepository(NotificationEvent notificationEvent)
+        private readonly ERPDATA2Context context;
+        public SqlListenerRepository(NotificationEvent notificationEvent, ERPDATA2Context context)
         {
             _notificationEvent = notificationEvent;
+            this.context = context;
             this.utils = new Utils();
         }
 
@@ -27,13 +30,26 @@ namespace LjDataAccess.Repositories
         {
             JPushClient client = new JPushClient(appkey, masterSecret);
             string orderTypeDescript = utils.GetCommandTypeLabelById(orderType);
+            string updateByName = context.Personel.Where(p=>p.EmpnPsl == updateBy).Select(p=>p.NamePsl).FirstOrDefault();
+            List<string> tags;
+            if(newStatusId == "1")
+            {
+                tags = new List<string>() { "OrderModule_financialValidation" };
+            }else if (newStatusId == "2" || newStatusId == "3")
+            {
+                tags = new List<string>() { userId, "OrderModule_managerValidation" };
+            }else if(newStatusId == "4" || newStatusId == "5")
+            {
+                tags = new List<string>() { userId };
+            }
+            else
+            {
+                tags = new List<string>();
+            }
             PushPayload pushPayload = new PushPayload()
             {
                 Platform = new List<string> { "android"},
-                Audience = new Audience
-                {
-                    Alias = new List<string>() { userId}
-                },
+                Audience = new Audience { Tag = tags},
                 Notification = new Notification
                 {
                     Android = new Android
