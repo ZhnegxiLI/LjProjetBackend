@@ -11,5 +11,9 @@ namespace LjData.Models
         [Key]
         [Column("CNAM_CI")]
         public string entrepriseName { get; set; }
+        [Column("FAX_CI")]
+        public string entrepriseFax { get; set; }
+        [Column("PHON_CI")]
+        public string entrepriseTel { get; set; }
     }
 }

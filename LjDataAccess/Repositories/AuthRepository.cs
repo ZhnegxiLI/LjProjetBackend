@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
+using LjData.Models;
 //using System.Web.Http.ModelBinding;
 using LjData.Models.ViewModel;
 using LjDataAccess.Interfaces;
@@ -43,11 +45,14 @@ namespace LjDataAccess.Repositories
 
         public List<dynamic> GetUserList()
         {
-            var result = context.User.Select(p => new
-            {
-                id = p.Id,
-                username = p.Name
-            }).ToList<dynamic>();
+            var result = (from u in context.User
+                join p in context.Personel on u.Id equals p.EmpnPsl
+                where p.RsdtPsl == null // 离职日期
+                select new
+                {
+                    id = u.Id,
+                    username = u.Name
+                }).ToList<dynamic>();
             return result;
         }
 

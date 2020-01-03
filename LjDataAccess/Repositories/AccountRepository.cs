@@ -17,6 +17,7 @@ namespace LjDataAccess.Repositories
         }
         public List<Account> GetAccounts()
         {
+
             return context.Account.ToList();
         }
     }
