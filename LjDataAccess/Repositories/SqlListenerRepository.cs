@@ -55,7 +55,7 @@ namespace LjDataAccess.Repositories
                     Android = new Android
                     {
                         Alert = "订单号: " + orderId +
-                        ", \\r\\n由:"+ updateByName  + " ,变更为: " + utils.GetOrdersStatus(int.Parse(newStatusId)),
+                        ", 由:"+ updateByName  + " ,变更为: " + utils.GetOrdersStatus(int.Parse(newStatusId)),
                         Title = orderTypeDescript+"状态更变"
                     }
                 }
