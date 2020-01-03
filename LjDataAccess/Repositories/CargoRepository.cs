@@ -66,10 +66,10 @@ namespace LjDataAccess.Repositories
         {
             switch (typeId)
             {
-                case "R": return "材";
-                case "M": return "半";
-                case "F": return "成";
-                default: return "编号错误";
+                case "R": return "(材)";
+                case "M": return "(半)";
+                case "F": return "(成)";
+                default: return "";
             }
         }
     }
