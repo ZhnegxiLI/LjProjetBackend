@@ -234,7 +234,7 @@ namespace LjDataAccess.Repositories
                             SumPp = product.totalPrice,
                             RemkPp = product.descriptProduct,
                             Desc3Pp = product.nameOffical,
-                            EquivPp = product.unitPriceType,
+                            PtypPp = product.unitPriceType,
                             SpecPp = product.adresseProduct
 
 
