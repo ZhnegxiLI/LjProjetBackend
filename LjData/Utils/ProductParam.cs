@@ -17,7 +17,7 @@ namespace LjData.Models
         public string hadPaidProduct { get; set; }
         public string descriptProduct { get; set; }
         public string salesOrderCommandOrder { get; set; }
-        public decimal unitPriceType { get; set; }
+        public string unitPriceType { get; set; }
         public decimal totalPrice { get; set; }
     }
 }
