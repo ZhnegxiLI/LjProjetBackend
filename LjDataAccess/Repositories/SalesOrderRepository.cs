@@ -225,7 +225,6 @@ namespace LjDataAccess.Repositories
                 int index = 1;
                 foreach (var product in products)
                 {
-                    {
                         Popart newCargo = new Popart // Take into the cargo repository
                         {
                             PonbPp = orderId,
@@ -243,11 +242,11 @@ namespace LjDataAccess.Repositories
                             SpecPp = product.adresseProduct,
                             PlntPp = product.entrepriseType,
                             LdatPp = DateTime.Now,
-                            LedtPp = orderInfo.userId
+                            LedtPp = orderInfo.userId,
+                            EquivPp = product.equivalenceValue
                         };
                         index++;
                         context.Popart.Add(newCargo);
-                    }
                 }
                 context.SaveChanges();
             }
