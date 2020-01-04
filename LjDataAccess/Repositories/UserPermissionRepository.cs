@@ -1,4 +1,5 @@
-﻿using LjDataAccess.Interfaces;
+﻿using LjData.Models;
+using LjDataAccess.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,11 @@ namespace LjDataAccess.Repositories
         public UserPermission(ERPDATA2Context context)
         {
             this.context = context;
+        }
+
+        public List<MobilePermission> GetPermissionList()
+        {
+            return context.MobilePermission.ToList();
         }
 
         public List<dynamic> getUserPermissionById(string userId)
@@ -26,6 +32,31 @@ namespace LjDataAccess.Repositories
                     permissionLabel = p.Label
                 };
             return result.ToList<dynamic>();
+        }
+
+        public int SaveUserPermission(UserPermissionParam userPermission)
+        {
+            int retour = 0;
+            if (userPermission.permissionIds!=null && userPermission.permissionIds.Count()>0)
+            {
+               var u= context.MobileUserPermission.Where(p => p.UserId == userPermission.userId);
+                if(u != null&& u.Count()>0)
+                {
+                    context.MobileUserPermission.RemoveRange(u);
+                }
+
+                foreach (var up in userPermission.permissionIds)
+                {
+                    var permission = new MobileUserPermission();
+                    permission.UserId = userPermission.userId;
+                    permission.PermissionId = up;
+                    context.MobileUserPermission.Add(permission);
+                }
+                context.SaveChanges();
+                retour = 1;
+            }
+
+            return retour;
         }
     }
 }

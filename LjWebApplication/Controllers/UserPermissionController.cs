@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LjData.Models;
 using LjDataAccess.Interfaces;
 using LjWebApplication.Model;
 using Microsoft.AspNetCore.Authorization;
@@ -29,5 +30,6 @@ namespace LjWebApplication.Controllers
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
+
     }
 }
