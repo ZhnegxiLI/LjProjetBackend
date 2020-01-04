@@ -6,6 +6,7 @@ namespace LjData.Models
 {
     public class OrderParam
     {
+        public string entrepriseType { get; set; }
         public string receiver { get; set; }
         public string dept { get; set; }
         public string type { get; set; } //订单种类 I表示采购 0 表示销售

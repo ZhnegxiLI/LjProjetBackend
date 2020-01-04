@@ -6,6 +6,7 @@ namespace LjData.Models
 {
     public class ProductParam
     {
+        public string entrepriseType { get; set; }
         public string nameProduct { get; set; }
         public decimal numberProduct { get; set; }
         public string unitProduct { get; set; }

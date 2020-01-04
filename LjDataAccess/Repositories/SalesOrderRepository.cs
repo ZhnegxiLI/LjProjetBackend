@@ -179,8 +179,13 @@ namespace LjDataAccess.Repositories
                     }
                 }
                 else
-                {
-                    orderId = "LJ-" + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");//TODO: get the last id
+                {   
+                    var recordCreator = context.PoCntIssue.Where(p => p.TypePci == "PO").FirstOrDefault();
+                    // TODO
+                    orderId = recordCreator.PrfxPci + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");//recordCreator.MaxnPci++
+                    //recordCreator.YearPci = DateTime.Now.ToString("yyyy");
+                    //recordCreator.MaxnPci++;
+                    //context.PoCntIssue.Update(recordCreator);
                     Pomst newOrder = new Pomst
                     {
                         PonbPo = orderId,
@@ -212,7 +217,7 @@ namespace LjDataAccess.Repositories
                         JlPo = "",
                         JlyjPo = "",
                         CrtdPo = DateTime.Now,
-                        PlntPo ="A",
+                        PlntPo = orderInfo.entrepriseType,
                         CmplPo = false
                 };
                     context.Pomst.Add(newOrder);
@@ -235,11 +240,10 @@ namespace LjDataAccess.Repositories
                             RemkPp = product.descriptProduct,
                             Desc3Pp = product.nameOffical,
                             PtypPp = product.unitPriceType,
-                            SpecPp = product.adresseProduct
-
-
-
-
+                            SpecPp = product.adresseProduct,
+                            PlntPp = product.entrepriseType,
+                            LdatPp = DateTime.Now,
+                            LedtPp = orderInfo.userId
                         };
                         index++;
                         context.Popart.Add(newCargo);
@@ -402,6 +406,7 @@ namespace LjDataAccess.Repositories
                     Order.StatPo = statutCode;
                     Order.SpyjPo = DateTime.Now + " " + applicationContent;
                     Order.JlyjPo = DateTime.Now + " " + applicationContent;
+                    Order.CmplPo = true;
                     context.Pomst.Update(Order);
                     context.SaveChanges();
                 }
@@ -416,8 +421,6 @@ namespace LjDataAccess.Repositories
             }
             return 0;
         }
-
-
     }
 
 }

@@ -31,11 +31,15 @@ namespace LjDataAccess.Repositories
             // Add login logic
             if (IsValidUserAndPasswordCombination(userId, password))
             {
+                string entrepriseType = context.Personel.Where(p => p.EmpnPsl == user.Id).Select(p => p.PlntPsl)
+                    .FirstOrDefault();
                 token = GenerateToken(user.Id);
                 return new
                 {
                     token = token,
-                    permission = getUserPermissionById(user.Id)
+                    permission = getUserPermissionById(user.Id),
+                    entrepriseType = entrepriseType,
+                    accountInfo = context.CpnyInfo.Where(p=>p.entrepriseType == entrepriseType).FirstOrDefault()
                 };
             }
 
