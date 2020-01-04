@@ -20,5 +20,7 @@ namespace LjData.Models
         public string salesOrderCommandOrder { get; set; }
         public string unitPriceType { get; set; }
         public decimal totalPrice { get; set; }
+
+        public decimal equivalenceValue { get; set; }
     }
 }

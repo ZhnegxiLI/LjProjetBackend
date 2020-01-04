@@ -39,7 +39,7 @@ namespace LjData.Models
         [JsonProperty(propertyName: "unitPriceType")]
         public string PtypPp { get; set; }
 
-        
+        [JsonProperty(propertyName: "equivalenceValue")]
         public decimal? EquivPp { get; set; }
 
         [JsonProperty(propertyName: "totalPrice")]
