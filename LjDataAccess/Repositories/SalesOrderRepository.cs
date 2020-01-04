@@ -225,29 +225,41 @@ namespace LjDataAccess.Repositories
                 int index = 1;
                 foreach (var product in products)
                 {
+                    Popart newCargo = new Popart // Take into the cargo repository
                     {
-                        Popart newCargo = new Popart // Take into the cargo repository
+                        PonbPp = orderId,
+                        OrdrPp = index.ToString("00"),
+                        PartPp = product.idProduct,
+                        DescPp = context.Itemmst.Where(p=>p.PartIt== product.idProduct).Select(p=>p.DescIt).FirstOrDefault(),//Get from the table data
+                        TqtyPp = product.numberProduct,
+                        UnitPp = product.unitProduct,
+                        PricPp = product.priceProduct,
+                        SchdPp = product.datePayProduct,
+                        SumPp = product.totalPrice,
+                        RemkPp = product.descriptProduct,
+                        Desc3Pp = product.nameOffical,
+                        PtypPp = product.unitPriceType,
+                        SpecPp = product.adresseProduct,
+                        PlntPp = product.entrepriseType,
+                        LdatPp = DateTime.Now,
+                        LedtPp = orderInfo.userId
+                    };
+                    index++;
+                    context.Popart.Add(newCargo);
+
+                    if (orderInfo.copyAfterCheck == true && (orderInfo.type == "O" || orderInfo.type == "I"))
+                    {
+                       // var review = context.po
+                        if (orderInfo.type == "O")
                         {
-                            PonbPp = orderId,
-                            OrdrPp = index.ToString("00"),
-                            PartPp = product.idProduct,
-                            DescPp = context.Itemmst.Where(p=>p.PartIt== product.idProduct).Select(p=>p.DescIt).FirstOrDefault(),//Get from the table data
-                            TqtyPp = product.numberProduct,
-                            UnitPp = product.unitProduct,
-                            PricPp = product.priceProduct,
-                            SchdPp = product.datePayProduct,
-                            SumPp = product.totalPrice,
-                            RemkPp = product.descriptProduct,
-                            Desc3Pp = product.nameOffical,
-                            PtypPp = product.unitPriceType,
-                            SpecPp = product.adresseProduct,
-                            PlntPp = product.entrepriseType,
-                            LdatPp = DateTime.Now,
-                            LedtPp = orderInfo.userId
-                        };
-                        index++;
-                        context.Popart.Add(newCargo);
+
+                        }
+                        else if (orderInfo.type == "I")
+                        {
+
+                        }
                     }
+
                 }
                 context.SaveChanges();
             }

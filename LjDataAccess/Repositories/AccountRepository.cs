@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LjData.Models;
+using LjData.Models.ViewModel;
 using LjDataAccess.Interfaces;
 
 namespace LjDataAccess.Repositories
@@ -20,5 +21,6 @@ namespace LjDataAccess.Repositories
 
             return context.Account.ToList();
         }
+
     }
 }
