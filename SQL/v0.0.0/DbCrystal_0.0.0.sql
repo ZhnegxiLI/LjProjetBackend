@@ -2,6 +2,13 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+/***************************************************************
+* BEGIN SCRIPT 
+* COMMENT : 添加手机端权限模块
+* Author: ZLI
+* DATE : 29/12/2019 
+*****************************************************************/
 IF  EXISTS (select * FROM sys.views where name = 'View_User') 
 	BEGIN
 	DROP VIEW [dbo].[View_User]
@@ -13,6 +20,8 @@ CREATE view [dbo].[View_User]
 	FROM dbo.PERSONEL p
 	INNER JOIN dbo.PASSWRD pw ON p.EMPN_PSL = pw.EMPN_PSW
 GO
+
+
 
 IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='Mobile_Permission' AND XTYPE='U')
 BEGIN
@@ -40,6 +49,12 @@ BEGIN
   ADD  Mobile_Version NVARCHAR(50)
 END
 GO
+/***************************************************************
+* END SCRIPT 
+* COMMENT : 添加手机端权限模块
+* Author: ZLI
+* DATE : 29/12/2019 
+*****************************************************************/
 
 /***************************************************************
 * BEGIN SCRIPT 

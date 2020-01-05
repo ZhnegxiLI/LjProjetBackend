@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using LjData.Models;
 using LjDataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
@@ -408,6 +409,14 @@ namespace LjDataAccess.Repositories
                     Order.CmplPo = true;
                     context.Pomst.Update(Order);
                     context.SaveChanges();
+
+                    var result = context.Database.ExecuteSqlCommand("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
+                    if (result>0)
+                    {
+                        return 1;
+                    }
+
+                    return 0;
                 }
                 else
                 {
