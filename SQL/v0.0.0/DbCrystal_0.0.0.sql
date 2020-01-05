@@ -167,3 +167,74 @@ GO
 * Author: ZLI
 * DATE : 29/12/2019 
 *****************************************************************/
+
+
+
+/***************************************************************
+* START SCRIPT 
+* COMMENT : 添加更新poview ps
+* Author: ZLI
+* DATE : 29/12/2019 
+*****************************************************************/
+IF EXISTS ( SELECT  *
+            FROM    sys.objects
+            WHERE   object_id = OBJECT_ID(N'Ps_InsertOrUpdate_Poveiw')
+                    AND type IN ( N'P', N'PC' ) ) 
+BEGIN
+	DROP PROCEDURE Ps_InsertOrUpdate_Poveiw
+END
+GO
+CREATE PROCEDURE Ps_InsertOrUpdate_Poveiw  @orderId NVARCHAR(50), @userId NVARCHAR(50)
+AS   
+	DECLARE @orderType NVARCHAR(10) = (SELECT TOP 1 TYPE_PO FROM POMST WHERE PONB_PO=@orderId)
+	DECLARE @copyToPoview BIT = (SELECT TOP 1 CTOV_PO FROM POMST WHERE PONB_PO=@orderId)
+	IF @copyToPoview = 1
+		BEGIN
+		IF object_id('tempdb..#result') is not null
+		BEGIN
+			DROP TABLE #result
+		END
+		CREATE TABLE #result(
+			PLNT_PP NVARCHAR(50) NULL,  
+			DATE_PO DATETIME NULL,
+			DESC_PP NVARCHAR(50) NULL,
+			TQTY_PP DECIMAL(18,2) NULL,
+			UNIT_PP NVARCHAR(50) NULL,
+			TCPY_PO NVARCHAR(50) NULL,
+			PONB_PO NVARCHAR(50),
+			PRIC_PP DECIMAL(18,2) NULL,
+			TNAM_PO NVARCHAR(50) NULL,
+			TTEL_PO NVARCHAR(50) NULL,
+			REMK_PP NVARCHAR(100) NULL,
+			CMPL_POV BIT DEFAULT 0,
+			LDAT_POV DATETIME DEFAULT GETDATE(),
+			LEDT_POV NVARCHAR(50) NULL
+		)
+		INSERT INTO #result(PLNT_PP,DATE_PO,DESC_PP,TQTY_PP,UNIT_PP,TCPY_PO,PONB_PO,PRIC_PP,TNAM_PO,TTEL_PO,REMK_PP)
+		SELECT PLNT_PO, DATE_PO, DESC_PP, TQTY_PP, UNIT_PP, TCPY_PO, PONB_PO, PRIC_PP,TNAM_PO,TTEL_PO,REMK_PP 
+		FROM POMST PO
+		INNER JOIN POPART PP ON PO.PONB_PO = PP.PONB_PP
+		WHERE PO.PONB_PO = @orderId
+		UPDATE #result SET LEDT_POV = @userId
+		IF @orderType='O'
+		BEGIN
+			-- INSERT THE DATA 
+			INSERT INTO POVIEW(PLNT_POV,DATE_POV,DESC_POV,ORDQ_POV,UNIT_POV,NAME_POV,TELN_POV,REMK_POV,CMPL_POV,LDAT_POV,LEDT_POV,  CSTM_POV,CPON_POV,OPRC_POV)
+			SELECT PLNT_PP,DATE_PO,DESC_PP,TQTY_PP,UNIT_PP,TNAM_PO,TTEL_PO,REMK_PP, CMPL_POV, LDAT_POV, LEDT_POV,TCPY_PO,PONB_PO,PRIC_PP
+			FROM #result
+		END
+		IF @orderType = 'I'
+		BEGIN
+			-- INSERT THE DATA 
+			INSERT INTO POVIEW(PLNT_POV,DATE_POV,DESC_POV,ORDQ_POV,UNIT_POV,NAME_POV,TELN_POV,REMK_POV,CMPL_POV,LDAT_POV,LEDT_POV,  VEND_POV,VPON_POV,IPRC_POV)
+			SELECT PLNT_PP,DATE_PO,DESC_PP,TQTY_PP,UNIT_PP,TNAM_PO,TTEL_PO,REMK_PP, CMPL_POV, LDAT_POV, LEDT_POV,TCPY_PO,PONB_PO,PRIC_PP
+			FROM #result
+		END
+	END
+GO 
+/***************************************************************
+* END SCRIPT 
+* COMMENT : 添加更新poview ps
+* Author: ZLI
+* DATE : 29/12/2019 
+*****************************************************************/
