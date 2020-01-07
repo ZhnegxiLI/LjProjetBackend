@@ -51,7 +51,7 @@ namespace LjDataAccess.Repositories
                 type = p.TcpyPo, // 单位
                 creator = context.User.Where(x => x.Id ==userId).Select(y=>y.Name),
                 commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
-            }).ToList<dynamic>();
+            }).OrderByDescending(p=>p.updateOn).ToList<dynamic>();
             return result;
             }
             catch (Exception e)
