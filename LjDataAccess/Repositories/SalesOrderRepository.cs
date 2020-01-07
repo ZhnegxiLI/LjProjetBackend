@@ -46,12 +46,13 @@ namespace LjDataAccess.Repositories
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
                 updateOn = p.LdatPo.ToString(),
+                updateTime = p.LdatPo,
                 receiver = p.TnamPo,
                 status = this.utils.GetOrdersStatus(Int32.Parse(p.StatPo)),
                 type = p.TcpyPo, // 单位
                 creator = context.User.Where(x => x.Id ==userId).Select(y=>y.Name),
                 commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
-            }).OrderByDescending(p=>p.updateOn).ToList<dynamic>();
+            }).OrderByDescending(p=>p.updateTime).ToList<dynamic>();
             return result;
             }
             catch (Exception e)
