@@ -35,11 +35,11 @@ namespace LjDataAccess.Repositories
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<dynamic> GetSalesOrderByUserId(string userId, int? orderStatus, string type)
+        public dynamic GetSalesOrderByUserId(string userId, int? orderStatus, string type, int step, int begin)
         {
             try
             {
-                var result = context.Pomst.Where(p => p.CreaPo == userId && p.TypePo == type && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
+            var result = context.Pomst.Where(p => p.CreaPo == userId && p.TypePo == type && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
             {
                 commandeTypeId = p.TypePo,
                 commandeTypeLabel = utils.GetCommandTypeLabelById(p.TypePo),
@@ -52,8 +52,13 @@ namespace LjDataAccess.Repositories
                 type = p.TcpyPo, // 单位
                 creator = context.User.Where(x => x.Id ==userId).Select(y=>y.Name),
                 commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
-            }).OrderByDescending(p=>p.updateTime).ToList<dynamic>();
-            return result;
+            }).OrderByDescending(x => x.updateTime);
+            var filterResult = result.Select(p => new
+            {
+                data = result.Skip(begin*step).Take(step).ToList<dynamic>(),
+                totalCount = result.Count()
+            }).FirstOrDefault();
+            return filterResult;
             }
             catch (Exception e)
             {

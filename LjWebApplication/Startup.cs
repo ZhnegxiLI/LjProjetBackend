@@ -49,7 +49,8 @@ namespace LjWebApplication
             }); ;
 
             services.AddDbContext<ERPDATA2Context>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"))
+                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"), 
+                    builder => builder.UseRowNumberForPaging()) // IMPORTANT : use of ef function take() Skip()
                 );
 
             /* Configure the log with serilog */
