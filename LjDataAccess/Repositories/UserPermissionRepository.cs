@@ -37,7 +37,7 @@ namespace LjDataAccess.Repositories
         public int SaveUserPermission(UserPermissionParam userPermission)
         {
             int retour = 0;
-            if (userPermission.permissionIds!=null && userPermission.permissionIds.Count()>0)
+            if (userPermission.userId!="")
             {
                var u= context.MobileUserPermission.Where(p => p.UserId == userPermission.userId);
                 if(u != null&& u.Count()>0)
