@@ -461,7 +461,7 @@ namespace LjDataAccess.Repositories
                           }).OrderByDescending(p=>p.updateTime);
             var formatedResult = new
             {
-                data = result.ToList<dynamic>(),
+                data = result.Skip(param.begin * param.step).Take(param.step).ToList<dynamic>(),
                 totalCount = result.Count()
             };
             return formatedResult;

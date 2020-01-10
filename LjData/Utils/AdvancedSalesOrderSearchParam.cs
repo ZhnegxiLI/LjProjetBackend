@@ -18,5 +18,7 @@ namespace LjData.Models
         public virtual string orderId { get; set; }
         public virtual DateTime? fromDate { get; set; }
         public virtual DateTime? toDate { get; set; }
+        public virtual int step { get; set; }
+        public virtual int begin { get; set; }
     }
 }
