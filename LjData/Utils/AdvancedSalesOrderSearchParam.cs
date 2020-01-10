@@ -10,7 +10,7 @@ namespace LjData.Models
         {
             this.userIds = userIds == null ? new List<string>() : userIds;
             this.orderTypes = orderTypes == null ? new List<string>() : orderTypes;
-            this.orderTypes = orderStatus == null ? new List<string>() : orderStatus;
+            this.orderStatus = orderStatus == null ? new List<string>() : orderStatus;
         }
         public virtual List<string> userIds { get; set; }
         public virtual List<string> orderTypes { get; set; }

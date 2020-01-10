@@ -53,11 +53,11 @@ namespace LjDataAccess.Repositories
                 creator = context.User.Where(x => x.Id ==userId).Select(y=>y.Name),
                 commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
             }).OrderByDescending(x => x.updateTime);
-            var filterResult = result.Select(p => new
+            var filterResult =new
             {
                 data = result.Skip(begin*step).Take(step).ToList<dynamic>(),
                 totalCount = result.Count()
-            }).FirstOrDefault();
+            };
             return filterResult;
             }
             catch (Exception e)
@@ -444,7 +444,7 @@ namespace LjDataAccess.Repositories
                           && (param.userIds.Count() <= 0 || param.userIds.Contains(salesOrder.CreaPo))
                           && (param.orderTypes.Count() <= 0 || param.orderTypes.Contains(salesOrder.TypePo))
                           && (param.orderStatus.Count() <= 0 || param.orderStatus.Contains(salesOrder.StatPo))
-                          && (param.orderId == "" || salesOrder.PonbPo == param.orderId)
+                          && (param.orderId == ""||param.orderId==null ||  EF.Functions.Like(salesOrder.PonbPo, "%"+ param.orderId + "%"))
                           select new
                           {
                               commandeTypeId = salesOrder.TypePo,
@@ -457,14 +457,14 @@ namespace LjDataAccess.Repositories
                               status = this.utils.GetOrdersStatus(Int32.Parse(salesOrder.StatPo)),
                               type = salesOrder.TcpyPo, // 单位
                               creator = context.User.Where(x => x.Id == salesOrder.CreaPo).Select(y => y.Name),
-                              commandeCreator = salesOrder.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
-                          }).OrderByDescending(p=>p.updateTime).ToList<dynamic>();
-            var formatedResult = result.Select(p =>new
+                              commandeCreator = salesOrder.FnamPo 
+                          }).OrderByDescending(p=>p.updateTime);
+            var formatedResult = new
             {
                 data = result.ToList<dynamic>(),
                 totalCount = result.Count()
-            }).FirstOrDefault();
-            return result;
+            };
+            return formatedResult;
         }
     }
 
