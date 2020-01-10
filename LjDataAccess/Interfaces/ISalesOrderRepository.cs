@@ -7,6 +7,7 @@ namespace LjDataAccess.Interfaces
 {
     public  interface ISalesOrderRepository
     {
+        dynamic AdvancedSalesOrderSearch(AdvancedSalesOrderSearchParam param);
         dynamic GetSalesOrderValidationContent(string orderId);
         dynamic GetSalesOrderByUserId(string userId, int? categoryId, string type, int step, int begin);
 

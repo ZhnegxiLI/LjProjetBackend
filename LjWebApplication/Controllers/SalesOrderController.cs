@@ -128,5 +128,17 @@ namespace LjWebApplication.Controllers
             var result = status==0? new ApiResult() { Success = true, Msg = "OK", Type = "200" }: new ApiResult() { Success = false, Msg = "服务器内部错误", Type = "500" };
             return Json(result);
         }
+
+        [HttpPost]
+        public JsonResult AdvancedSalesOrderSearch([FromBody]AdvancedSalesOrderSearchParam param)
+        {
+            var result = new ApiResult()
+            {
+                Data = _saleOrderRepository.AdvancedSalesOrderSearch(param),
+                Msg = "OK",
+                Success = true
+            };
+            return Json(result);
+        }
     }
 }

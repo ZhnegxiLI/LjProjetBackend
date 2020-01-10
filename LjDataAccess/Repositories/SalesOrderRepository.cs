@@ -435,6 +435,37 @@ namespace LjDataAccess.Repositories
             }
             return 0;
         }
+
+        public dynamic AdvancedSalesOrderSearch(AdvancedSalesOrderSearchParam param)
+        {//todo
+            var result = (from salesOrder in context.Pomst
+                          where (param.fromDate == null || salesOrder.DatePo >= param.fromDate)
+                          && (param.toDate == null || salesOrder.DatePo <= param.toDate)
+                          && (param.userIds.Count() <= 0 || param.userIds.Contains(salesOrder.CreaPo))
+                          && (param.orderTypes.Count() <= 0 || param.orderTypes.Contains(salesOrder.TypePo))
+                          && (param.orderStatus.Count() <= 0 || param.orderStatus.Contains(salesOrder.StatPo))
+                          && (param.orderId == "" || salesOrder.PonbPo == param.orderId)
+                          select new
+                          {
+                              commandeTypeId = salesOrder.TypePo,
+                              commandeTypeLabel = utils.GetCommandTypeLabelById(salesOrder.TypePo),
+                              commandeId = salesOrder.PonbPo,
+                              commandeCreateDate = salesOrder.DatePo,
+                              updateOn = salesOrder.LdatPo.ToString(),
+                              updateTime = salesOrder.LdatPo,
+                              receiver = salesOrder.TnamPo,
+                              status = this.utils.GetOrdersStatus(Int32.Parse(salesOrder.StatPo)),
+                              type = salesOrder.TcpyPo, // 单位
+                              creator = context.User.Where(x => x.Id == salesOrder.CreaPo).Select(y => y.Name),
+                              commandeCreator = salesOrder.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
+                          }).OrderByDescending(p=>p.updateTime).ToList<dynamic>();
+            var formatedResult = result.Select(p =>new
+            {
+                data = result.ToList<dynamic>(),
+                totalCount = result.Count()
+            }).FirstOrDefault();
+            return result;
+        }
     }
 
 }
