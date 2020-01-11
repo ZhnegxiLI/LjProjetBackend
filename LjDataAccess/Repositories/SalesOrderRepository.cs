@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using LjData.Models;
 using LjDataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,7 @@ namespace LjDataAccess.Repositories
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public dynamic GetSalesOrderByUserId(string userId, int? orderStatus, string type, int step, int begin)
+        public async Task<dynamic> GetSalesOrderByUserIdAsync(string userId, int? orderStatus, string type, int step, int begin)
         {
             try
             {
@@ -55,8 +56,8 @@ namespace LjDataAccess.Repositories
             }).OrderByDescending(x => x.updateTime);
             var filterResult =new
             {
-                data = result.Skip(begin*step).Take(step).ToList<dynamic>(),
-                totalCount = result.Count()
+                data = await result.Skip(begin*step).Take(step).ToListAsync<dynamic>(),
+                totalCount = await result.CountAsync()
             };
             return filterResult;
             }
@@ -64,18 +65,17 @@ namespace LjDataAccess.Repositories
             {
                 throw e;
             }
-      
         }
         public class CommandStaut
         {
             public string commandeTypeId { get; set; }
             public string statusId { get; set; }
         }
-        public List<dynamic> GetSalesOrderValidationList(int? categoryId, string type)
+        public async Task<List<dynamic>> GetSalesOrderValidationList(int? categoryId, string type)
         {
             try
             {//TODO: classify by order type and statuts
-                var resultGroup = (from order in context.Pomst
+                var resultGroup = await (from order in context.Pomst
                     where categoryId == null || order.StatPo == categoryId.ToString()
                           && type == "" || order.TypePo == type
                     orderby order.TypePo , order.StatPo, order.DatePo descending
@@ -84,30 +84,28 @@ namespace LjDataAccess.Repositories
                     {
                         commandeTypeId = g.Key.TypePo,
                         statusId = g.Key.StatPo
-                    }).ToList<CommandStaut>();
+                    }).ToListAsync<CommandStaut>();
 
                 var result = (from r in resultGroup
-                    select new
-                    {
-                        commandDetails = (from order in context.Pomst
-                            where order.TypePo == r.commandeTypeId && order.StatPo == r.statusId
-                            select new
-                            {
-                                commandeId = order.PonbPo,
-                                commandeCreateDate = order.DatePo,
-                                updateOn = order.LdatPo.ToString(),
-                                receiver = order.TnamPo,
-                                status = utils.GetOrdersStatus(Int32.Parse(order.StatPo)),
-                                type = order.TcpyPo, // 单位
-                                creator = context.User.Where(x => x.Id == order.CreaPo).Select(y => y.Name).FirstOrDefault( ),
-                                commandeCreator = order.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
-                            }),
-                        r.commandeTypeId,
-                        commandTypeLabel = utils.GetCommandTypeLabelById(r.commandeTypeId),
-                        statusLabel = utils.GetOrdersStatus(Int32.Parse(r.statusId)),
-                        r.statusId
-                    }).ToList<dynamic>();
-
+                                select new
+                                {
+                                    commandDetails =  (from order in context.Pomst
+                                        where order.TypePo == r.commandeTypeId && order.StatPo == r.statusId
+                                        select new
+                                        {
+                                            commandeId = order.PonbPo,
+                                            commandeCreateDate = order.DatePo,
+                                            updateOn = order.LdatPo.ToString(),
+                                            receiver = order.TnamPo,
+                                            status = utils.GetOrdersStatus(Int32.Parse(order.StatPo)),
+                                            type = order.TcpyPo, // 单位
+                                            creator = context.User.Where(x => x.Id == order.CreaPo).Select(y => y.Name).FirstOrDefault( ),
+                                            commandeCreator = order.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
+                                        }),
+                                    r.commandeTypeId,
+                                    commandTypeLabel = utils.GetCommandTypeLabelById(r.commandeTypeId),
+                                    statusLabel = utils.GetOrdersStatus(Int32.Parse(r.statusId)),
+                                    r.statusId}).ToList<dynamic>();
                 return result;
             }
             catch (Exception e)
@@ -120,22 +118,21 @@ namespace LjDataAccess.Repositories
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public dynamic GetSalesOrderListByOrderId(string orderId)
+        public async Task<dynamic> GetSalesOrderListByOrderIdAsync(string orderId)
         {
-            var result = context.Pomst.Where(p => p.PonbPo == orderId).ToList();
-            var newResult = from r in result
-                            select (new
-                            {
+            var result = await context.Pomst.Where(p => p.PonbPo == orderId).ToListAsync();
+            var newResult = (from r in result
+                            select (new{
                                 commandeType = new
                                 {
                                     commandeTypeId = r.TypePo,
                                     commandeTypeLabel = utils.GetCommandTypeLabelById(r.TypePo),
                                 },
-                                salesOrderDetail = r, 
+                                salesOrderDetail = r,
                                 cargo = (from po in context.Popart
                                          where po.PonbPp == r.PonbPo
-                                         select po).ToList()
-                            });
+                                         select po) //.ToList()
+                            })).ToList();
             var r2 = newResult.FirstOrDefault();
             return r2;
         }
@@ -146,10 +143,10 @@ namespace LjDataAccess.Repositories
         /// <param name="orderInfo"></param>
         /// /// <param name="products"></param>
         /// <returns></returns>
-        public int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products)
+        public async Task<int> InsertSalesOrderByOrderIdAsync(OrderParam orderInfo, List<ProductParam> products)
         {
             string orderId = orderInfo.title;
-            var oldOrder = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
+            var oldOrder = await context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefaultAsync();
             try
             {
                 if (oldOrder != null)
@@ -178,7 +175,7 @@ namespace LjDataAccess.Repositories
 
                     context.Pomst.Update(oldOrder);
 
-                    var productOld = context.Popart.Where(p => p.PonbPp == orderId);
+                    var productOld = await context.Popart.Where(p => p.PonbPp == orderId).ToListAsync();
 
                     foreach (Popart p in productOld)
                     {
@@ -187,7 +184,7 @@ namespace LjDataAccess.Repositories
                 }
                 else
                 {   
-                    var recordCreator = context.PoCntIssue.Where(p => p.TypePci == "PO").FirstOrDefault();
+                    var recordCreator = await context.PoCntIssue.Where(p => p.TypePci == "PO").FirstOrDefaultAsync();
                     // TODO
                     orderId = recordCreator.PrfxPci + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");//recordCreator.MaxnPci++
                     //recordCreator.YearPci = DateTime.Now.ToString("yyyy");
@@ -237,7 +234,7 @@ namespace LjDataAccess.Repositories
                             PonbPp = orderId,
                             OrdrPp = index.ToString("00"),
                             PartPp = product.idProduct,
-                            DescPp = context.Itemmst.Where(p=>p.PartIt== product.idProduct).Select(p=>p.DescIt).FirstOrDefault(),//Get from the table data
+                            DescPp = await context.Itemmst.Where(p=>p.PartIt== product.idProduct).Select(p=>p.DescIt).FirstOrDefaultAsync(),//Get from the table data
                             TqtyPp = product.numberProduct,
                             UnitPp = product.unitProduct,
                             PricPp = product.priceProduct,
@@ -255,7 +252,7 @@ namespace LjDataAccess.Repositories
                         index++;
                         context.Popart.Add(newCargo);
                 }
-                context.SaveChanges();
+               await context.SaveChangesAsync();
             }
             catch(Exception e)
             {
@@ -269,7 +266,7 @@ namespace LjDataAccess.Repositories
             productOld.SchdPp = product.datePayProduct;*/
         }
 
-        public List<dynamic> GetSalesOrderCategoriesByUserId(string userId, string orderType)// 'I'/'0'
+        public async Task<List<dynamic>> GetSalesOrderCategoriesByUserIdAsync(string userId, string orderType)// 'I'/'0'
         {
             //var result = context.Pomst.Where(p => p.CreaPo == userId).GroupBy(p => p.StatPo).Select(g=> new
             //{
@@ -288,10 +285,10 @@ namespace LjDataAccess.Repositories
                     categoryName = utils.GetOrdersStatus(Int32.Parse(g.Key))
                 };
 
-            return result.ToList<dynamic>();
+            return await result.ToListAsync<dynamic>();
         }
 
-        public dynamic GetSalesOrderValidationContent(string orderId)
+        public async Task<dynamic> GetSalesOrderValidationContentAsync(string orderId)
         {
             var result = context.Pomst.Where(p => p.PonbPo == orderId).Select(p=>
                 new
@@ -317,7 +314,7 @@ namespace LjDataAccess.Repositories
                     actualContent = p.SpyjPo
                 }
             );
-            return result.FirstOrDefault();
+            return await result.FirstOrDefaultAsync();
         }
         //public int UpdateSalesOrderStatut(string userId,string orderId, string statutCode, string applicationContent, string financialContent,string managerContent)
         //{
@@ -349,11 +346,11 @@ namespace LjDataAccess.Repositories
         //    return 0;
         //}
 
-        public int SetSenderApplication(string userId, string orderId, string statutCode, string applicationContent)
+        public async Task<int> SetSenderApplicationAsync(string userId, string orderId, string statutCode, string applicationContent)
         {
             try
             {
-                var Order = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
+                var Order = await context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefaultAsync();
                 if (Order != null)
                 {
                     Order.FqrPo =  userId;
@@ -361,7 +358,7 @@ namespace LjDataAccess.Repositories
                     Order.SpyjPo = DateTime.Now + " " + applicationContent;
                     Order.FqryjPo = DateTime.Now + " " + applicationContent;
                     context.Pomst.Update(Order);
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                 }
                 else
                 {
@@ -375,11 +372,11 @@ namespace LjDataAccess.Repositories
             return 0;
         }
 
-        public int SetFinancialApplication(string userId, string orderId, string statutCode, string applicationContent)
+        public async Task<int> SetFinancialApplicationAsync(string userId, string orderId, string statutCode, string applicationContent)
         {
             try
             {
-                var Order = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
+                var Order = await context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefaultAsync();
                 if (Order != null)
                 {
                     Order.CwPo = userId;
@@ -387,7 +384,7 @@ namespace LjDataAccess.Repositories
                     Order.SpyjPo = DateTime.Now + " " + applicationContent;
                     Order.CwyjPo = DateTime.Now + " " + applicationContent;
                     context.Pomst.Update(Order);
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                 }
                 else
                 {
@@ -401,11 +398,11 @@ namespace LjDataAccess.Repositories
             return 0;
         }
 
-        public int SetManagerApplication(string userId, string orderId, string statutCode, string applicationContent)
+        public async Task<int> SetManagerApplicationAsync(string userId, string orderId, string statutCode, string applicationContent)
         {
             try
             {
-                var Order = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
+                var Order = await context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefaultAsync();
                 if (Order != null)
                 {
                     Order.JlPo = userId;
@@ -414,7 +411,7 @@ namespace LjDataAccess.Repositories
                     Order.JlyjPo = DateTime.Now + " " + applicationContent;
                     Order.CmplPo = true;
                     context.Pomst.Update(Order);
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
 
                     var result = context.Database.ExecuteSqlCommand("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
                     if (result>0)
@@ -436,7 +433,7 @@ namespace LjDataAccess.Repositories
             return 0;
         }
 
-        public dynamic AdvancedSalesOrderSearch(AdvancedSalesOrderSearchParam param)
+        public async Task<dynamic> AdvancedSalesOrderSearchAsync(AdvancedSalesOrderSearchParam param)
         {//todo
             var result = (from salesOrder in context.Pomst
                           where (param.fromDate == null || salesOrder.DatePo >= param.fromDate)
@@ -461,8 +458,8 @@ namespace LjDataAccess.Repositories
                           }).OrderByDescending(p=>p.updateTime);
             var formatedResult = new
             {
-                data = result.Skip(param.begin * param.step).Take(param.step).ToList<dynamic>(),
-                totalCount = result.Count()
+                data = await result.Skip(param.begin * param.step).Take(param.step).ToListAsync<dynamic>(),
+                totalCount = await result.CountAsync()
             };
             return formatedResult;
         }

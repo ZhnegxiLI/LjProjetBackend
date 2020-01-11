@@ -27,32 +27,32 @@ namespace LjWebApplication.Controllers
         }
         // GET: SalesOrder
         [HttpGet]
-        public JsonResult GetSalesOrderByUserId(string userId, int? categoryId, string type, int step, int begin)
+        public async Task<JsonResult> GetSalesOrderByUserId(string userId, int? categoryId, string type, int step, int begin)
         {
-            var data = _saleOrderRepository.GetSalesOrderByUserId(userId, categoryId, type,step, begin);
+            var data = await _saleOrderRepository.GetSalesOrderByUserIdAsync(userId, categoryId, type,step, begin);
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
 
         [HttpPost]
-        public JsonResult GetSalesOrderValidationList(int? categoryId, string type)
+        public async Task<JsonResult> GetSalesOrderValidationList(int? categoryId, string type)
         {
-            var data = _saleOrderRepository.GetSalesOrderValidationList(categoryId, type);
+            var data = await _saleOrderRepository.GetSalesOrderValidationList(categoryId, type);
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
 
         [HttpGet]
-        public JsonResult GetSalesOrderByOrderId(string orderId)
+        public async Task<JsonResult> GetSalesOrderByOrderId(string orderId)
         {
-            var data = _saleOrderRepository.GetSalesOrderListByOrderId(orderId);
+            var data = await _saleOrderRepository.GetSalesOrderListByOrderIdAsync(orderId);
             //string output = JsonConvert.SerializeObject(result);
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data=data };
             return Json(result);
         }
 
         [HttpPost]
-        public JsonResult InsertSalesOrderByOrderId()
+        public async Task<JsonResult> InsertSalesOrderByOrderId()
         {
             var result = string.Empty;
             ApiResult ret;
@@ -61,7 +61,7 @@ namespace LjWebApplication.Controllers
                 result = reader.ReadToEnd();
             }
             InsertOrderParam resultJson = JsonConvert.DeserializeObject<InsertOrderParam>(result);
-            int status = _saleOrderRepository.InsertSalesOrderByOrderId(resultJson.orderInfo, resultJson.products);
+            int status = await _saleOrderRepository.InsertSalesOrderByOrderIdAsync(resultJson.orderInfo, resultJson.products);
             if (status == 0) {
                 ret = new ApiResult() { Success = true, Msg = "OK", Type = "200" };
             }
@@ -73,11 +73,11 @@ namespace LjWebApplication.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetSalesOrderCategoriesByUserId(string userId, string type)
+        public async Task<JsonResult> GetSalesOrderCategoriesByUserId(string userId, string type)
         {
            var result = new ApiResult()
             {
-                Data = _saleOrderRepository.GetSalesOrderCategoriesByUserId(userId,type),
+                Data = await _saleOrderRepository.GetSalesOrderCategoriesByUserIdAsync(userId,type),
                 Msg = "OK",
                 Success = true
             };
@@ -85,11 +85,11 @@ namespace LjWebApplication.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetSalesOrderValidationContent(string orderId)
+        public async Task<JsonResult> GetSalesOrderValidationContent(string orderId)
         {
             var result = new ApiResult()
             {
-                Data = _saleOrderRepository.GetSalesOrderValidationContent(orderId),
+                Data = await _saleOrderRepository.GetSalesOrderValidationContentAsync(orderId),
                 Msg = "OK",
                 Success = true
             };
@@ -107,22 +107,22 @@ namespace LjWebApplication.Controllers
 
          
         [HttpPost]
-        public JsonResult UpdateSalesOrderStatut([FromBody]updateCriteria criteria)
+        public async Task<JsonResult> UpdateSalesOrderStatut([FromBody]updateCriteria criteria)
         {
             var status = 0;
             if (criteria.statutCode=="1")
             {
-                status = _saleOrderRepository.SetSenderApplication(criteria.userId, criteria.orderId, criteria.statutCode,
+                status = await _saleOrderRepository.SetSenderApplicationAsync(criteria.userId, criteria.orderId, criteria.statutCode,
                     criteria.applicationContent);
             }
             else if (criteria.statutCode == "3")
             {
-                status = _saleOrderRepository.SetFinancialApplication(criteria.userId, criteria.orderId, criteria.statutCode,
+                status = await _saleOrderRepository.SetFinancialApplicationAsync(criteria.userId, criteria.orderId, criteria.statutCode,
                     criteria.applicationContent);
             }
             else if (criteria.statutCode == "5")
             {
-                status = _saleOrderRepository.SetManagerApplication(criteria.userId, criteria.orderId, criteria.statutCode,
+                status = await _saleOrderRepository.SetManagerApplicationAsync(criteria.userId, criteria.orderId, criteria.statutCode,
                     criteria.applicationContent);
             }
             var result = status==0? new ApiResult() { Success = true, Msg = "OK", Type = "200" }: new ApiResult() { Success = false, Msg = "服务器内部错误", Type = "500" };
@@ -130,11 +130,11 @@ namespace LjWebApplication.Controllers
         }
 
         [HttpPost]
-        public JsonResult AdvancedSalesOrderSearch([FromBody]AdvancedSalesOrderSearchParam param)
+        public async Task<JsonResult> AdvancedSalesOrderSearch([FromBody]AdvancedSalesOrderSearchParam param)
         {
             var result = new ApiResult()
             {
-                Data = _saleOrderRepository.AdvancedSalesOrderSearch(param),
+                Data = await _saleOrderRepository.AdvancedSalesOrderSearchAsync(param),
                 Msg = "OK",
                 Success = true
             };

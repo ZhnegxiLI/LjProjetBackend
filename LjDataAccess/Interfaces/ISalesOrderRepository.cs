@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using LjData.Models;
 
 namespace LjDataAccess.Interfaces
 {
     public  interface ISalesOrderRepository
     {
-        dynamic AdvancedSalesOrderSearch(AdvancedSalesOrderSearchParam param);
-        dynamic GetSalesOrderValidationContent(string orderId);
-        dynamic GetSalesOrderByUserId(string userId, int? categoryId, string type, int step, int begin);
+        Task<dynamic> AdvancedSalesOrderSearchAsync(AdvancedSalesOrderSearchParam param);
+        Task<dynamic> GetSalesOrderValidationContentAsync(string orderId);
+        Task<dynamic> GetSalesOrderByUserIdAsync(string userId, int? categoryId, string type, int step, int begin);
 
-        int SetSenderApplication(string userId, string orderId, string statutCode, string applicationContent);
-        int SetFinancialApplication(string userId, string orderId, string statutCode, string applicationContent);
-        int SetManagerApplication(string userId, string orderId, string statutCode, string applicationContent);
-        List<dynamic> GetSalesOrderValidationList(int? categoryId, string type);
+        Task<int> SetSenderApplicationAsync(string userId, string orderId, string statutCode, string applicationContent);
+        Task<int> SetFinancialApplicationAsync(string userId, string orderId, string statutCode, string applicationContent);
+        Task<int> SetManagerApplicationAsync(string userId, string orderId, string statutCode, string applicationContent);
+        Task<List<dynamic>> GetSalesOrderValidationList(int? categoryId, string type);
 
-        dynamic GetSalesOrderListByOrderId(string orderId);
+        Task<dynamic> GetSalesOrderListByOrderIdAsync(string orderId);
 
-        int InsertSalesOrderByOrderId(OrderParam orderInfo, List<ProductParam> products);
+        Task<int> InsertSalesOrderByOrderIdAsync(OrderParam orderInfo, List<ProductParam> products);
 
         //int UpdateSalesOrderStatut(string userId, string orderId, string statutCode, string applicationContent, string financialContent, string managerContent);
 
-        List<dynamic> GetSalesOrderCategoriesByUserId(string userId, string type);
+        Task<List<dynamic>> GetSalesOrderCategoriesByUserIdAsync(string userId, string type);
     }
 }
