@@ -186,10 +186,11 @@ namespace LjDataAccess.Repositories
                 {   
                     var recordCreator = await context.PoCntIssue.Where(p => p.TypePci == "PO").FirstOrDefaultAsync();
                     // TODO
-                    orderId = recordCreator.PrfxPci + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");//recordCreator.MaxnPci++
-                    //recordCreator.YearPci = DateTime.Now.ToString("yyyy");
-                    //recordCreator.MaxnPci++;
-                    //context.PoCntIssue.Update(recordCreator);
+                    // orderId = recordCreator.PrfxPci + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");//recordCreator.MaxnPci++
+                    recordCreator.YearPci = DateTime.Now.ToString("yyyy");
+                    recordCreator.MaxnPci = recordCreator.MaxnPci+1;
+                    context.PoCntIssue.Update(recordCreator);
+                    orderId = recordCreator.PrfxPci + recordCreator.YearPci + "-"+ Convert.ToInt32(recordCreator.MaxnPci).ToString("0000");
                     Pomst newOrder = new Pomst
                     {
                         PonbPo = orderId,
