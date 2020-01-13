@@ -46,7 +46,7 @@ namespace LjDataAccess.Repositories
                 commandeTypeLabel = utils.GetCommandTypeLabelById(p.TypePo),
                 commandeId = p.PonbPo,
                 commandeCreateDate = p.DatePo,
-                updateOn = p.LdatPo.ToString(),
+                updateOn = p.LdatPo.HasValue ? p.LdatPo.Value.ToString("yyyy-MM-dd hh:mm:ss") : "[N/A]",
                 updateTime = p.LdatPo,
                 receiver = p.TnamPo,
                 status = this.utils.GetOrdersStatus(Int32.Parse(p.StatPo)),
@@ -95,7 +95,7 @@ namespace LjDataAccess.Repositories
                                         {
                                             commandeId = order.PonbPo,
                                             commandeCreateDate = order.DatePo,
-                                            updateOn = order.LdatPo.ToString(),
+                                            updateOn = order.LdatPo.HasValue ? order.LdatPo.Value.ToString("yyyy-MM-dd hh:mm:ss") : "[N/A]",
                                             receiver = order.TnamPo,
                                             status = utils.GetOrdersStatus(Int32.Parse(order.StatPo)),
                                             type = order.TcpyPo, // 单位
