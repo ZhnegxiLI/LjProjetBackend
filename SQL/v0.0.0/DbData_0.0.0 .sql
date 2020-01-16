@@ -79,3 +79,27 @@ GO
 * 16/12/2019 
 */
 
+/* 
+* BEGIN: Add specific permission review order permission
+* ZLI
+* 16/01/2019 
+*/
+IF NOT EXISTS (SELECT * FROM Mobile_Permission WHERE Code = 'OrderModule_reviewSalesOrder')
+BEGIN
+	INSERT INTO Mobile_Permission(Code,Label)
+	VALUES ('OrderModule_reviewSalesOrder','观看销售订单')
+END
+
+IF NOT EXISTS (SELECT * FROM Mobile_Permission WHERE Code = 'OrderModule_reviewPurchaseOrder')
+BEGIN
+	INSERT INTO Mobile_Permission(Code,Label)
+	VALUES ('OrderModule_reviewPurchaseOrder','观看采购订单')
+END
+
+GO
+
+/* 
+* END: BEGIN: Add specific permission review order permission
+* ZLI
+* 16/01/2019 
+*/

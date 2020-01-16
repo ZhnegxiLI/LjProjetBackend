@@ -27,7 +27,7 @@ namespace LjData.Models
 
         [JsonProperty(propertyName:"cargoQuantity")]
         public decimal? TqtyPp { get; set; }
-
+        [JsonProperty(propertyName: "hadPaidProduct")]
         public decimal? RecqPp { get; set; }
 
         [JsonProperty(propertyName:"cargoUnit")]
