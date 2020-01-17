@@ -64,6 +64,11 @@ namespace LjDataAccess.Repositories
         private bool IsValidUserAndPasswordCombination(string userId, string password)
         {
             var e = encode(password);
+            var testUser = context.User.Where(p => p.Id == userId).FirstOrDefault();
+/*            var passwork = testUser.Password;
+            foreach(var i in passwork){
+                var t = i;
+            }*/
             var user = context.User.Where(p => p.Id == userId && p.Password == encode(password)).FirstOrDefault();
             return user!=null;
         }
@@ -123,14 +128,15 @@ namespace LjDataAccess.Repositories
             string res = "";
             string codage = "C3D4E5";
             int codeLen = codage.Length;
+            arg = (arg.Length < 10) ? arg + new String(' ', (10 - arg.Length)) : arg;
+            arg = arg.ToUpper();
             int m = 0;
             for (int i = 0; i < arg.Length; i++, m++)
             {
                 if (m >= codeLen) m = 0;
                 res += (char)(arg[i] + codage[m]);
-            }
+             }
 
-            res = res + "cSdT";
             return res;
         }
 
