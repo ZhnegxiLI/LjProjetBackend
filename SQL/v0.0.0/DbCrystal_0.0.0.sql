@@ -253,3 +253,34 @@ GO
 * Author: ZLI
 * DATE : 29/12/2019 
 *****************************************************************/
+
+/***************************************************************
+* BEGIN SCRIPT 
+* COMMENT : 添加Mobile_PushMessage,用于发推送
+* Author: ZLI
+* DATE : 02/02/2019 
+*****************************************************************/
+IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='Mobile_PushMessage' AND XTYPE='U')
+BEGIN
+CREATE TABLE [dbo].[Mobile_PushMessage](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] NVARCHAR(4) NULL,
+	[Title] NVARCHAR(500),
+	[Body] NVARCHAR(MAX),
+	[UserGroup] NVARCHAR(100) NULL
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+/***************************************************************
+* END SCRIPT 
+* COMMENT : 添加Mobile_PushMessage,用于发推送
+* Author: ZLI
+* DATE : 02/02/2019 
+*****************************************************************/
+
+
+
