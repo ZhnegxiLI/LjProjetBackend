@@ -13,10 +13,11 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LjDataAccess.Repositories
 {
-    public class SendMobilePushRepository
+    public class SendMobilePushRepository: ISendMobilePushRepository
     {
         private NotificationEvent _notificationEvent;
         private IUtils utils;
@@ -31,7 +32,7 @@ namespace LjDataAccess.Repositories
             Configuration = configuration;
         }
 
-        public void sendNotificationRequest()
+        public async Task sendNotificationRequestAsync()
         {
 
             JPushClient client = new JPushClient(Configuration["JpushConfig:appKey"], Configuration["JpushConfig:MasterSecret"]);
@@ -45,8 +46,12 @@ namespace LjDataAccess.Repositories
             foreach (MobilePushMessage message in messageList)
             {
                 PushPayload pushPayload = creatPushMessage(message);
-                client.SendPush(pushPayload);
+                var test = client.SendPush(pushPayload);
+
+                message.IsSend = true;
+                context.MobilePushMessage.Update(message);
             }
+            await context.SaveChangesAsync();
             return;
         }
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Hangfire;
 using LjData.Models;
 using LjData.Utils;
 using LjDataAccess;
@@ -96,6 +97,8 @@ namespace LjWebApplication
             services.AddSingleton<NotificationService>();
             services.AddSignalR();//前后端通讯集成，支持分组发送
 
+            //配置定时任务
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnectionString")));
 
             // Dependencies injection
             services.AddSingleton<IStudentRepository, MockStudentRepository>(); // Only for test
@@ -107,12 +110,13 @@ namespace LjWebApplication
             services.AddScoped<IVersionRepository, VersionRepository>();
             services.AddScoped<IUserPermission, UserPermission>();
             services.AddScoped<ISseRepository, SseRepository>();
+            services.AddScoped<ISendMobilePushRepository, SendMobilePushRepository>();
             //services.AddScoped<ISqlListenerRepository, SqlListenerRepository>();
         }
 
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+            public void Configure(IApplicationBuilder app, IHostingEnvironment env, ISendMobilePushRepository sendMobilePushRepository)
             {
                 // Proxy
                 if (env.IsDevelopment())
@@ -124,9 +128,15 @@ namespace LjWebApplication
                 //{
                 //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                 //});
-                
-                app.UseCors(MyAllowSpecificOrigins);
 
+
+                app.UseHangfireServer();
+                app.UseHangfireDashboard();
+
+
+                RecurringJob.AddOrUpdate(() => sendMobilePushRepository.sendNotificationRequestAsync(), Cron.Minutely);
+
+                app.UseCors(MyAllowSpecificOrigins);
 
                 app.UseErrorHandling();
 

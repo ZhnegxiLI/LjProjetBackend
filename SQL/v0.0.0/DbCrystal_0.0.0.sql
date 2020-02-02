@@ -276,6 +276,10 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 END
 GO
+IF NOT EXISTS (select * from sys.objects where type = 'TR' and name = 'TR_UpdateOrderStatut')
+BEGIN
+	DROP TRIGGER [dbo].[TR_UpdateOrderStatut]
+END
 /***************************************************************
 * END SCRIPT 
 * COMMENT : 添加Mobile_PushMessage,用于发推送
