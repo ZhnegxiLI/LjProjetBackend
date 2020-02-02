@@ -65,13 +65,13 @@ namespace LjDataAccess.Repositories
             
             PushPayload pushPayload = new PushPayload()
             {
-                Platform = new List<string> { "android" },
+                Platform = new List<string> { "android","ios" },
                 Audience = new Audience { Tag = tags },
                 Notification = new Notification
                 {
+                    Alert = message.Body,
                     Android = new Android
                     {
-                        Alert = message.Body,
                         Title = message.Title
                     }
                 }
