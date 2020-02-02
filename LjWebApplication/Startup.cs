@@ -110,12 +110,13 @@ namespace LjWebApplication
             services.AddScoped<IVersionRepository, VersionRepository>();
             services.AddScoped<IUserPermission, UserPermission>();
             services.AddScoped<ISseRepository, SseRepository>();
+            services.AddScoped<ISendMobilePushRepository, SendMobilePushRepository>();
             //services.AddScoped<ISqlListenerRepository, SqlListenerRepository>();
         }
 
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IHostingEnvironment env, IClientRepository clientRepository)
+            public void Configure(IApplicationBuilder app, IHostingEnvironment env, ISendMobilePushRepository sendMobilePushRepository)
             {
                 // Proxy
                 if (env.IsDevelopment())
@@ -133,7 +134,7 @@ namespace LjWebApplication
                 app.UseHangfireDashboard();
 
 
-                RecurringJob.AddOrUpdate(() => clientRepository.GetClieListByVagueNameSearch(10), Cron.Minutely);
+                RecurringJob.AddOrUpdate(() => sendMobilePushRepository.sendNotificationRequestAsync(), Cron.Minutely);
 
                 app.UseCors(MyAllowSpecificOrigins);
 
