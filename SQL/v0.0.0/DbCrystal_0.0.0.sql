@@ -267,7 +267,8 @@ CREATE TABLE [dbo].[Mobile_PushMessage](
 	[UserId] NVARCHAR(4) NULL,
 	[Title] NVARCHAR(500),
 	[Body] NVARCHAR(MAX),
-	[UserGroup] NVARCHAR(100) NULL
+	[UserGroup] NVARCHAR(100) NULL,
+	[IsSend] BIT
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
