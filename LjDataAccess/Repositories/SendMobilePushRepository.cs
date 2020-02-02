@@ -46,7 +46,8 @@ namespace LjDataAccess.Repositories
             foreach (MobilePushMessage message in messageList)
             {
                 PushPayload pushPayload = creatPushMessage(message);
-                client.SendPush(pushPayload);
+                var test = client.SendPush(pushPayload);
+
                 message.IsSend = true;
                 context.MobilePushMessage.Update(message);
             }
