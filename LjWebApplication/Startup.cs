@@ -110,7 +110,7 @@ namespace LjWebApplication
             services.AddScoped<IVersionRepository, VersionRepository>();
             services.AddScoped<IUserPermission, UserPermission>();
             services.AddScoped<ISseRepository, SseRepository>();
-            services.AddScoped<ISqlListenerRepository, SqlListenerRepository>();
+            //services.AddScoped<ISqlListenerRepository, SqlListenerRepository>();
         }
 
 

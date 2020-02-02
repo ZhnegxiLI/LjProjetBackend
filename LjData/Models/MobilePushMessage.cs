@@ -15,5 +15,7 @@ namespace LjData.Models
         public string Title { get; set; }
         public string Body { get; set; }
         public string UserGroup { get; set; }
+
+        public Boolean IsSend { get; set; }
     }
 }

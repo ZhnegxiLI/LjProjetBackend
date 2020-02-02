@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using LjData.JpushModel;
 using LjData.Models;
 using LjDataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -347,6 +348,7 @@ namespace LjDataAccess.Repositories
         //    return 0;
         //}
 
+
         public async Task<int> SetSenderApplicationAsync(string userId, string orderId, string statutCode, string applicationContent)
         {
             try
@@ -359,12 +361,23 @@ namespace LjDataAccess.Repositories
                     Order.SpyjPo = DateTime.Now + " " + applicationContent;
                     Order.FqryjPo = DateTime.Now + " " + applicationContent;
                     context.Pomst.Update(Order);
+
+                    MobilePushMessage pushMessgae = new MobilePushMessage
+                    {
+                        UserGroup = "OrderModule_financialValidation",
+                        Title = "订单提交 : " + orderId,
+                        Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("1")),
+                        IsSend = false
+                    };
+
+                    context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
                 }
                 else
                 {
                     return 1;
                 }
+                
             }
             catch (Exception e)
             {
@@ -385,6 +398,17 @@ namespace LjDataAccess.Repositories
                     Order.SpyjPo = DateTime.Now + " " + applicationContent;
                     Order.CwyjPo = DateTime.Now + " " + applicationContent;
                     context.Pomst.Update(Order);
+
+                    MobilePushMessage pushMessgae = new MobilePushMessage
+                    {
+                        UserId = userId,
+                        UserGroup = "OrderModule_managerValidation",
+                        Title = "订单提交 : " + orderId,
+                        Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("3")),
+                        IsSend = false
+                    };
+
+                    context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
                 }
                 else
@@ -412,6 +436,16 @@ namespace LjDataAccess.Repositories
                     Order.JlyjPo = DateTime.Now + " " + applicationContent;
                     Order.CmplPo = true;
                     context.Pomst.Update(Order);
+
+                    MobilePushMessage pushMessgae = new MobilePushMessage
+                    {
+                        UserId = userId,
+                        Title = "订单提交 : " + orderId,
+                        Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("5")),
+                        IsSend = false
+                    };
+
+                    context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
 
                     var result = context.Database.ExecuteSqlCommand("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
@@ -431,7 +465,6 @@ namespace LjDataAccess.Repositories
             {
                 return 1;
             }
-            return 0;
         }
 
         public async Task<dynamic> AdvancedSalesOrderSearchAsync(AdvancedSalesOrderSearchParam param)
