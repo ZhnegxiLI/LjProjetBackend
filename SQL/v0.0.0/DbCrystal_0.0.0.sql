@@ -157,6 +157,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
+IF EXISTS (SELECT * FROM sys.objects WHERE [type] = 'TR' AND [name] = 'TR_UpdateOrderStatut')
+	BEGIN 
+		DROP TRIGGER TR_UpdateOrderStatut;
+	END
+GO
+
 CREATE TRIGGER TR_UpdateOrderStatut
 ON [dbo].[POMST]
  FOR UPDATE
@@ -166,16 +173,58 @@ DECLARE @oldStatus CHAR(1), @newStatus CHAR(1);
 	SELECT @newStatus = STAT_PO FROM inserted;
     IF @oldStatus != @newStatus
         BEGIN 
+		DECLARE @body NVARCHAR(max) = ''
+		DECLARE @title NVARCHAR(100) = ''
+		DECLARE @UserGroup NVARCHAR(100)
+		DECLARE @SendUserId NVARCHAR(10)
+
 		DECLARE @orderId NVARCHAR(50) = (SELECT PONB_PO FROM inserted)
 		DECLARE @userId NVARCHAR(10) = (SELECT CREA_PO FROM POMST WHERE PONB_PO = @orderId)
+
 		DECLARE @oldStatusId NVARCHAR(4) = (SELECT STAT_PO FROM deleted)
 		DECLARE @newStatusId NVARCHAR(4) = (SELECT STAT_PO FROM inserted)
 		DECLARE @updateBy NVARCHAR(4) = (SELECT LEDT_PO FROM inserted)
 		DECLARE @orderType NVARCHAR(4) = (SELECT TYPE_PO FROM inserted)
-		DECLARE @url NVARCHAR(1000) = 'https://api.europetechs.com/api/SqlListener/UpdateOrderStatus/?userId='+ @userId +'&orderId='+@orderId++'&oldStatusId='+@oldStatusId+'&newStatusId='+@newStatusId +'&updateBy='+@updateBy + '&orderType='+@orderType
-        EXEC  P_GET_HttpRequestData @url 
+
+		SET @title = N'订单状态更变请及时查验证'
+		IF @orderType = 'I'
+		BEGIN
+				SET @body = '订单号:' + @orderId +N'(采购订单)' + N'于' + CONVERT(VARCHAR,GETDATE(),20 ) +N'更变为'
 		END
+		IF @orderType = 'O' 	
+		BEGIN
+			SET @body = '订单号:' + @orderId +N'(销售订单)' + N'于' +  CONVERT(VARCHAR,GETDATE(),20 ) +N'更变为'
+		END
+
+		IF @oldStatus='0' AND @newStatus='1'
+		BEGIN
+			SET @body = @body+N'财务审核'
+			SET @UserGroup = 'OrderModule_financialValidation'
+
+			INSERT INTO Mobile_PushMessage(Title,Body,UserGroup,IsSend)
+			VALUES(@title,@body,@UserGroup,0)
+		END
+
+		IF @oldStatus='1' AND @newStatus='3'
+		BEGIN
+			SET @body = @body+N'财务审核通过'
+			SET @UserGroup = 'OrderModule_managerValidation'
+			SET @SendUserId = @userId
+
+			INSERT INTO Mobile_PushMessage(UserId,Title,Body,UserGroup,IsSend)
+			VALUES(@SendUserId,@title,@body,@UserGroup,0)
+		END
+		IF @oldStatus='3' AND @newStatus='5'
+		BEGIN
+			SET @body = @body+N'经理审核通过'
+			SET @SendUserId = @userId
+
+			INSERT INTO Mobile_PushMessage(UserId,Title,Body,IsSend)
+			VALUES(@SendUserId,@title,@body,0)
+		END
+	END
 GO
+
 /***************************************************************
 * END SCRIPT 
 * COMMENT : 添加订单状态触发器
