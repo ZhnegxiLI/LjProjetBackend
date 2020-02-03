@@ -362,15 +362,15 @@ namespace LjDataAccess.Repositories
                     Order.FqryjPo = DateTime.Now + " " + applicationContent;
                     context.Pomst.Update(Order);
 
-                    MobilePushMessage pushMessgae = new MobilePushMessage
-                    {
-                        UserGroup = "OrderModule_financialValidation",
-                        Title = "订单提交 : " + orderId,
-                        Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("1")),
-                        IsSend = false
-                    };
+                    //MobilePushMessage pushMessgae = new MobilePushMessage
+                    //{
+                    //    UserGroup = "OrderModule_financialValidation",
+                    //    Title = "订单提交 : " + orderId,
+                    //    Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("1")),
+                    //    IsSend = false
+                    //};
 
-                    context.MobilePushMessage.Add(pushMessgae);
+                    //context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
                 }
                 else
@@ -399,16 +399,16 @@ namespace LjDataAccess.Repositories
                     Order.CwyjPo = DateTime.Now + " " + applicationContent;
                     context.Pomst.Update(Order);
 
-                    MobilePushMessage pushMessgae = new MobilePushMessage
-                    {
-                        UserId = userId,
-                        UserGroup = "OrderModule_managerValidation",
-                        Title = "订单提交 : " + orderId,
-                        Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("3")),
-                        IsSend = false
-                    };
+                    //MobilePushMessage pushMessgae = new MobilePushMessage
+                    //{
+                    //    UserId = userId,
+                    //    UserGroup = "OrderModule_managerValidation",
+                    //    Title = "订单提交 : " + orderId,
+                    //    Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("3")),
+                    //    IsSend = false
+                    //};
 
-                    context.MobilePushMessage.Add(pushMessgae);
+                    //context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
                 }
                 else
@@ -437,15 +437,15 @@ namespace LjDataAccess.Repositories
                     Order.CmplPo = true;
                     context.Pomst.Update(Order);
 
-                    MobilePushMessage pushMessgae = new MobilePushMessage
-                    {
-                        UserId = userId,
-                        Title = "订单提交 : " + orderId,
-                        Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("5")),
-                        IsSend = false
-                    };
+                    //MobilePushMessage pushMessgae = new MobilePushMessage
+                    //{
+                    //    UserId = userId,
+                    //    Title = "订单提交 : " + orderId,
+                    //    Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("5")),
+                    //    IsSend = false
+                    //};
 
-                    context.MobilePushMessage.Add(pushMessgae);
+                    //context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
 
                     var result = context.Database.ExecuteSqlCommand("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
