@@ -47,7 +47,7 @@ namespace LjWebApplication
             {
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            }); ;
+            }); 
 
             services.AddDbContext<ERPDATA2Context>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"), 

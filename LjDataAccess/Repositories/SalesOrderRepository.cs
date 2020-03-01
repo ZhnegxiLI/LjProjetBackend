@@ -451,10 +451,10 @@ namespace LjDataAccess.Repositories
                     var result = context.Database.ExecuteSqlCommand("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
                     if (result>0)
                     {
-                        return 1;
+                        return 0;
                     }
 
-                    return 0;
+                    return 1;
                 }
                 else
                 {
