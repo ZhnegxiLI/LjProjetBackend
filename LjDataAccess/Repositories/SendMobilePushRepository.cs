@@ -2,8 +2,10 @@
 using LjData.Models;
 using LjData.Utils;
 using LjDataAccess.Interfaces;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using MimeKit;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -45,6 +47,7 @@ namespace LjDataAccess.Repositories
 
             foreach (MobilePushMessage message in messageList)
             {
+                SendEmail(message.UserEmail, message.Title, message.Body, null);
                 PushPayload pushPayload = creatPushMessage(message);
                 var test = client.SendPush(pushPayload);
 
@@ -84,6 +87,51 @@ namespace LjDataAccess.Repositories
 
             return pushPayload;
         }
+
+           public string SendEmail(string ToEmail,string Subjet, string Message, string AttachmentPath)
+            {
+
+            try
+            {
+                // todo add infor into appconfig 
+                MimeMessage message = new MimeMessage();
+
+                MailboxAddress from = new MailboxAddress("丽锦纺织",
+                Configuration["Mailkit:EmailAccount"]);
+                message.From.Add(from);
+
+                MailboxAddress to = new MailboxAddress(ToEmail,
+                ToEmail);
+                message.To.Add(to);
+
+                message.Subject = Subjet;
+                BodyBuilder bodyBuilder = new BodyBuilder();
+                bodyBuilder.HtmlBody = Message;
+               
+                if (AttachmentPath != null)
+                {
+                    bodyBuilder.Attachments.Add(AttachmentPath);
+                }
+
+                message.Body = bodyBuilder.ToMessageBody();
+
+
+                SmtpClient client = new SmtpClient();
+                client.Connect(Configuration["Mailkit:EmailHost"], int.Parse(Configuration["Mailkit:EmailPort"]), true);
+                client.Authenticate(Configuration["Mailkit:EmailAccount"], Configuration["Mailkit:EmailPassword"]);
+
+                client.Send(message);
+                client.Disconnect(true);
+                client.Dispose();
+            
+                return "Email Sent Successfully!"; //todo change to code 
+            }
+            catch (System.Exception e)
+            {
+                return e.Message; // todo change to code 
+            }
+        }
+
 
 
     }
