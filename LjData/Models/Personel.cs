@@ -54,5 +54,7 @@ namespace LjData.Models
         public string LedtPsl { get; set; }
         public string PlntPsl { get; set; }
         public string DdidPsl { get; set; }
+
+        public string EmailPsl { get; set; }
     }
 }

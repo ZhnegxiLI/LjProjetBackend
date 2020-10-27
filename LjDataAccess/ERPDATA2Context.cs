@@ -127,6 +127,7 @@ namespace LjDataAccess
                 entity.Property(v => v.Id).HasColumnName("Id");
                 entity.Property(v => v.Name).HasColumnName("Name");
                 entity.Property(v => v.Password).HasColumnName("Password");
+                entity.Property(v => v.Email).HasColumnName("Email");
             });
 
             modelBuilder.Entity<Accmbk>(entity =>
@@ -5316,6 +5317,11 @@ namespace LjDataAccess
                     .HasColumnName("DDID_PSL")
                     .HasMaxLength(30)
                     .IsUnicode(false);
+
+                entity.Property(e => e.EmailPsl)
+                .HasColumnName("Email_PSL")
+                .HasMaxLength(500)
+                .IsUnicode(false);
 
                 entity.Property(e => e.DeptPsl)
                     .HasColumnName("DEPT_PSL")

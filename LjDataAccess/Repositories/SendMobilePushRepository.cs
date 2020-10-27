@@ -47,7 +47,37 @@ namespace LjDataAccess.Repositories
 
             foreach (MobilePushMessage message in messageList)
             {
-                SendEmail(message.UserEmail, message.Title, message.Body, null);
+                List<string> EmailList = new List<string>();
+                /* Get email to send users */
+                if (message.UserId != null)
+                {
+                    var userEmail = context.Personel.Where(p => p.EmpnPsl == message.UserId && p.EmailPsl!=null).Select(p => p.EmailPsl).FirstOrDefault();
+                    if (userEmail!=null)
+                    {
+                        EmailList.Add(userEmail);
+                    }
+                }
+                if (message.UserGroup !=null)
+                {
+                    var userGroupEmail = (from p in context.MobilePermission
+                                          join up in context.MobileUserPermission on p.Id equals up.PermissionId
+                                          join u in context.Personel on up.UserId equals u.EmpnPsl
+                                          where p.Code == message.UserGroup && u.EmailPsl != null
+                                          select u.EmailPsl).ToList();
+
+                    if (userGroupEmail.Count() > 0)
+                    {
+                        EmailList.Concat(userGroupEmail);
+                    }
+                }
+                if (EmailList.Count()>0)
+                {
+                    foreach (var item in EmailList)
+                    {
+                        SendEmail(item, message.Title, message.Body, null);
+                    }
+                }
+               
                 PushPayload pushPayload = creatPushMessage(message);
                 var test = client.SendPush(pushPayload);
 
