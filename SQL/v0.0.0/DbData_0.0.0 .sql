@@ -103,3 +103,43 @@ GO
 * ZLI
 * 16/01/2019 
 */
+
+
+
+
+/* 
+* BEGIN: Add email for person
+* ZLI
+* 27/10/2020
+*/
+IF NOT EXISTS (SELECT * FROM [PERSONEL] WHERE Email_PSL IS NOT NULL)
+BEGIN
+UPDATE [PERSONEL]
+SET Email_PSL = 'hwd@ljfz.net'
+where NAME_PSL = N'郝卫东'
+
+
+UPDATE [PERSONEL]
+SET Email_PSL = 'fam@ljfz.net'
+where NAME_PSL = N'范爱民'
+
+UPDATE [PERSONEL]
+SET Email_PSL = 'hcy@ljfz.net'
+where NAME_PSL = N'阿燕'
+
+UPDATE [PERSONEL]
+SET Email_PSL = 'hwm@ljfz.net'
+where NAME_PSL = N'韩卫民'
+
+	
+UPDATE [PERSONEL]
+SET Email_PSL = 'lh@ljfz.net'
+where NAME_PSL = N'李华'
+END
+GO
+
+/* 
+* END: BEGIN: Add email for person
+* ZLI
+* 27/10/2020
+*/

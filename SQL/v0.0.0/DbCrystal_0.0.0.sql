@@ -337,4 +337,36 @@ END
 *****************************************************************/
 
 
+/***************************************************************
+* START SCRIPT 
+* COMMENT : 在personne 表格中添加email
+* Author: ZLI
+* DATE : 27/10/2020 
+*****************************************************************/
+IF NOT EXISTS(SELECT 1 FROM sys.columns 
+          WHERE Name = N'Email_PSL'
+          AND Object_ID = Object_ID(N'PERSONEL'))
+BEGIN
+    ALTER TABLE [PERSONEL]
+	ADD Email_PSL NVARCHAR(500) NULL
+END
+GO
 
+
+IF  EXISTS (select * FROM sys.views where name = 'View_User') 
+	BEGIN
+	DROP VIEW [dbo].[View_User]
+	END
+GO
+CREATE view [dbo].[View_User]
+	as
+	SELECT EMPN_PSL AS Id, NAME_PSL AS 'Name', PSWD_PSW as Password, Email_PSL as Email
+	FROM dbo.PERSONEL p
+	INNER JOIN dbo.PASSWRD pw ON p.EMPN_PSL = pw.EMPN_PSW
+GO
+/***************************************************************
+* END SCRIPT 
+* COMMENT : 在personne 表格中添加email
+* Author: ZLI
+* DATE : 27/10/2020 
+*****************************************************************/
