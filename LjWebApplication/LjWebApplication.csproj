@@ -34,4 +34,10 @@
     <ProjectReference Include="..\LjData\LjData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="web.config.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
