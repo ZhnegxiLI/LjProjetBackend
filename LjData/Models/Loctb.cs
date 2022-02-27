@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace LjData.Models
 {
+    /// <summary>
+    /// Client table 
+    /// </summary>
     public partial class Loctb
     {
         [JsonProperty(PropertyName = "id")]
