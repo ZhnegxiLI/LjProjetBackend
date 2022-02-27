@@ -1,21 +1,17 @@
-﻿using System;
+﻿//using System.Web.Http.ModelBinding;
+using LjData.Models.ViewModel;
+using LjDataAccess.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
-using LjData.Models;
-//using System.Web.Http.ModelBinding;
-using LjData.Models.ViewModel;
-using LjDataAccess.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LjDataAccess.Repositories
 {
-    public class AuthRepository:IAuthRepository
+    public class AuthRepository : IAuthRepository
     {
         private readonly ERPDATA2Context context;
 
@@ -39,7 +35,7 @@ namespace LjDataAccess.Repositories
                     token = token,
                     permission = getUserPermissionById(user.Id),
                     entrepriseType = entrepriseType,
-                    accountInfo = context.CpnyInfo.Where(p=>p.entrepriseType == entrepriseType).FirstOrDefault()
+                    accountInfo = context.CpnyInfo.Where(p => p.entrepriseType == entrepriseType).FirstOrDefault()
                 };
             }
 
@@ -50,13 +46,13 @@ namespace LjDataAccess.Repositories
         public List<dynamic> GetUserList()
         {
             var result = (from u in context.User
-                join p in context.Personel on u.Id equals p.EmpnPsl
-                where p.RsdtPsl == null // 离职日期
-                select new
-                {
-                    id = u.Id,
-                    username = u.Name
-                }).ToList<dynamic>();
+                          join p in context.Personel on u.Id equals p.EmpnPsl
+                          where p.RsdtPsl == null // 离职日期
+                          select new
+                          {
+                              id = u.Id,
+                              username = u.Name
+                          }).ToList<dynamic>();
             return result;
         }
 
@@ -65,12 +61,12 @@ namespace LjDataAccess.Repositories
         {
             var e = encode(password);
             var testUser = context.User.Where(p => p.Id == userId).FirstOrDefault();
-/*            var passwork = testUser.Password;
-            foreach(var i in passwork){
-                var t = i;
-            }*/
+            /*            var passwork = testUser.Password;
+                        foreach(var i in passwork){
+                            var t = i;
+                        }*/
             var user = context.User.Where(p => p.Id == userId && p.Password == encode(password)).FirstOrDefault();
-            return user!=null;
+            return user != null;
         }
 
         /// <summary>
@@ -123,7 +119,7 @@ namespace LjDataAccess.Repositories
         }
 
         // Encode password function
-         private string encode(string arg)
+        private string encode(string arg)
         {
             string res = "";
             string codage = "C3D4E5";
@@ -135,25 +131,25 @@ namespace LjDataAccess.Repositories
             {
                 if (m >= codeLen) m = 0;
                 res += (char)(arg[i] + codage[m]);
-             }
+            }
 
             return res;
         }
 
-         public List<dynamic> getUserPermissionById(string userId)
-         {
-             var result = from up in context.MobileUserPermission
-                 join p in context.MobilePermission on up.PermissionId equals p.Id
-                 where up.UserId == userId
-                 select new
-                 {
-                     userId = up.UserId,
-                     permissionId = p.Id,
-                     permissionCode = p.Code,
-                     permissionLabel = p.Label
-                 };
-             return result.ToList<dynamic>();
-         }
+        public List<dynamic> getUserPermissionById(string userId)
+        {
+            var result = from up in context.MobileUserPermission
+                         join p in context.MobilePermission on up.PermissionId equals p.Id
+                         where up.UserId == userId
+                         select new
+                         {
+                             userId = up.UserId,
+                             permissionId = p.Id,
+                             permissionCode = p.Code,
+                             permissionLabel = p.Label
+                         };
+            return result.ToList<dynamic>();
+        }
 
     }
 }

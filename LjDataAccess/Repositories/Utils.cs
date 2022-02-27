@@ -1,7 +1,4 @@
 ﻿using LjDataAccess.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LjDataAccess.Repositories
 {

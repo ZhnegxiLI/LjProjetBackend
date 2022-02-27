@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace LjData.Models
 {
     public partial class Pomst
     {
-        [JsonProperty(propertyName:"commandeId")]
+        [JsonProperty(propertyName: "commandeId")]
         public string PonbPo { get; set; }
 
         [JsonProperty(propertyName: "commandeType")]
@@ -19,28 +17,28 @@ namespace LjData.Models
         public DateTime? CrtdPo { get; set; }//TODO
         public bool? CmplPo { get; set; }
 
-        [JsonProperty(propertyName:"receiver")]
+        [JsonProperty(propertyName: "receiver")]
         public string TnamPo { get; set; }
 
-        [JsonProperty(propertyName:"departmentLabel")]
+        [JsonProperty(propertyName: "departmentLabel")]
         public string TcpyPo { get; set; }
 
-        [JsonProperty(propertyName:"receiverFax")]
+        [JsonProperty(propertyName: "receiverFax")]
         public string TfaxPo { get; set; }
 
-        [JsonProperty(propertyName:"receiverTelephoneNumber")]
+        [JsonProperty(propertyName: "receiverTelephoneNumber")]
         public string TtelPo { get; set; }
 
-        [JsonProperty(propertyName:"sender")]
+        [JsonProperty(propertyName: "sender")]
         public string FnamPo { get; set; }
 
-        [JsonProperty(propertyName:"senderTelephoneNumber")]
+        [JsonProperty(propertyName: "senderTelephoneNumber")]
         public string FtelPo { get; set; }
 
         [JsonProperty(propertyName: "senderFax")]
         public string FfaxPo { get; set; }
 
-        [JsonProperty(propertyName:"Remark1")]
+        [JsonProperty(propertyName: "Remark1")]
         public string Rmk1Po { get; set; }
 
         [JsonProperty(propertyName: "Remark2")]
@@ -66,16 +64,16 @@ namespace LjData.Models
         public bool? CtovPo { get; set; }
         public bool? SealPo { get; set; }//TODO
         public string MrmkPo { get; set; }
-        [JsonProperty(propertyName:"remarkfeedback")]
+        [JsonProperty(propertyName: "remarkfeedback")]
         public string RvmkPo { get; set; }
 
         public string CachetPo { get; set; }
         public string PlntPo { get; set; }//TODO
 
-        [JsonProperty(propertyName:"departmentId")]
+        [JsonProperty(propertyName: "departmentId")]
         public string CstmPo { get; set; }
 
-        [JsonProperty(propertyName:"commandCreator")]
+        [JsonProperty(propertyName: "commandCreator")]
         public string CreaPo { get; set; }
 
         public DateTime? ClsdPo { get; set; }
@@ -83,18 +81,18 @@ namespace LjData.Models
         public string SpyjPo { get; set; }
         public string FqrPo { get; set; }
 
-        [JsonProperty(propertyName:"messageForAuditor")]
+        [JsonProperty(propertyName: "messageForAuditor")]
         public string FqryjPo { get; set; }
 
         public string CwPo { get; set; }
         public string CwyjPo { get; set; }
         public string JlPo { get; set; }
-        
+
         public string JlyjPo { get; set; }
 
-        [JsonProperty(propertyName:"status")]
+        [JsonProperty(propertyName: "status")]
         public string StatPo { get; set; }
-        [JsonProperty(propertyName:"entrepriseName")]
+        [JsonProperty(propertyName: "entrepriseName")]
         public string FcpyPo { get; set; }
     }
 }

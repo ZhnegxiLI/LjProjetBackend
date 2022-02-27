@@ -3,23 +3,16 @@ using LjData.Models;
 using LjData.Utils;
 using LjDataAccess.Interfaces;
 using MailKit.Net.Smtp;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LjDataAccess.Repositories
 {
-    public class SendMobilePushRepository: ISendMobilePushRepository
+    public class SendMobilePushRepository : ISendMobilePushRepository
     {
         private NotificationEvent _notificationEvent;
         private IUtils utils;
@@ -51,13 +44,13 @@ namespace LjDataAccess.Repositories
                 /* Get email to send users */
                 if (message.UserId != null)
                 {
-                    var userEmail = context.Personel.Where(p => p.EmpnPsl == message.UserId && p.EmailPsl!=null).Select(p => p.EmailPsl).FirstOrDefault();
-                    if (userEmail!=null)
+                    var userEmail = context.Personel.Where(p => p.EmpnPsl == message.UserId && p.EmailPsl != null).Select(p => p.EmailPsl).FirstOrDefault();
+                    if (userEmail != null)
                     {
                         EmailList.Add(userEmail);
                     }
                 }
-                if (message.UserGroup !=null)
+                if (message.UserGroup != null)
                 {
                     var userGroupEmail = (from p in context.MobilePermission
                                           join up in context.MobileUserPermission on p.Id equals up.PermissionId
@@ -70,14 +63,14 @@ namespace LjDataAccess.Repositories
                         EmailList.Concat(userGroupEmail);
                     }
                 }
-                if (EmailList.Count()>0)
+                if (EmailList.Count() > 0)
                 {
                     foreach (var item in EmailList)
                     {
                         SendEmail(item, message.Title, message.Body, null);
                     }
                 }
-               
+
                 PushPayload pushPayload = creatPushMessage(message);
                 var test = client.SendPush(pushPayload);
 
@@ -90,20 +83,20 @@ namespace LjDataAccess.Repositories
 
         public PushPayload creatPushMessage(MobilePushMessage message)
         {
-    
+
             List<String> tags = new List<string>();
-            if(message.UserId != null)
+            if (message.UserId != null)
             {
                 tags.Add(message.UserId);
             }
-            if(message.UserGroup != null)
+            if (message.UserGroup != null)
             {
                 tags.Add(message.UserGroup);
             }
-            
+
             PushPayload pushPayload = new PushPayload()
             {
-                Platform = new List<string> { "android","ios" },
+                Platform = new List<string> { "android", "ios" },
                 Audience = new Audience { Tag = tags },
                 Notification = new Notification
                 {
@@ -118,8 +111,8 @@ namespace LjDataAccess.Repositories
             return pushPayload;
         }
 
-           public string SendEmail(string ToEmail,string Subjet, string Message, string AttachmentPath)
-            {
+        public string SendEmail(string ToEmail, string Subjet, string Message, string AttachmentPath)
+        {
 
             try
             {
@@ -137,7 +130,7 @@ namespace LjDataAccess.Repositories
                 message.Subject = Subjet;
                 BodyBuilder bodyBuilder = new BodyBuilder();
                 bodyBuilder.HtmlBody = Message;
-               
+
                 if (AttachmentPath != null)
                 {
                     bodyBuilder.Attachments.Add(AttachmentPath);
@@ -153,7 +146,7 @@ namespace LjDataAccess.Repositories
                 client.Send(message);
                 client.Disconnect(true);
                 client.Dispose();
-            
+
                 return "Email Sent Successfully!"; //todo change to code 
             }
             catch (System.Exception e)

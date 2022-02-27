@@ -12,7 +12,7 @@ namespace LjData.JpushModel
         public string Mobile { get; set; }
 
         [JsonProperty("tags")]
-        public Dictionary<string, object> Tags { get; set;}
+        public Dictionary<string, object> Tags { get; set; }
 
         private string GetJson()
         {

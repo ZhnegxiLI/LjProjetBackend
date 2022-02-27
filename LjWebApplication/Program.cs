@@ -10,8 +10,8 @@ namespace LjWebApplication
     {
         public static void Main(string[] args)
         {
-         
-            var config =  ConfigurationAppSettings(new ConfigurationBuilder()).Build();
+
+            var config = ConfigurationAppSettings(new ConfigurationBuilder()).Build();
             Log.Logger = new LoggerConfiguration()
                .ReadFrom.Configuration(config)
                .CreateLogger();

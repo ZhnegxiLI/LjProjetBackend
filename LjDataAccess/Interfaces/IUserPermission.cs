@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using LjData.Models;
+﻿using LjData.Models;
+using System.Collections.Generic;
 
 namespace LjDataAccess.Interfaces
 {

@@ -1,8 +1,6 @@
 ﻿using LjData.Utils;
 using LjDataAccess.Interfaces;
-using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace LjDataAccess.Repositories
@@ -42,7 +40,7 @@ namespace LjDataAccess.Repositories
             {
                 _notificationEvent.hasSet = false;
                 return ServerSentEventData($"has receive data : {_notificationEvent.data}", "0", "push"); //如果检测到数据库变化
-                
+
             }
             else
             {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LjData.Utils
+﻿namespace LjData.Utils
 {
     public class NotificationEvent
     {

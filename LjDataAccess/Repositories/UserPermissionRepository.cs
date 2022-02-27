@@ -22,25 +22,25 @@ namespace LjDataAccess.Repositories
         public List<dynamic> getUserPermissionById(string userId)
         {
             var result = from up in context.MobileUserPermission
-                join p in context.MobilePermission on up.PermissionId equals p.Id
-                where up.UserId == userId
-                select new
-                {
-                    userId = up.UserId,
-                    permissionId = p.Id,
-                    permissionCode = p.Code,
-                    permissionLabel = p.Label
-                };
+                         join p in context.MobilePermission on up.PermissionId equals p.Id
+                         where up.UserId == userId
+                         select new
+                         {
+                             userId = up.UserId,
+                             permissionId = p.Id,
+                             permissionCode = p.Code,
+                             permissionLabel = p.Label
+                         };
             return result.ToList<dynamic>();
         }
 
         public int SaveUserPermission(UserPermissionParam userPermission)
         {
             int retour = 0;
-            if (userPermission.userId!="")
+            if (userPermission.userId != "")
             {
-               var u= context.MobileUserPermission.Where(p => p.UserId == userPermission.userId);
-                if(u != null&& u.Count()>0)
+                var u = context.MobileUserPermission.Where(p => p.UserId == userPermission.userId);
+                if (u != null && u.Count() > 0)
                 {
                     context.MobileUserPermission.RemoveRange(u);
                 }

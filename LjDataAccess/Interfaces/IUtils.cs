@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LjDataAccess.Interfaces
+﻿namespace LjDataAccess.Interfaces
 {
     public interface IUtils
     {

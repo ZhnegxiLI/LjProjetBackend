@@ -1,9 +1,7 @@
-﻿using System;
+﻿using LjData.Models;
+using LjDataAccess.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using LjData.Models;
-using LjDataAccess.Interfaces;
 
 namespace LjDataAccess.Repositories
 {
@@ -19,8 +17,8 @@ namespace LjDataAccess.Repositories
         {
             var result = context.Loctb.Select(p => new
             {
-                id =  p.LocnLtb,
-                name =p.TypeLtb +" - " +p.DescLtb
+                id = p.LocnLtb,
+                name = p.TypeLtb + " - " + p.DescLtb
             });
             return limit != -1 ? result.Take(limit).ToList<dynamic>() : result.ToList<dynamic>();
         }
