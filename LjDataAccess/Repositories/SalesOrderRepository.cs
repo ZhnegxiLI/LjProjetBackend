@@ -1,10 +1,14 @@
-﻿using LjData.Models;
-using LjDataAccess.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
+using LjData.JpushModel;
+using LjData.Models;
+using LjDataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace LjDataAccess.Repositories
 {
@@ -17,7 +21,7 @@ namespace LjDataAccess.Repositories
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-
+        
 
         public SalesOrderRepository(ERPDATA2Context context)
         {
@@ -25,7 +29,7 @@ namespace LjDataAccess.Repositories
             this.utils = new Utils();
         }
 
-
+        
 
         /// <summary>
         /// Get sales order list by user
@@ -36,26 +40,26 @@ namespace LjDataAccess.Repositories
         {
             try
             {
-                var result = context.Pomst.Where(p => p.CreaPo == userId && p.TypePo == type && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
-                {
-                    commandeTypeId = p.TypePo,
-                    commandeTypeLabel = utils.GetCommandTypeLabelById(p.TypePo),
-                    commandeId = p.PonbPo,
-                    commandeCreateDate = p.DatePo,
-                    updateOn = p.LdatPo.HasValue ? p.LdatPo.Value.ToString("yyyy-MM-dd hh:mm:ss") : "[N/A]",
-                    updateTime = p.LdatPo,
-                    receiver = p.TnamPo,
-                    status = this.utils.GetOrdersStatus(Int32.Parse(p.StatPo)),
-                    type = p.TcpyPo, // 单位
-                    creator = context.User.Where(x => x.Id == userId).Select(y => y.Name),
-                    commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
-                }).OrderByDescending(x => x.updateTime);
-                var filterResult = new
-                {
-                    data = await result.Skip(begin * step).Take(step).ToListAsync<dynamic>(),
-                    totalCount = await result.CountAsync()
-                };
-                return filterResult;
+            var result = context.Pomst.Where(p => p.CreaPo == userId && p.TypePo == type && (orderStatus == null || p.StatPo == orderStatus.ToString())).Select(p => new
+            {
+                commandeTypeId = p.TypePo,
+                commandeTypeLabel = utils.GetCommandTypeLabelById(p.TypePo),
+                commandeId = p.PonbPo,
+                commandeCreateDate = p.DatePo,
+                updateOn = p.LdatPo.HasValue ? p.LdatPo.Value.ToString("yyyy-MM-dd hh:mm:ss") : "[N/A]",
+                updateTime = p.LdatPo,
+                receiver = p.TnamPo,
+                status = this.utils.GetOrdersStatus(Int32.Parse(p.StatPo)),
+                type = p.TcpyPo, // 单位
+                creator = context.User.Where(x => x.Id ==userId).Select(y=>y.Name),
+                commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
+            }).OrderByDescending(x => x.updateTime);
+            var filterResult =new
+            {
+                data = await result.Skip(begin*step).Take(step).ToListAsync<dynamic>(),
+                totalCount = await result.CountAsync()
+            };
+            return filterResult;
             }
             catch (Exception e)
             {
@@ -72,37 +76,36 @@ namespace LjDataAccess.Repositories
             try
             {//TODO: classify by order type and statuts
                 var resultGroup = await (from order in context.Pomst
-                                         where categoryId == null || order.StatPo == categoryId.ToString()
-                                               && type == "" || order.TypePo == type
-                                         orderby order.TypePo, order.StatPo, order.DatePo descending
-                                         group order by new { order.TypePo, order.StatPo } into g
-                                         select new CommandStaut()
-                                         {
-                                             commandeTypeId = g.Key.TypePo,
-                                             statusId = g.Key.StatPo
-                                         }).ToListAsync<CommandStaut>();
+                    where categoryId == null || order.StatPo == categoryId.ToString()
+                          && type == "" || order.TypePo == type
+                    orderby order.TypePo , order.StatPo, order.DatePo descending
+                    group order by new { order.TypePo, order.StatPo } into g
+                    select new CommandStaut()
+                    {
+                        commandeTypeId = g.Key.TypePo,
+                        statusId = g.Key.StatPo
+                    }).ToListAsync<CommandStaut>();
 
                 var result = (from r in resultGroup
-                              select new
-                              {
-                                  commandDetails = (from order in context.Pomst
-                                                    where order.TypePo == r.commandeTypeId && order.StatPo == r.statusId
-                                                    select new
-                                                    {
-                                                        commandeId = order.PonbPo,
-                                                        commandeCreateDate = order.DatePo,
-                                                        updateOn = order.LdatPo.HasValue ? order.LdatPo.Value.ToString("yyyy-MM-dd hh:mm:ss") : "[N/A]",
-                                                        receiver = order.TnamPo,
-                                                        status = utils.GetOrdersStatus(Int32.Parse(order.StatPo)),
-                                                        type = order.TcpyPo, // 单位
-                                                        creator = context.User.Where(x => x.Id == order.CreaPo).Select(y => y.Name).FirstOrDefault(),
-                                                        commandeCreator = order.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
-                                                    }),
-                                  r.commandeTypeId,
-                                  commandTypeLabel = utils.GetCommandTypeLabelById(r.commandeTypeId),
-                                  statusLabel = utils.GetOrdersStatus(Int32.Parse(r.statusId)),
-                                  r.statusId
-                              }).ToList<dynamic>();
+                                select new
+                                {
+                                    commandDetails =  (from order in context.Pomst
+                                        where order.TypePo == r.commandeTypeId && order.StatPo == r.statusId
+                                        select new
+                                        {
+                                            commandeId = order.PonbPo,
+                                            commandeCreateDate = order.DatePo,
+                                            updateOn = order.LdatPo.HasValue ? order.LdatPo.Value.ToString("yyyy-MM-dd hh:mm:ss") : "[N/A]",
+                                            receiver = order.TnamPo,
+                                            status = utils.GetOrdersStatus(Int32.Parse(order.StatPo)),
+                                            type = order.TcpyPo, // 单位
+                                            creator = context.User.Where(x => x.Id == order.CreaPo).Select(y => y.Name).FirstOrDefault( ),
+                                            commandeCreator = order.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
+                                        }),
+                                    r.commandeTypeId,
+                                    commandTypeLabel = utils.GetCommandTypeLabelById(r.commandeTypeId),
+                                    statusLabel = utils.GetOrdersStatus(Int32.Parse(r.statusId)),
+                                    r.statusId}).ToList<dynamic>();
                 return result;
             }
             catch (Exception e)
@@ -119,18 +122,17 @@ namespace LjDataAccess.Repositories
         {
             var result = await context.Pomst.Where(p => p.PonbPo == orderId).ToListAsync();
             var newResult = (from r in result
-                             select (new
-                             {
-                                 commandeType = new
-                                 {
-                                     commandeTypeId = r.TypePo,
-                                     commandeTypeLabel = utils.GetCommandTypeLabelById(r.TypePo),
-                                 },
-                                 salesOrderDetail = r,
-                                 cargo = (from po in context.Popart
-                                          where po.PonbPp == r.PonbPo
-                                          select po) //.ToList()
-                             })).ToList();
+                            select (new{
+                                commandeType = new
+                                {
+                                    commandeTypeId = r.TypePo,
+                                    commandeTypeLabel = utils.GetCommandTypeLabelById(r.TypePo),
+                                },
+                                salesOrderDetail = r,
+                                cargo = (from po in context.Popart
+                                         where po.PonbPp == r.PonbPo
+                                         select po) //.ToList()
+                            })).ToList();
             var r2 = newResult.FirstOrDefault();
             return r2;
         }
@@ -151,7 +153,7 @@ namespace LjDataAccess.Repositories
                 {
                     oldOrder.DatePo = orderInfo.date.Value.Date;
                     oldOrder.TnamPo = orderInfo.receiver;
-                    oldOrder.TcpyPo = context.Loctb.Where(p => p.LocnLtb == orderInfo.deptId).Select(p => p.DescLtb).FirstOrDefault();
+                    oldOrder.TcpyPo = context.Loctb.Where(p=>p.LocnLtb == orderInfo.deptId).Select(p=>p.DescLtb).FirstOrDefault();
                     oldOrder.TfaxPo = orderInfo.faxReceiver;
                     oldOrder.TtelPo = orderInfo.telReceiver;
                     oldOrder.FnamPo = orderInfo.sender;
@@ -181,14 +183,14 @@ namespace LjDataAccess.Repositories
                     }
                 }
                 else
-                {
+                {   
                     var recordCreator = await context.PoCntIssue.Where(p => p.TypePci == "PO").FirstOrDefaultAsync();
                     // TODO
                     // orderId = recordCreator.PrfxPci + DateTime.Now.ToString("yyyy") + "-" + context.Popart.Count().ToString("0000");//recordCreator.MaxnPci++
                     recordCreator.YearPci = DateTime.Now.ToString("yyyy");
-                    recordCreator.MaxnPci = recordCreator.MaxnPci + 1;
+                    recordCreator.MaxnPci = recordCreator.MaxnPci+1;
                     context.PoCntIssue.Update(recordCreator);
-                    orderId = recordCreator.PrfxPci + recordCreator.YearPci + "-" + Convert.ToInt32(recordCreator.MaxnPci).ToString("0000");
+                    orderId = recordCreator.PrfxPci + recordCreator.YearPci + "-"+ Convert.ToInt32(recordCreator.MaxnPci).ToString("0000");
                     Pomst newOrder = new Pomst
                     {
                         PonbPo = orderId,
@@ -222,38 +224,38 @@ namespace LjDataAccess.Repositories
                         CrtdPo = DateTime.Now,
                         PlntPo = orderInfo.entrepriseType,
                         CmplPo = false
-                    };
+                };
                     context.Pomst.Add(newOrder);
                 }
                 int index = 1;
                 foreach (var product in products)
                 {
-                    Popart newCargo = new Popart // Take into the cargo repository
-                    {
-                        PonbPp = orderId,
-                        OrdrPp = index.ToString("00"),
-                        PartPp = product.idProduct,
-                        DescPp = await context.Itemmst.Where(p => p.PartIt == product.idProduct).Select(p => p.DescIt).FirstOrDefaultAsync(),//Get from the table data
-                        TqtyPp = product.numberProduct,
-                        UnitPp = product.unitProduct,
-                        PricPp = product.priceProduct,
-                        SchdPp = product.datePayProduct,
-                        SumPp = product.totalPrice,
-                        RemkPp = product.descriptProduct,
-                        Desc3Pp = product.nameOffical,
-                        PtypPp = product.unitPriceType,
-                        SpecPp = product.adresseProduct,
-                        PlntPp = product.entrepriseType,
-                        LdatPp = DateTime.Now,
-                        LedtPp = orderInfo.userId,
-                        EquivPp = product.equivalenceValue
-                    };
-                    index++;
-                    context.Popart.Add(newCargo);
+                        Popart newCargo = new Popart // Take into the cargo repository
+                        {
+                            PonbPp = orderId,
+                            OrdrPp = index.ToString("00"),
+                            PartPp = product.idProduct,
+                            DescPp = await context.Itemmst.Where(p=>p.PartIt== product.idProduct).Select(p=>p.DescIt).FirstOrDefaultAsync(),//Get from the table data
+                            TqtyPp = product.numberProduct,
+                            UnitPp = product.unitProduct,
+                            PricPp = product.priceProduct,
+                            SchdPp = product.datePayProduct,
+                            SumPp = product.totalPrice,
+                            RemkPp = product.descriptProduct,
+                            Desc3Pp = product.nameOffical,
+                            PtypPp = product.unitPriceType,
+                            SpecPp = product.adresseProduct,
+                            PlntPp = product.entrepriseType,
+                            LdatPp = DateTime.Now,
+                            LedtPp = orderInfo.userId,
+                            EquivPp = product.equivalenceValue
+                        };
+                        index++;
+                        context.Popart.Add(newCargo);
                 }
-                await context.SaveChangesAsync();
+               await context.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 return 1;
             }
@@ -272,31 +274,31 @@ namespace LjDataAccess.Repositories
             //    count = g.Count(),
             //    categoryName = g.
             //}).  ToList<dynamic>();
-
+            
             var result = from command in context.Pomst
-                         where command.CreaPo == userId && command.TypePo == orderType
+                where command.CreaPo == userId && command.TypePo == orderType
                          group command by command.StatPo
                 into g
-                         select new
-                         {
-                             count = g.Count(),
-                             categoryId = g.Key,
-                             categoryName = utils.GetOrdersStatus(Int32.Parse(g.Key))
-                         };
+                select new
+                {
+                    count = g.Count(),
+                    categoryId = g.Key,
+                    categoryName = utils.GetOrdersStatus(Int32.Parse(g.Key))
+                };
 
             return await result.ToListAsync<dynamic>();
         }
 
         public async Task<dynamic> GetSalesOrderValidationContentAsync(string orderId)
         {
-            var result = context.Pomst.Where(p => p.PonbPo == orderId).Select(p =>
+            var result = context.Pomst.Where(p => p.PonbPo == orderId).Select(p=>
                 new
                 {
                     senderContent = new
                     {
                         senderId = p.FqrPo,
                         senderLabel = "",//todo
-                        content = p.FqryjPo
+                        content= p.FqryjPo
                     },
                     financialContent = new
                     {
@@ -353,7 +355,7 @@ namespace LjDataAccess.Repositories
                 var Order = await context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefaultAsync();
                 if (Order != null)
                 {
-                    Order.FqrPo = userId;
+                    Order.FqrPo =  userId;
                     Order.StatPo = statutCode;
                     Order.SpyjPo = DateTime.Now + " " + applicationContent;
                     Order.FqryjPo = DateTime.Now + " " + applicationContent;
@@ -374,7 +376,7 @@ namespace LjDataAccess.Repositories
                 {
                     return 1;
                 }
-
+                
             }
             catch (Exception e)
             {
@@ -446,7 +448,7 @@ namespace LjDataAccess.Repositories
                     await context.SaveChangesAsync();
 
                     var result = context.Database.ExecuteSqlCommand("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
-                    if (result > 0)
+                    if (result>0)
                     {
                         return 0;
                     }
@@ -472,7 +474,7 @@ namespace LjDataAccess.Repositories
                           && (param.userIds.Count() <= 0 || param.userIds.Contains(salesOrder.CreaPo))
                           && (param.orderTypes.Count() <= 0 || param.orderTypes.Contains(salesOrder.TypePo))
                           && (param.orderStatus.Count() <= 0 || param.orderStatus.Contains(salesOrder.StatPo))
-                          && (param.orderId == "" || param.orderId == null || EF.Functions.Like(salesOrder.PonbPo, "%" + param.orderId + "%"))
+                          && (param.orderId == ""||param.orderId==null ||  EF.Functions.Like(salesOrder.PonbPo, "%"+ param.orderId + "%"))
                           select new
                           {
                               commandeTypeId = salesOrder.TypePo,
@@ -485,8 +487,8 @@ namespace LjDataAccess.Repositories
                               status = this.utils.GetOrdersStatus(Int32.Parse(salesOrder.StatPo)),
                               type = salesOrder.TcpyPo, // 单位
                               creator = context.User.Where(x => x.Id == salesOrder.CreaPo).Select(y => y.Name),
-                              commandeCreator = salesOrder.FnamPo
-                          }).OrderByDescending(p => p.updateTime);
+                              commandeCreator = salesOrder.FnamPo 
+                          }).OrderByDescending(p=>p.updateTime);
             var formatedResult = new
             {
                 data = await result.Skip(param.begin * param.step).Take(param.step).ToListAsync<dynamic>(),

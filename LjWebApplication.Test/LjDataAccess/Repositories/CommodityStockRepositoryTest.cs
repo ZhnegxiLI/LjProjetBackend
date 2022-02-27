@@ -68,13 +68,13 @@ namespace LjWebApplication.Test
             _commodityStockRepository = new CommodityStockRepository(db);
         }
 
-
+        
         [Test]
         [TestCase("", "", "")]
         [TestCase(null, null, null)]
         public async Task Run_GetCommodityStocks_WithoutParams_ReturnAllItemsAsync(string CommodityTextSearch, string ClientTextSearch, string CommodityType)
         {
-            var numberOfCommodityInStock = db.Inven.Select(x => x.PartIvn).Distinct().Count();
+            var numberOfCommodityInStock = db.Inven.Select(x=>x.PartIvn).Distinct().Count();
 
             var count = (await _commodityStockRepository.GetCommodityStocks(CommodityTextSearch, ClientTextSearch, CommodityType)).Count;
             Assert.AreEqual(numberOfCommodityInStock, count);
@@ -100,9 +100,9 @@ namespace LjWebApplication.Test
                                    join c in db.Itemmst on cs.PartIvn equals c.PartIt
                                    where CommodityTextSearch == null || CommodityTextSearch == "" || c.PartIt.Contains(CommodityTextSearch) || c.DescIt.Contains(CommodityTextSearch)
                                    select cs.PartIvn).Distinct();
-            var result = await _commodityStockRepository.GetCommodityStocks(CommodityTextSearch, null, null);
+            var result = await _commodityStockRepository.GetCommodityStocks(CommodityTextSearch,null, null);
             // Check if result list corresponds the search param 
-            Assert.That(result.All(x => CommodityTextSearch == null || CommodityTextSearch == "" || x.CommodityId.Contains(CommodityTextSearch) || x.CommodityLabel.Contains(CommodityTextSearch)));
+            Assert.That(result.All(x=> CommodityTextSearch==null || CommodityTextSearch == "" || x.CommodityId.Contains(CommodityTextSearch) || x.CommodityLabel.Contains(CommodityTextSearch)));
             // Check if some result not in the list 
             Assert.AreEqual(result.Count, commodityStocks.Count());
         }
@@ -128,9 +128,9 @@ namespace LjWebApplication.Test
                                    where ClientTextSearch == null || ClientTextSearch == "" || client.LocnLtb.Contains(ClientTextSearch) || client.DescLtb.Contains(ClientTextSearch)
                                    select cs.PartIvn).Distinct().Count();
             var result = await _commodityStockRepository.GetCommodityStocks(null, ClientTextSearch, null);
-
+            
             // Check if result list corresponds the search param 
-            Assert.That(result.All(x => ClientTextSearch == null || ClientTextSearch == "" || x.Details.Where(p => p.ClientId.Contains(ClientTextSearch)).Count() > 0 || x.Details.Where(p => p.ClientName.Contains(ClientTextSearch)).Count() > 0));
+            Assert.That(result.All(x => ClientTextSearch == null || ClientTextSearch == "" || x.Details.Where(p=>p.ClientId.Contains(ClientTextSearch)).Count()>0 || x.Details.Where(p => p.ClientName.Contains(ClientTextSearch)).Count() > 0));
             // Check if some result not in the list 
             Assert.AreEqual(commodityStocks, result.Count);
         }
@@ -145,11 +145,11 @@ namespace LjWebApplication.Test
             var commodityStocks = (from cs in db.Inven
                                    join client in db.Loctb on cs.LocnIvn equals client.LocnLtb
                                    join c in db.Itemmst on cs.PartIvn equals c.PartIt
-                                   where CommodityType == null || CommodityType == "" || c.TypeIt.Contains(CommodityType)
+                                   where CommodityType == null || CommodityType == "" || c.TypeIt.Contains(CommodityType) 
                                    select cs.PartIvn).Distinct();
             var result = await _commodityStockRepository.GetCommodityStocks(null, null, CommodityType);
             // Check if result list corresponds the search param 
-            Assert.That(result.All(x => CommodityType == null || CommodityType == "" || x.CommodityTypeCode.Contains(CommodityType)));
+            Assert.That(result.All(x => CommodityType == null || CommodityType == "" || x.CommodityTypeCode.Contains(CommodityType) ));
             // Check if some result not in the list 
             Assert.AreEqual(result.Count, commodityStocks.Count());
         }

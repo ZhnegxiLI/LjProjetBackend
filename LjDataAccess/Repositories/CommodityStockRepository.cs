@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using LjData.DtoModels;
-using LjData.Models;
-using LjData.Models.ViewModel;
+﻿using LjData.DtoModels;
 using LjDataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LjDataAccess.Repositories
 {
@@ -25,8 +20,8 @@ namespace LjDataAccess.Repositories
             var query = (from stock in db.Inven
                          join commodity in db.Itemmst on stock.PartIvn equals commodity.PartIt
                          join client in db.Loctb on stock.LocnIvn equals client.LocnLtb
-                         where  (CommodityType == null || CommodityType.Length == 0 || commodity.TypeIt.Contains(CommodityType)) 
-                            && (CommodityTextSearch == null || CommodityTextSearch.Length == 0  || commodity.PartIt.Contains(CommodityTextSearch) || commodity.DescIt.Contains(CommodityTextSearch))
+                         where (CommodityType == null || CommodityType.Length == 0 || commodity.TypeIt.Contains(CommodityType))
+                            && (CommodityTextSearch == null || CommodityTextSearch.Length == 0 || commodity.PartIt.Contains(CommodityTextSearch) || commodity.DescIt.Contains(CommodityTextSearch))
                             && (ClientTextSearch == null || ClientTextSearch.Length == 0 || client.LocnLtb.Contains(ClientTextSearch) || client.DescLtb.Contains(ClientTextSearch))
                          group stock by new { stock.PartIvn, commodity.DescIt, commodity.TypeIt, commodity.UnitIt, commodity.Typ2It } into g
                          select new CommodityStockDto()
