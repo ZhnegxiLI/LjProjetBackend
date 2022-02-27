@@ -9,7 +9,6 @@ using LjData.Models;
 using LjDataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace LjDataAccess.Repositories
 {
