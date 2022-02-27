@@ -1,11 +1,13 @@
-﻿using LjDataAccess.Interfaces;
+﻿using LjData.DtoModels;
+using LjDataAccess.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LjWebApplication.Controllers
 {
-    [Route("api/commodity-stock")]
+    [Route("api/CommodityStock")]
     [ApiController]
     public class CommodityStockController : ControllerBase
     {
@@ -15,21 +17,11 @@ namespace LjWebApplication.Controllers
             _commodityStockRepository = commodityStockRepository;
         }
 
-
+   
         [HttpGet]
-        public async Task<ActionResult> GetData(string CommodityTextSearch, string ClientTextSearch, string CommodityType, int? Start, int? Limit)
+        public async Task<IEnumerable<CommodityStockDto>> GetData(string CommodityTextSearch, string ClientTextSearch, string CommodityType)
         {
-            var result = await _commodityStockRepository.GetCommodityStocks(CommodityTextSearch, ClientTextSearch, CommodityType);
-            var totalAmount = result.Count();
-            if (Start != null && Limit != null)
-            {
-                result = result.Skip((int)Start * (int)Limit).Take((int)Limit).ToList();
-            }
-            return Ok(new
-            {
-                TotalAmount = totalAmount,
-                Data = result
-            });
+            return await _commodityStockRepository.GetCommodityStocks(CommodityTextSearch, ClientTextSearch, CommodityType);
         }
     }
 }

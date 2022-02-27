@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace LjData.DtoModels
 {
@@ -15,7 +17,7 @@ namespace LjData.DtoModels
         public string CommodityType2Code { get; set; }
     }
 
-    public class CommodityStockDetail : CommodityStock
+    public class CommodityStockDetail:CommodityStock
     {
         public string ClientId { get; set; }
 
