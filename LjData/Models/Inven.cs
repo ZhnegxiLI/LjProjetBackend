@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace LjData.Models
 {
@@ -26,7 +25,7 @@ namespace LjData.Models
         public decimal? AdjqIvn { get; set; }
         public decimal? ScpqIvn { get; set; }
         public decimal? UseqIvn { get; set; }
-     
+
         public DateTime? LdatIvn { get; set; }
         public decimal? BfadIvn { get; set; }
         public DateTime? AudtIvn { get; set; }

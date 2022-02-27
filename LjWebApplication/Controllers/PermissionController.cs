@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LjData.Models;
+﻿using LjData.Models;
 using LjDataAccess.Interfaces;
 using LjWebApplication.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LjWebApplication.Controllers
@@ -39,7 +33,7 @@ namespace LjWebApplication.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveUserPermission([FromBody]UserPermissionParam userPermission)
+        public JsonResult SaveUserPermission([FromBody] UserPermissionParam userPermission)
         {
             var data = _userPermission.SaveUserPermission(userPermission);
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };

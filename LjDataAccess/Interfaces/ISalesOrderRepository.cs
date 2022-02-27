@@ -1,12 +1,10 @@
-﻿using System;
+﻿using LjData.Models;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using LjData.Models;
 
 namespace LjDataAccess.Interfaces
 {
-    public  interface ISalesOrderRepository
+    public interface ISalesOrderRepository
     {
         Task<dynamic> AdvancedSalesOrderSearchAsync(AdvancedSalesOrderSearchParam param);
         Task<dynamic> GetSalesOrderValidationContentAsync(string orderId);

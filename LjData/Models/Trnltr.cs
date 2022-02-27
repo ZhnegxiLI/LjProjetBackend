@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LjData.Models
+﻿namespace LjData.Models
 {
     public partial class Trnltr
     {

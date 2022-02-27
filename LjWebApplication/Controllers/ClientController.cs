@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LjDataAccess;
-using LjDataAccess.Interfaces;
+﻿using LjDataAccess.Interfaces;
 using LjWebApplication.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LjWebApplication.Controllers
@@ -16,8 +10,8 @@ namespace LjWebApplication.Controllers
     [Authorize]
     public class ClientController : Controller
     {
-      
-        private readonly IClientRepository  _clientRepository;
+
+        private readonly IClientRepository _clientRepository;
         public ClientController(IClientRepository clientRepository)
         {
             _clientRepository = clientRepository;

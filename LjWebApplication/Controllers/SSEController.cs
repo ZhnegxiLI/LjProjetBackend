@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LjDataAccess.Interfaces;
-using LjWebApplication.Models;
+﻿using LjDataAccess.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace LjWebApplication.Controllers
 {

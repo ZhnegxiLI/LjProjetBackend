@@ -50,7 +50,7 @@ namespace LjData.JpushModel
         /// - 如果 TimeUnit 为 "month": {"01", "02"...};
         /// </summary>
         [JsonProperty("point")]
-        public List<string> TimeList { get; set; } 
+        public List<string> TimeList { get; set; }
 
         private string GetJson()
         {

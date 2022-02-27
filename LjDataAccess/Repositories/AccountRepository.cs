@@ -1,14 +1,11 @@
-﻿using System;
+﻿using LjData.Models;
+using LjDataAccess.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using LjData.Models;
-using LjData.Models.ViewModel;
-using LjDataAccess.Interfaces;
 
 namespace LjDataAccess.Repositories
 {
-    public class AccountRepository:IAccountRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly ERPDATA2Context context;
 

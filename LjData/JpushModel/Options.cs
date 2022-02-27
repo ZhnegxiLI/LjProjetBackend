@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
-using System.Reflection;
 using System.Collections.Generic;
 
 namespace LjData.JpushModel
@@ -58,15 +56,17 @@ namespace LjData.JpushModel
         /// </summary>
         public Dictionary<string, object> Dict { get; set; }
 
-        public void Add(string key, object value) {
-            if (Dict == null) {
+        public void Add(string key, object value)
+        {
+            if (Dict == null)
+            {
                 Dict = new Dictionary<string, object>();
             }
             Dict.Add(key, value);
         }
     }
 
-    public class OptionsJsonConvert : JsonConverter 
+    public class OptionsJsonConvert : JsonConverter
     {
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
@@ -79,7 +79,8 @@ namespace LjData.JpushModel
             {
                 return true;
             }
-            else {
+            else
+            {
                 return false;
             }
         }
@@ -92,30 +93,36 @@ namespace LjData.JpushModel
                 return;
             }
             writer.WriteStartObject();
-            Options options = (Options) value;
-            if (options.SendNo != null) {
+            Options options = (Options)value;
+            if (options.SendNo != null)
+            {
                 writer.WritePropertyName("sendno");
                 writer.WriteValue(options.SendNo);
             }
-            if (options.TimeToLive != null) {
+            if (options.TimeToLive != null)
+            {
                 writer.WritePropertyName("time_to_live");
                 writer.WriteValue(options.TimeToLive);
             }
-            if (options.OverrideMessageId != null) {
+            if (options.OverrideMessageId != null)
+            {
                 writer.WritePropertyName("override_msg_id");
                 writer.WriteValue(options.OverrideMessageId);
             }
             writer.WritePropertyName("apns_production");
             writer.WriteValue(options.IsApnsProduction);
-            if (options.ApnsCollapseId != null) {
+            if (options.ApnsCollapseId != null)
+            {
                 writer.WritePropertyName("apns_collapse_id");
                 writer.WriteValue(options.ApnsCollapseId);
             }
-            if (options.BigPushDuration != null) {
+            if (options.BigPushDuration != null)
+            {
                 writer.WritePropertyName("big_push_duration");
                 writer.WriteValue(options.BigPushDuration);
             }
-            if (options.Dict != null) {
+            if (options.Dict != null)
+            {
                 foreach (KeyValuePair<string, object> item in options.Dict)
                 {
                     writer.WritePropertyName(item.Key);

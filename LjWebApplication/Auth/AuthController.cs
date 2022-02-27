@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LjData.Models.ViewModel;
+﻿using LjData.Models.ViewModel;
 using LjDataAccess.Interfaces;
 using LjWebApplication.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using System;
 
 namespace LjWebApplication.Auth
 {
@@ -27,25 +22,25 @@ namespace LjWebApplication.Auth
         {
             Object result = new object();
             if (ModelState.IsValid)
-            { 
-             dynamic token =  _authRepositoryRepository.Login(user);
-             if (token!=null)
-             {
-                 result = new ApiResult()
-                 {
-                     Data = token,
-                     Msg = "OK",
-                     Success = true
-                 };
-             }
-             else
-             {
-                 result = new ApiResult()
-                 {
-                     Msg = "FAIL",
-                     Success = false
-                 };
-             }
+            {
+                dynamic token = _authRepositoryRepository.Login(user);
+                if (token != null)
+                {
+                    result = new ApiResult()
+                    {
+                        Data = token,
+                        Msg = "OK",
+                        Success = true
+                    };
+                }
+                else
+                {
+                    result = new ApiResult()
+                    {
+                        Msg = "FAIL",
+                        Success = false
+                    };
+                }
             }
             else
             {
@@ -63,7 +58,7 @@ namespace LjWebApplication.Auth
         [HttpGet]
         public JsonResult CheckAvailabilityOfToken(string token)
         {
-            return Json( new ApiResult()
+            return Json(new ApiResult()
             {
                 Msg = "OK",
                 Success = true,

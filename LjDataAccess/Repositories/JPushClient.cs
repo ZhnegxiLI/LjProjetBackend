@@ -1,12 +1,12 @@
-﻿using System;
+﻿using LjData.JpushModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using LjData.JpushModel;
 
 namespace LjData.Utils
 {

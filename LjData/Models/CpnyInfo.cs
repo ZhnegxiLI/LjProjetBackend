@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 
 namespace LjData.Models
 {

@@ -11,12 +11,12 @@ namespace LjDataAccess
         {
         }
         public virtual DbSet<MobilePushMessage> MobilePushMessage { get; set; }
-        public virtual  DbSet<CpnyInfo> CpnyInfo { get; set; }
+        public virtual DbSet<CpnyInfo> CpnyInfo { get; set; }
         public virtual DbSet<XyInfo> XyInfo { get; set; }
         public virtual DbSet<MobilePermission> MobilePermission { get; set; }
         public virtual DbSet<MobileUserPermission> MobileUserPermission { get; set; }
 
-        public  virtual DbSet<User> User { get; set; }
+        public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Accmbk> Accmbk { get; set; }
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<Acctrn> Acctrn { get; set; }

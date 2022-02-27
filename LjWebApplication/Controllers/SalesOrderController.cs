@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LjData.Models;
 using LjDataAccess.Interfaces;
-using LjData.Models;
-using Microsoft.AspNetCore.Http;
+using LjWebApplication.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
-using LjWebApplication.Model;
-using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace LjWebApplication.Controllers
 {
@@ -29,7 +25,7 @@ namespace LjWebApplication.Controllers
         [HttpGet]
         public async Task<JsonResult> GetSalesOrderByUserId(string userId, int? categoryId, string type, int step, int begin)
         {
-            var data = await _saleOrderRepository.GetSalesOrderByUserIdAsync(userId, categoryId, type,step, begin);
+            var data = await _saleOrderRepository.GetSalesOrderByUserIdAsync(userId, categoryId, type, step, begin);
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
@@ -47,7 +43,7 @@ namespace LjWebApplication.Controllers
         {
             var data = await _saleOrderRepository.GetSalesOrderListByOrderIdAsync(orderId);
             //string output = JsonConvert.SerializeObject(result);
-            ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data=data };
+            ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
 
@@ -62,7 +58,8 @@ namespace LjWebApplication.Controllers
             }
             InsertOrderParam resultJson = JsonConvert.DeserializeObject<InsertOrderParam>(result);
             int status = await _saleOrderRepository.InsertSalesOrderByOrderIdAsync(resultJson.orderInfo, resultJson.products);
-            if (status == 0) {
+            if (status == 0)
+            {
                 ret = new ApiResult() { Success = true, Msg = "OK", Type = "200" };
             }
             else
@@ -75,9 +72,9 @@ namespace LjWebApplication.Controllers
         [HttpGet]
         public async Task<JsonResult> GetSalesOrderCategoriesByUserId(string userId, string type)
         {
-           var result = new ApiResult()
+            var result = new ApiResult()
             {
-                Data = await _saleOrderRepository.GetSalesOrderCategoriesByUserIdAsync(userId,type),
+                Data = await _saleOrderRepository.GetSalesOrderCategoriesByUserIdAsync(userId, type),
                 Msg = "OK",
                 Success = true
             };
@@ -105,12 +102,12 @@ namespace LjWebApplication.Controllers
             public string statutCode { get; set; }
         }
 
-         
+
         [HttpPost]
-        public async Task<JsonResult> UpdateSalesOrderStatut([FromBody]updateCriteria criteria)
+        public async Task<JsonResult> UpdateSalesOrderStatut([FromBody] updateCriteria criteria)
         {
             var status = 0;
-            if (criteria.statutCode=="1")
+            if (criteria.statutCode == "1")
             {
                 status = await _saleOrderRepository.SetSenderApplicationAsync(criteria.userId, criteria.orderId, criteria.statutCode,
                     criteria.applicationContent);
@@ -125,12 +122,12 @@ namespace LjWebApplication.Controllers
                 status = await _saleOrderRepository.SetManagerApplicationAsync(criteria.userId, criteria.orderId, criteria.statutCode,
                     criteria.applicationContent);
             }
-            var result = status==0? new ApiResult() { Success = true, Msg = "OK", Type = "200" }: new ApiResult() { Success = false, Msg = "服务器内部错误", Type = "500" };
+            var result = status == 0 ? new ApiResult() { Success = true, Msg = "OK", Type = "200" } : new ApiResult() { Success = false, Msg = "服务器内部错误", Type = "500" };
             return Json(result);
         }
 
         [HttpPost]
-        public async Task<JsonResult> AdvancedSalesOrderSearch([FromBody]AdvancedSalesOrderSearchParam param)
+        public async Task<JsonResult> AdvancedSalesOrderSearch([FromBody] AdvancedSalesOrderSearchParam param)
         {
             var result = new ApiResult()
             {
