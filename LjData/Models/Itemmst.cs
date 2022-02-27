@@ -4,17 +4,25 @@ using System.Collections.Generic;
 
 namespace LjData.Models
 {
+    /// <summary>
+    /// Commodity table (Reference)
+    /// </summary>
     public partial class Itemmst
     {
-        [JsonProperty(PropertyName = "FooBar")]
+        [JsonProperty(PropertyName = "CommodityId")]
         public string PartIt { get; set; }
+        [JsonProperty(PropertyName = "CommodityLabel")]
+        public string DescIt { get; set; }
+        [JsonProperty(PropertyName = "CommodityUnit")]
+        public string UnitIt { get; set; }
+        [JsonProperty(PropertyName = "CommodityTypeCode")]
+        public string TypeIt { get; set; }
+        [JsonProperty(PropertyName = "CommodityType2Code")]
+        public string Typ2It { get; set; }
+
         public string BarcIt { get; set; }
         public string PybmIt { get; set; }
-        public string TypeIt { get; set; }
-        public string Typ2It { get; set; }
-        public string DescIt { get; set; }
         public string SpecIt { get; set; }
-        public string UnitIt { get; set; }
         public string Pn2It { get; set; }
         public string Desc2It { get; set; }
         public decimal? MaxqIt { get; set; }

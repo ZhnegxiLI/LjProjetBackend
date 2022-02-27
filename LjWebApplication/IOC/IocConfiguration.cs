@@ -53,6 +53,8 @@ namespace LjWebApplication.IOC
             services.AddScoped<IUserPermission, UserPermission>();
             services.AddScoped<ISseRepository, SseRepository>();
             services.AddScoped<ISendMobilePushRepository, SendMobilePushRepository>();
+            services.AddScoped<ICommodityStockRepository, CommodityStockRepository>();
+            
             //services.AddScoped<ISqlListenerRepository, SqlListenerRepository>();
         }
 
@@ -75,7 +77,7 @@ namespace LjWebApplication.IOC
 
         public static void NewtonsoftJsonIoc(IMvcBuilder services) {
             services.AddNewtonsoftJson(options =>
-            {
+            {   
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
