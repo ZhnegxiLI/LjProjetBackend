@@ -5,7 +5,6 @@ using System.Text;
 using LjData.Models;
 using LjDataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Remotion.Linq.Clauses;
 
 namespace LjDataAccess.Repositories
 {

@@ -11,3 +11,4 @@ Properties
 /LjWebApplication/appsettings.json
 /LjWebApplication/LjWebApplication.csproj.user
 /LjWebApplication/web.config
+/LjWebApplication.Test/obj
