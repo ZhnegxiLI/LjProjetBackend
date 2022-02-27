@@ -1,8 +1,5 @@
-﻿using LjData.DtoModels;
-using LjDataAccess.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using LjDataAccess.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,13 +15,13 @@ namespace LjWebApplication.Controllers
             _commodityStockRepository = commodityStockRepository;
         }
 
-   
+
         [HttpGet]
         public async Task<ActionResult> GetData(string CommodityTextSearch, string ClientTextSearch, string CommodityType, int? Start, int? Limit)
         {
             var result = await _commodityStockRepository.GetCommodityStocks(CommodityTextSearch, ClientTextSearch, CommodityType);
             var totalAmount = result.Count();
-            if (Start!=null && Limit != null)
+            if (Start != null && Limit != null)
             {
                 result = result.Skip((int)Start * (int)Limit).Take((int)Limit).ToList();
             }
