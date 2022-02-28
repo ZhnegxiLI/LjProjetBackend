@@ -45,6 +45,9 @@ namespace LjWebApplication
 
             // DI Service repository 
             IocConfiguration.RepositoryIoc(services);
+
+            // DI Swagger
+            IocConfiguration.SwaggerIoc(services);
         }
 
 
@@ -61,6 +64,13 @@ namespace LjWebApplication
 
             RecurringJob.AddOrUpdate(() => sendMobilePushRepository.sendNotificationRequestAsync(), Cron.Minutely);
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "LJAPI");
+            });
+
             app.UseErrorHandling();
 
             app.UseRouting();
@@ -76,6 +86,7 @@ namespace LjWebApplication
                 endpoints.MapControllerRoute(name: "default",
                        pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }
