@@ -14,8 +14,12 @@
 - Add automapper to map db structure
     - https://procodeguide.com/programming/automapper-in-aspnet-core/
 
+- Add swagger 
+    - https://coderjony.com/blogs/adding-swagger-to-aspnet-core-31-web-api/
+    - Not work yet, should change some api to respect rest api
 - Add unit test
+    - NUnit 
+    - EF CORE InMemory context 
 ## TODO: 
 - Add transaction for save service 
-
 - Migrate the api to rest api 
