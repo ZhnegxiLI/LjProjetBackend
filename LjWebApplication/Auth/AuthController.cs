@@ -54,6 +54,7 @@ namespace LjWebApplication.Auth
             return Json(result);
         }
 
+        //TODO ONLY FOR TEST
         [Authorize]
         [HttpGet]
         public JsonResult CheckAvailabilityOfToken(string token)
@@ -71,14 +72,14 @@ namespace LjWebApplication.Auth
         public JsonResult GetUserList()
         {
             var data = _authRepositoryRepository.GetUserList();
-            ApiResult result = new ApiResult()
-            {
-                Msg = "OK",
-                Success = true,
-                Data = data,
-                Type = "200"
-            };
-            return Json(result);
+            //ApiResult result = new ApiResult()
+            //{
+            //    Msg = "OK",
+            //    Success = true,
+            //    Data = data,
+            //    Type = "200"
+            //};
+            return Json(data);
         }
 
     }

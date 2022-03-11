@@ -15,7 +15,7 @@ namespace LjDataAccess.Repositories
         {
             this.db = context;
         }
-        public async Task<List<CommodityStockDto>> GetCommodityStocks(string CommodityTextSearch, string ClientTextSearch, string CommodityType)
+        public async Task<List<CommodityStockDto>> GetCommodityStocks(string CommodityTextSearch, string ClientTextSearch, string CommodityType, string[] clientIdList, string[] commodityIdList)
         {
             var query = (from stock in db.Inven
                          join commodity in db.Itemmst on stock.PartIvn equals commodity.PartIt
@@ -23,6 +23,8 @@ namespace LjDataAccess.Repositories
                          where (CommodityType == null || CommodityType.Length == 0 || commodity.TypeIt.Contains(CommodityType))
                             && (CommodityTextSearch == null || CommodityTextSearch.Length == 0 || commodity.PartIt.Contains(CommodityTextSearch) || commodity.DescIt.Contains(CommodityTextSearch))
                             && (ClientTextSearch == null || ClientTextSearch.Length == 0 || client.LocnLtb.Contains(ClientTextSearch) || client.DescLtb.Contains(ClientTextSearch))
+                            && (clientIdList.Length == 0 || clientIdList.Contains(client.LocnLtb))
+                            && (commodityIdList.Length == 0 || commodityIdList.Contains(commodity.PartIt))
                          group stock by new { stock.PartIvn, commodity.DescIt, commodity.TypeIt, commodity.UnitIt, commodity.Typ2It } into g
                          select new CommodityStockDto()
                          {
