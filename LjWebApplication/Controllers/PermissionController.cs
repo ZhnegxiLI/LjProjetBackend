@@ -21,8 +21,8 @@ namespace LjWebApplication.Controllers
         public JsonResult GetPermissionList()
         {
             var data = _userPermission.GetPermissionList();
-            ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
-            return Json(result);
+            //ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
+            return Json(data);
         }
         [HttpGet]
         public JsonResult GetUserPermissionById(string userId)

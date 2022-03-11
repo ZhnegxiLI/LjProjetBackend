@@ -37,7 +37,10 @@ namespace LjDataAccess.Repositories
                          select new
                          {
                              id = it.PartIt,
-                             name = GetCargoType(it.Typ2It) + it.DescIt,
+                             name =  it.DescIt,
+                             type = it.Typ2It== "R" ? "(材)" :
+                             it.Typ2It == "M" ? "(半)" :
+                             it.Typ2It == "F" ? "(成)" : null,
                              unit = it.UnitIt,
                              typePrice = it.PunitIt
                          };

@@ -47,7 +47,7 @@ namespace LjDataAccess.Repositories
                     receiver = p.TnamPo,
                     status = this.utils.GetOrdersStatus(Int32.Parse(p.StatPo)),
                     type = p.TcpyPo, // 单位
-                    creator = context.User.Where(x => x.Id == userId).Select(y => y.Name),
+                    creator = context.User.Where(x => x.Id == userId).Select(y => y.Name).FirstOrDefault(),
                     commandeCreator = p.FnamPo //context.Personel.Where(r=>r.EmpnPsl == p.CreaPo).Select(x=>x.NamePsl) 
                 }).OrderByDescending(x => x.updateTime);
                 var filterResult = new
@@ -479,12 +479,12 @@ namespace LjDataAccess.Repositories
                               commandeTypeLabel = utils.GetCommandTypeLabelById(salesOrder.TypePo),
                               commandeId = salesOrder.PonbPo,
                               commandeCreateDate = salesOrder.DatePo,
-                              updateOn = salesOrder.LdatPo.ToString(),
+                              updateOn = salesOrder.LdatPo.Value,
                               updateTime = salesOrder.LdatPo,
                               receiver = salesOrder.TnamPo,
                               status = this.utils.GetOrdersStatus(Int32.Parse(salesOrder.StatPo)),
                               type = salesOrder.TcpyPo, // 单位
-                              creator = context.User.Where(x => x.Id == salesOrder.CreaPo).Select(y => y.Name),
+                              creator = context.User.Where(x => x.Id == salesOrder.CreaPo).Select(y => y.Name).FirstOrDefault(),
                               commandeCreator = salesOrder.FnamPo
                           }).OrderByDescending(p => p.updateTime);
             var formatedResult = new

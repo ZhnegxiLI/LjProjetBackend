@@ -48,16 +48,10 @@ namespace LjWebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> InsertSalesOrderByOrderId()
+        public async Task<JsonResult> InsertSalesOrderByOrderId([FromBody]InsertOrderParam criteria)
         {
-            var result = string.Empty;
             ApiResult ret;
-            using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
-            {
-                result = reader.ReadToEnd();
-            }
-            InsertOrderParam resultJson = JsonConvert.DeserializeObject<InsertOrderParam>(result);
-            int status = await _saleOrderRepository.InsertSalesOrderByOrderIdAsync(resultJson.orderInfo, resultJson.products);
+            int status = await _saleOrderRepository.InsertSalesOrderByOrderIdAsync(criteria.orderInfo, criteria.products);
             if (status == 0)
             {
                 ret = new ApiResult() { Success = true, Msg = "OK", Type = "200" };
