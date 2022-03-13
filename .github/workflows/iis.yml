@@ -1,4 +1,4 @@
-name: .NET
+name: CDCI
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-
+    environment: FUNC
     runs-on: windows-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
       
     - name: echo
-      run: echo ${{env.DOTNET_ROOT}}
+      run: echo ${{env.DOTNET_ROOT}} ${{steps.environment.outputs.environment}}
       
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
