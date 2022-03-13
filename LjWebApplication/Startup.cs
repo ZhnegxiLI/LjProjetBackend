@@ -29,7 +29,7 @@ namespace LjWebApplication
 
             // DI DBContext 
             services.AddDbContext<ERPDATA2Context>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
+                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"), option=> option.UseRowNumberForPaging()));
 
             // DI JWT
             IocConfiguration.JwtIoc(services);
