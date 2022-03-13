@@ -45,5 +45,8 @@ jobs:
           uses: actions/download-artifact@v2
           with: 
             name: .net-app
+        - name: Deploy to IIS
+          run: |
+            Copy-Item . C:/TEST -Recurse -Force
         
 
