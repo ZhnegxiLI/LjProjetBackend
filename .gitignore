@@ -8,7 +8,6 @@
 /LjDataAccess/bin
 Properties
 /LjWebApplication/appsettings.Development.json
-/LjWebApplication/appsettings.json
 /LjWebApplication/LjWebApplication.csproj.user
 /LjWebApplication/web.config
 /LjWebApplication.Test/obj
