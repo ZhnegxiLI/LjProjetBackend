@@ -26,8 +26,8 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+    - name: dotnet publish Staging
+      run: dotnet publish -c Release /p:EnvironmentName=Staging -o ${{env.DOTNET_ROOT}}/Staging
       
     - name: echo
       run: echo ${{env.DOTNET_ROOT}} ${{steps.environment.outputs.environment}}
@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
+        path: ${{env.DOTNET_ROOT}}/Staging
     
   deploy:
       runs-on: self-hosted
@@ -49,6 +49,6 @@ jobs:
             name: .net-app
         - name: Deploy to IIS
           run: |
-            Copy-Item . C:/TEST -Recurse -Force
+            Copy-Item ./ C:/Deploy/LjProjet/Test -Recurse -Force
         
 
