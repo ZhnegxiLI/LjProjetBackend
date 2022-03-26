@@ -1,0 +1,60 @@
+name: ProductionCDCI
+
+on:
+  push:
+     tags:
+      - '*'
+
+jobs:
+  build:
+    environment: PROD
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      
+    - name: dotnet publish Production
+      run: dotnet publish -c Release /p:EnvironmentName=Production -o ${{env.DOTNET_ROOT}}/Production
+      
+    - name: echo
+      run: echo ${{env.DOTNET_ROOT}} ${{steps.environment.outputs.environment}}
+      
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
+        name: .net-app
+        path: ${{env.DOTNET_ROOT}}/Production
+    
+  deploy:
+      runs-on: self-hosted
+      needs: build
+      
+      steps:
+        - name: Clean download artifact folder
+          run: | 
+            Remove-Item -Path "C:/Artifact/ljprojet/production/*" -Recurse
+          
+        - name: Download artifact from build job
+          uses: actions/download-artifact@v3
+          with: 
+            name: .net-app
+            path: C:/Artifact/ljprojet/production
+
+        - name: Deploy to IIS
+          run: |
+            appcmd stop site LJ_PROD
+            Copy-Item C:/Artifact/ljprojet/production/* C:/Deploy/LjProjet/Prod -Recurse -Force
+            appcmd start site LJ_PROD
+        

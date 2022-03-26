@@ -1,4 +1,5 @@
 ﻿using LjData.DtoModels;
+using LjData.Models;
 using LjDataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -57,5 +58,6 @@ namespace LjDataAccess.Repositories
             return result;
         }
 
+        public async Task<List<Itemtype>> GetItemType() => await db.Itemtype.ToListAsync();
     }
 }
