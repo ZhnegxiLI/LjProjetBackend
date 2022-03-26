@@ -1,4 +1,4 @@
-name: CDCI
+name: StagingCDCI
 
 on:
   push:
