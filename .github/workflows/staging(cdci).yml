@@ -45,7 +45,7 @@ jobs:
       steps:
         - name: Clean download artifact folder
           run: | 
-            Remove-Item -Path "C:\Artifact\lj_func\*" -Recurse
+            Remove-Item -Path "C:/Artifact/ljprojet/staging/*" -Recurse
           
         - name: Download artifact from build job
           uses: actions/download-artifact@v3
