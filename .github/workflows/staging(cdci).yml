@@ -49,9 +49,10 @@ jobs:
             name: .net-app
             path: C:/Artifact/lj_func
 
-          
         - name: Deploy to IIS
           run: |
+            iisreset /stop
             Copy-Item C:/Artifact/lj_func/* C:/Deploy/LjProjet/Test -Recurse -Force
+            iisreset /start
         
 
