@@ -16,6 +16,12 @@ namespace LjWebApplication.Controllers
             _commodityStockRepository = commodityStockRepository;
         }
 
+        [Route("item-type")]
+        [HttpGet]
+        public async Task<ActionResult>  GetItemTypeData()
+        {
+            return Ok(await _commodityStockRepository.GetItemType());
+        }
 
         public class SearchCriteria
         {

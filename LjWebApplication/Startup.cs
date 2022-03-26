@@ -47,7 +47,8 @@ namespace LjWebApplication
             IocConfiguration.RepositoryIoc(services);
 
             // DI Swagger
-            IocConfiguration.SwaggerIoc(services);
+           // IocConfiguration.SwaggerIoc(services);
+            services.AddSwaggerGen();
         }
 
 
@@ -63,13 +64,6 @@ namespace LjWebApplication
             app.UseHangfireDashboard();
 
             RecurringJob.AddOrUpdate(() => sendMobilePushRepository.sendNotificationRequestAsync(), Cron.Minutely);
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("v1/swagger.json", "LJAPI");
-            });
 
             app.UseErrorHandling();
 
@@ -87,6 +81,13 @@ namespace LjWebApplication
                 endpoints.MapHub<NotificationHub>("/notification/signalr");
                 endpoints.MapControllerRoute(name: "default",
                        pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "LJAPI");
             });
 
         }
