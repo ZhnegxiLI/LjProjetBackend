@@ -51,7 +51,7 @@ jobs:
           uses: actions/download-artifact@v3
           with: 
             name: .net-app
-            path: C:/Artifact/lj_func
+            path: C:/Artifact/ljprojet/staging
 
         - name: Deploy to IIS
           run: |
