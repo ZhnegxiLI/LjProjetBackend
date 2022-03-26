@@ -1,14 +1,13 @@
-name: StagingCDCI
+name: ProductionCDCI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+     tags:
+      - '*'
 
 jobs:
   build:
-    environment: FUNC
+    environment: PROD
     runs-on: windows-latest
 
     steps:
@@ -26,8 +25,8 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: dotnet publish Staging
-      run: dotnet publish -c Release /p:EnvironmentName=Staging -o ${{env.DOTNET_ROOT}}/Staging
+    - name: dotnet publish Production
+      run: dotnet publish -c Release /p:EnvironmentName=Production -o ${{env.DOTNET_ROOT}}/Production
       
     - name: echo
       run: echo ${{env.DOTNET_ROOT}} ${{steps.environment.outputs.environment}}
@@ -36,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: .net-app
-        path: ${{env.DOTNET_ROOT}}/Staging
+        path: ${{env.DOTNET_ROOT}}/Production
     
   deploy:
       runs-on: self-hosted
@@ -51,12 +50,11 @@ jobs:
           uses: actions/download-artifact@v3
           with: 
             name: .net-app
-            path: C:/Artifact/lj_func
+            path: C:/Artifact/ljprojet/production
 
         - name: Deploy to IIS
           run: |
-            appcmd stop site LJ_STAGING
-            Copy-Item C:/Artifact/ljprojet/staging/* C:/Deploy/LjProjet/Test -Recurse -Force
-            appcmd start site LJ_STAGING
+            appcmd stop site LJ_PROD
+            Copy-Item C:/Artifact/ljprojet/production/* C:/Deploy/LjProjet/Prod -Recurse -Force
+            appcmd start site LJ_PROD
         
-
