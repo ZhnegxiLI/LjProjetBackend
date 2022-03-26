@@ -51,8 +51,8 @@ jobs:
 
         - name: Deploy to IIS
           run: |
-            iisreset /stop
+            appcmd stop site LJ_STAGING
             Copy-Item C:/Artifact/lj_func/* C:/Deploy/LjProjet/Test -Recurse -Force
-            iisreset /start
+            appcmd start site LJ_STAGING
         
 
