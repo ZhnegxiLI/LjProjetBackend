@@ -27,7 +27,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
       
     - name: dotnet publish Staging
-      run: dotnet publish -c Release /p:EnvironmentName=Staging -o ${{env.DOTNET_ROOT}}/Staging
+      run: dotnet publish -c Release /p:EnvironmentName=Staging -o ${{env.DOTNET_ROOT}}/Staging -r win-x64 --self-contained false 
       
     - name: echo
       run: echo ${{env.DOTNET_ROOT}} ${{steps.environment.outputs.environment}}
@@ -39,7 +39,7 @@ jobs:
         path: ${{env.DOTNET_ROOT}}/Staging
     
   deploy:
-      runs-on: self-hosted
+      runs-on: win
       needs: build
       
       steps:
@@ -56,6 +56,7 @@ jobs:
         - name: Deploy to IIS
           run: |
             appcmd stop site LJ_STAGING
+            Start-Sleep -s 10
             Copy-Item C:/Artifact/ljprojet/staging/* C:/Deploy/LjProjet/Test -Recurse -Force
             appcmd start site LJ_STAGING
         
