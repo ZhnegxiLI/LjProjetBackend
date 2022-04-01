@@ -17,6 +17,9 @@ namespace LjDataAccess
         public virtual DbSet<MobileUserPermission> MobileUserPermission { get; set; }
 
         public virtual DbSet<User> User { get; set; }
+
+        public virtual DbSet<Warehouse> Warehouse { get; set; }
+        
         public virtual DbSet<Accmbk> Accmbk { get; set; }
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<Acctrn> Acctrn { get; set; }
@@ -129,6 +132,15 @@ namespace LjDataAccess
                 entity.Property(v => v.Password).HasColumnName("Password");
                 entity.Property(v => v.Email).HasColumnName("Email");
             });
+
+            modelBuilder.Entity<Warehouse>(entity =>
+            {
+                // View cannot update or insert, only can be read
+                entity.ToTable("WAREHOUSE");
+                entity.Property(v => v.Id).HasColumnName("LTRN_LTR");
+                entity.Property(v => v.Name).HasColumnName("DESC_LTR");
+            });
+            
 
             modelBuilder.Entity<Accmbk>(entity =>
             {

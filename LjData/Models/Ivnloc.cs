@@ -16,6 +16,9 @@ namespace LjData.Models
         public string PrdnIvl { get; set; }
         [JsonProperty(PropertyName = "StockQuantity")]
         public decimal? BlceIvl { get; set; }
+
+
+
         public DateTime? LdatIvl { get; set; }
         public string LedtIvl { get; set; }
         public DateTime? InpdIvl { get; set; }

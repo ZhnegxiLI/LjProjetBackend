@@ -38,6 +38,16 @@ namespace LjDataAccess.Repositories
                              CommodityType2Code = g.Key.Typ2It,
                              Unit = g.Key.UnitIt,
                              CommodityTypeLabel = db.Itemtype.Where(x => x.CmpnPty == g.Key.TypeIt).Select(x => x.DescPty).FirstOrDefault(),
+                             ProductionDetail = (from pd in db.Ivnloc
+                                                 from w in db.Warehouse.Where(x=>x.Id == pd.LocnIvl).DefaultIfEmpty()
+                                                 where pd.PartIvl == g.Key.PartIvn
+                                                 select new CommodityStockProductDetail()
+                                                 {
+                                                     WarehouseId = pd.LocnIvl,
+                                                     WarehouseName = w.Name,
+                                                     ProductionNumber = pd.PrdnIvl,
+                                                     Quantity = pd.BlceIvl
+                                                 }).ToList(),
                              Details = (from detailStock in db.Inven
                                         join detailClient in db.Loctb on detailStock.LocnIvn equals detailClient.LocnLtb
                                         where detailStock.PartIvn == g.Key.PartIvn

@@ -24,8 +24,19 @@ namespace LjData.DtoModels
         public string ClientType { get; set; }
     }
 
+    public class CommodityStockProductDetail
+    {
+        public string WarehouseId { get; set; }
+        public string WarehouseName { get; set; }
+        public string ProductionNumber { get; set; }
+        public string TypeLabel { get; set; }
+        public decimal? Quantity { get; set; }
+    }
+
     public class CommodityStockDto : CommodityStock
     {
         public List<CommodityStockDetail> Details { get; set; }
+
+        public List<CommodityStockProductDetail> ProductionDetail { get; set; }
     }
 }
