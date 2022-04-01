@@ -1,6 +1,5 @@
 ﻿using LjDataAccess.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +17,7 @@ namespace LjWebApplication.Controllers
 
         [Route("item-type")]
         [HttpGet]
-        public async Task<ActionResult>  GetItemTypeData()
+        public async Task<ActionResult> GetItemTypeData()
         {
             return Ok(await _commodityStockRepository.GetItemType());
         }
@@ -34,7 +33,7 @@ namespace LjWebApplication.Controllers
             public string[] commodityIdList { get; set; }
         }
         [HttpPost]
-        public async Task<ActionResult> GetData([FromBody]SearchCriteria criteria)
+        public async Task<ActionResult> GetData([FromBody] SearchCriteria criteria)
         {
             var result = await _commodityStockRepository.GetCommodityStocks(criteria.CommodityTextSearch, criteria.ClientTextSearch, criteria.CommodityType, criteria.clientIdList, criteria.commodityIdList);
             var totalAmount = result.Count();

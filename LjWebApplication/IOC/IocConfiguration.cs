@@ -1,7 +1,6 @@
 ﻿using LjData.Utils;
 using LjDataAccess.Interfaces;
 using LjDataAccess.Repositories;
-using LjWebApplication.Model;
 using LjWebApplication.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +46,6 @@ namespace LjWebApplication.IOC
         public static void RepositoryIoc(IServiceCollection services)
         {
             // Dependencies injection
-            services.AddSingleton<IStudentRepository, MockStudentRepository>(); // Only for test
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICargoRepository, CargoRepository>();

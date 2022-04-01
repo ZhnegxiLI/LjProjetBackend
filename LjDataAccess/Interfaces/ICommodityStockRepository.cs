@@ -7,7 +7,7 @@ namespace LjDataAccess.Interfaces
 {
     public interface ICommodityStockRepository
     {
-  
+
         Task<List<CommodityStockDto>> GetCommodityStocks(string CommodityTextSearch, string ClientTextSearch, string CommodityType, string[] clientIdList, string[] commodityIdList);
 
         Task<List<Itemtype>> GetItemType();

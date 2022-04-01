@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 
 namespace LjWebApplication
 {
@@ -29,7 +30,7 @@ namespace LjWebApplication
 
             // DI DBContext 
             services.AddDbContext<ERPDATA2Context>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"), option=> option.UseRowNumberForPaging()));
+                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
             // DI JWT
             IocConfiguration.JwtIoc(services);
@@ -47,8 +48,11 @@ namespace LjWebApplication
             IocConfiguration.RepositoryIoc(services);
 
             // DI Swagger
-           // IocConfiguration.SwaggerIoc(services);
-            services.AddSwaggerGen();
+            // IocConfiguration.SwaggerIoc(services);
+            services.AddSwaggerGen(c =>
+            {
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+            });
         }
 
 
@@ -64,6 +68,13 @@ namespace LjWebApplication
             app.UseHangfireDashboard();
 
             RecurringJob.AddOrUpdate(() => sendMobilePushRepository.sendNotificationRequestAsync(), Cron.Minutely);
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "LJAPI");
+            });
 
             app.UseErrorHandling();
 
@@ -83,12 +94,7 @@ namespace LjWebApplication
                        pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "LJAPI");
-            });
 
         }
     }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LjWebApplication.Controllers
 {
-    [Route("api/[controller]/{action}/{id?}")]
+    [Route("api/[controller]")]
     //[ApiController]
     [Authorize]
     //[EnableCors]
@@ -18,6 +18,8 @@ namespace LjWebApplication.Controllers
             _cargoRepository = cargoRepository;
         }
         // GET: api/Cargo
+
+        [Route("GetCargo")]
         [HttpGet]
         public JsonResult GetCargo(int limit)
         {
@@ -25,6 +27,8 @@ namespace LjWebApplication.Controllers
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
+
+        [Route("GetUnitList")]
         [AllowAnonymous]
         [HttpGet]
         public JsonResult GetUnitList()

@@ -3,9 +3,6 @@ using LjDataAccess.Interfaces;
 using LjWebApplication.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LjWebApplication.Controllers
@@ -48,7 +45,7 @@ namespace LjWebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> InsertSalesOrderByOrderId([FromBody]InsertOrderParam criteria)
+        public async Task<JsonResult> InsertSalesOrderByOrderId([FromBody] InsertOrderParam criteria)
         {
             ApiResult ret;
             int status = await _saleOrderRepository.InsertSalesOrderByOrderIdAsync(criteria.orderInfo, criteria.products);
