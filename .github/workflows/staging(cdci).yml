@@ -59,7 +59,7 @@ jobs:
             Stop-WebAppPool -Name LJ_STAGING
             Start-Sleep -s 10
             Copy-Item C:/Artifact/ljprojet/staging/* C:/Deploy/LjProjet/Test -Recurse -Force
-            Stop-WebAppPool -Name LJ_STAGING
+            Start-WebAppPool -Name LJ_STAGING
             appcmd start site LJ_STAGING
         
 
