@@ -55,6 +55,10 @@ jobs:
         - name: Deploy to IIS
           run: |
             appcmd stop site LJ_PROD
+            Stop-WebAppPool -Name LJ_PROD
+            Start-Sleep -s 10
             Copy-Item C:/Artifact/ljprojet/production/* C:/Deploy/LjProjet/Prod -Recurse -Force
+            Start-WebAppPool -Name LJ_PROD
             appcmd start site LJ_PROD
-        
+              
+      
