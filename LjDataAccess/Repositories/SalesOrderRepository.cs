@@ -445,7 +445,7 @@ namespace LjDataAccess.Repositories
                     //context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
 
-                    var result = context.Database.ExecuteSqlCommand("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
+                    var result = context.Database.ExecuteSqlRaw("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
                     if (result > 0)
                     {
                         return 0;
