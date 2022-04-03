@@ -80,6 +80,8 @@ namespace LjWebApplication
 
             app.UseRouting();
 
+            app.UseSentryTracing();
+
             app.UseCors();
 
             app.UseAuthentication();

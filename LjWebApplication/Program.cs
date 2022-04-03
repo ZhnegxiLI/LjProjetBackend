@@ -34,13 +34,14 @@ namespace LjWebApplication
         public static IHostBuilder CreateHostBuilder(string[] args) =>
                Host.CreateDefaultBuilder(args)
                     .UseSerilog() //Uses Serilog instead of default .NET Logger
-                   .ConfigureWebHostDefaults(webBuilder =>
+                    .ConfigureWebHostDefaults(webBuilder =>
                    {
+                       webBuilder.UseSentry();
                        webBuilder.UseStartup<Startup>()
-                            .ConfigureAppConfiguration((hostingContext, config) =>
-                            {
-                                ConfigurationAppSettings(config);
-                            });
+                        .ConfigureAppConfiguration((hostingContext, config) =>
+                        {
+                            ConfigurationAppSettings(config);
+                        });
                    });
 
         public static IConfigurationBuilder ConfigurationAppSettings(IConfigurationBuilder config)
