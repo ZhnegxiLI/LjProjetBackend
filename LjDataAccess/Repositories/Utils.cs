@@ -48,5 +48,17 @@ namespace LjDataAccess.Repositories
             return label;
 
         }
+
+
+        public string GetCargoType(string typeId)
+        {
+            switch (typeId)
+            {
+                case "R": return "(材)";
+                case "M": return "(半)";
+                case "F": return "(成)";
+                default: return "";
+            }
+        }
     }
 }

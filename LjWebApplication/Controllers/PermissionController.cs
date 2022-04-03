@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LjWebApplication.Controllers
 {
-    [Route("api/[controller]/{action}/{id?}")]
+    [Route("api/[controller]")]
     [Authorize]
     public class PermissionController : Controller
     {
@@ -17,6 +17,8 @@ namespace LjWebApplication.Controllers
             _userPermission = permissionRepository;
         }
         // GET: api/Cargo
+
+        [Route("GetPermissionList")]
         [HttpGet]
         public JsonResult GetPermissionList()
         {
@@ -24,6 +26,8 @@ namespace LjWebApplication.Controllers
             //ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(data);
         }
+
+        [Route("GetUserPermissionById")]
         [HttpGet]
         public JsonResult GetUserPermissionById(string userId)
         {
@@ -32,6 +36,7 @@ namespace LjWebApplication.Controllers
             return Json(result);
         }
 
+        [Route("SaveUserPermission")]
         [HttpPost]
         public JsonResult SaveUserPermission([FromBody] UserPermissionParam userPermission)
         {

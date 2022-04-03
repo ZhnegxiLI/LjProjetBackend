@@ -7,7 +7,7 @@ using System;
 
 namespace LjWebApplication.Auth
 {
-    [Route("api/[controller]/{action}/{id?}")]
+    [Route("api/[controller]")]
     //[ApiController]
     public class AuthController : Controller
     {
@@ -17,6 +17,7 @@ namespace LjWebApplication.Auth
             _authRepositoryRepository = authRepositoryRepository;
         }
 
+        [Route("Login")]
         [HttpPost]
         public JsonResult Login([FromBody] User user)
         {
@@ -55,6 +56,7 @@ namespace LjWebApplication.Auth
         }
 
         //TODO ONLY FOR TEST
+        [Route("CheckAvailabilityOfToken")]
         [Authorize]
         [HttpGet]
         public JsonResult CheckAvailabilityOfToken(string token)
@@ -68,6 +70,7 @@ namespace LjWebApplication.Auth
             });
         }
 
+        [Route("GetUserList")]
         [HttpGet]
         public JsonResult GetUserList()
         {

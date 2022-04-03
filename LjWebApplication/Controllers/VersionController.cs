@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LjWebApplication.Controllers
 {
-    [Route("api/[controller]/{action}/{id?}")]
+    [Route("api/[controller]")]
     public class VersionController : Controller
     {
         private readonly IVersionRepository _versionRepository;
@@ -14,6 +14,7 @@ namespace LjWebApplication.Controllers
             _versionRepository = versionRepository;
         }
         // GET: api/Cargo
+        [Route("GetVersion")]
         [HttpGet]
         public JsonResult GetVersion()
         {
@@ -21,6 +22,8 @@ namespace LjWebApplication.Controllers
             ApiResult result = new ApiResult() { Success = true, Msg = "OK", Type = "200", Data = data };
             return Json(result);
         }
+
+        [Route("GetCompanyName")]
         [HttpGet]
         public JsonResult GetCompanyName()
         {

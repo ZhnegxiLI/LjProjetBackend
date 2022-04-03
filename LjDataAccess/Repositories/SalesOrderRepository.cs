@@ -1,9 +1,11 @@
 ﻿using LjData.Models;
 using LjDataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace LjDataAccess.Repositories
@@ -12,17 +14,13 @@ namespace LjDataAccess.Repositories
     {
         private readonly ERPDATA2Context context;
         private IUtils utils;
-        /// <summary>
-        /// Get the status label by code id
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
+        private readonly ILogger<SalesOrderRepository> _logger;
 
-
-        public SalesOrderRepository(ERPDATA2Context context)
+        public SalesOrderRepository(ERPDATA2Context context, IUtils utils, ILogger<SalesOrderRepository> logger)
         {
             this.context = context;
-            this.utils = new Utils();
+            this.utils = utils;
+            _logger = logger;
         }
 
 
@@ -255,24 +253,14 @@ namespace LjDataAccess.Repositories
             }
             catch (Exception e)
             {
+                _logger.LogError(JsonSerializer.Serialize(e));
                 return 1;
             }
             return 0;
-            /*productOld.DescPp = product.nameProduct;
-            productOld.TqtyPp = product.numberProduct;
-            productOld.UnitPp = product.unitProduct;   更新模板是使用
-            productOld.PricPp = product.priceProduct; 
-            productOld.SchdPp = product.datePayProduct;*/
         }
 
-        public async Task<List<dynamic>> GetSalesOrderCategoriesByUserIdAsync(string userId, string orderType)// 'I'/'0'
+        public async Task<List<dynamic>> GetSalesOrderCategoriesByUserIdAsync(string userId, string orderType)
         {
-            //var result = context.Pomst.Where(p => p.CreaPo == userId).GroupBy(p => p.StatPo).Select(g=> new
-            //{
-            //    count = g.Count(),
-            //    categoryName = g.
-            //}).  ToList<dynamic>();
-
             var result = from command in context.Pomst
                          where command.CreaPo == userId && command.TypePo == orderType
                          group command by command.StatPo
@@ -315,37 +303,7 @@ namespace LjDataAccess.Repositories
             );
             return await result.FirstOrDefaultAsync();
         }
-        //public int UpdateSalesOrderStatut(string userId,string orderId, string statutCode, string applicationContent, string financialContent,string managerContent)
-        //{
-        //    try
-        //    {
-        //        var Order = context.Pomst.Where(p => p.PonbPo == orderId).FirstOrDefault();
-        //        if (Order != null)
-        //        {
-        //            Order.FqrPo = statutCode == "1" ? userId : Order.FqrPo;
-        //            Order.CwPo = statutCode == "3" ? userId : Order.CwPo;
-        //            Order.JlPo = statutCode == "5" ? userId : Order.JlPo;   
-        //            Order.StatPo = statutCode;
-        //            Order.SpyjPo = DateTime.Now + "  " + statutCode == "1"?applicationContent: (statutCode=="3"? financialContent :(statutCode == "5"? managerContent:"")) ;
-        //            Order.FqryjPo = applicationContent!=null?(DateTime.Now + "  " + applicationContent):null;
-        //            Order.CwyjPo = financialContent != null ?(DateTime.Now + "  " + financialContent):null;
-        //            Order.JlyjPo = managerContent != null ? (DateTime.Now + "  " + managerContent):null;
-        //            context.Pomst.Update(Order);
-        //            context.SaveChanges();
-        //        }
-        //        else
-        //        {
-        //            return 1;
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return 1;
-        //    }
-        //    return 0;
-        //}
-
-
+ 
         public async Task<int> SetSenderApplicationAsync(string userId, string orderId, string statutCode, string applicationContent)
         {
             try
@@ -359,15 +317,6 @@ namespace LjDataAccess.Repositories
                     Order.FqryjPo = DateTime.Now + " " + applicationContent;
                     context.Pomst.Update(Order);
 
-                    //MobilePushMessage pushMessgae = new MobilePushMessage
-                    //{
-                    //    UserGroup = "OrderModule_financialValidation",
-                    //    Title = "订单提交 : " + orderId,
-                    //    Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("1")),
-                    //    IsSend = false
-                    //};
-
-                    //context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
                 }
                 else
@@ -378,6 +327,8 @@ namespace LjDataAccess.Repositories
             }
             catch (Exception e)
             {
+
+                _logger.LogError(JsonSerializer.Serialize(e));
                 return 1;
             }
             return 0;
@@ -396,16 +347,6 @@ namespace LjDataAccess.Repositories
                     Order.CwyjPo = DateTime.Now + " " + applicationContent;
                     context.Pomst.Update(Order);
 
-                    //MobilePushMessage pushMessgae = new MobilePushMessage
-                    //{
-                    //    UserId = userId,
-                    //    UserGroup = "OrderModule_managerValidation",
-                    //    Title = "订单提交 : " + orderId,
-                    //    Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("3")),
-                    //    IsSend = false
-                    //};
-
-                    //context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
                 }
                 else
@@ -415,6 +356,8 @@ namespace LjDataAccess.Repositories
             }
             catch (Exception e)
             {
+
+                _logger.LogError(JsonSerializer.Serialize(e));
                 return 1;
             }
             return 0;
@@ -434,20 +377,12 @@ namespace LjDataAccess.Repositories
                     Order.CmplPo = true;
                     context.Pomst.Update(Order);
 
-                    //MobilePushMessage pushMessgae = new MobilePushMessage
-                    //{
-                    //    UserId = userId,
-                    //    Title = "订单提交 : " + orderId,
-                    //    Body = "订单号: " + orderId + ", 变更为: " + utils.GetOrdersStatus(int.Parse("5")),
-                    //    IsSend = false
-                    //};
-
-                    //context.MobilePushMessage.Add(pushMessgae);
                     await context.SaveChangesAsync();
 
                     var result = context.Database.ExecuteSqlRaw("EXEC Ps_InsertOrUpdate_Poveiw @p0,@p1", orderId, userId);
                     if (result > 0)
                     {
+                        _logger.LogError($"EXEC Ps_InsertOrUpdate_Poveiw {orderId}, {userId} fail!");
                         return 0;
                     }
 
@@ -460,6 +395,8 @@ namespace LjDataAccess.Repositories
             }
             catch (Exception e)
             {
+
+                _logger.LogError(JsonSerializer.Serialize(e));
                 return 1;
             }
         }

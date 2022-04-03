@@ -48,12 +48,6 @@ namespace LjWebApplication
             return config.AddJsonFile($"appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true);
         }
-        // TODO ADD REST CONFIG
-        //.UseKestrel()
-        //    .UseContentRoot(Directory.GetCurrentDirectory())
-        //    .UseSerilog() // Already replace 
-        //    .UseStartup<Startup>();
-
 
     }
 }

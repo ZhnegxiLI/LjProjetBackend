@@ -5,5 +5,7 @@
         string GetOrdersStatus(int code);
 
         string GetCommandTypeLabelById(string commandeTypeId);
+
+        string GetCargoType(string typeId);
     }
 }

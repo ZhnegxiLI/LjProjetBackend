@@ -47,17 +47,15 @@ namespace LjWebApplication.IOC
         {
             // Dependencies injection
             services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICargoRepository, CargoRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<ISalesOrderRepository, SalesOrderRepository>();
             services.AddScoped<IVersionRepository, VersionRepository>();
             services.AddScoped<IUserPermission, UserPermission>();
-            services.AddScoped<ISseRepository, SseRepository>();
             services.AddScoped<ISendMobilePushRepository, SendMobilePushRepository>();
             services.AddScoped<ICommodityStockRepository, CommodityStockRepository>();
-
-            //services.AddScoped<ISqlListenerRepository, SqlListenerRepository>();
+            services.AddScoped<IUtils, Utils>();
+            
         }
 
         public static void CorsIoc(IServiceCollection services, IConfiguration Configuration)

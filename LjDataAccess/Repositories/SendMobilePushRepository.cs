@@ -15,7 +15,6 @@ namespace LjDataAccess.Repositories
     public class SendMobilePushRepository : ISendMobilePushRepository
     {
         private NotificationEvent _notificationEvent;
-        private IUtils utils;
         private readonly ERPDATA2Context context;
         public readonly IConfiguration Configuration;
 
@@ -23,12 +22,12 @@ namespace LjDataAccess.Repositories
         {
             _notificationEvent = notificationEvent;
             this.context = context;
-            this.utils = new Utils();
             Configuration = configuration;
         }
 
         public async Task sendNotificationRequestAsync()
         {
+            // TODO ADD LOG 
 
             JPushClient client = new JPushClient(Configuration["JpushConfig:appKey"], Configuration["JpushConfig:MasterSecret"]);
 
@@ -81,7 +80,7 @@ namespace LjDataAccess.Repositories
             return;
         }
 
-        public PushPayload creatPushMessage(MobilePushMessage message)
+        private PushPayload creatPushMessage(MobilePushMessage message)
         {
 
             List<String> tags = new List<string>();
@@ -111,7 +110,7 @@ namespace LjDataAccess.Repositories
             return pushPayload;
         }
 
-        public string SendEmail(string ToEmail, string Subjet, string Message, string AttachmentPath)
+        private string SendEmail(string ToEmail, string Subjet, string Message, string AttachmentPath)
         {
 
             try

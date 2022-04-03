@@ -18,9 +18,6 @@ namespace LjDataAccess.Interfaces
         Task<dynamic> GetSalesOrderListByOrderIdAsync(string orderId);
 
         Task<int> InsertSalesOrderByOrderIdAsync(OrderParam orderInfo, List<ProductParam> products);
-
-        //int UpdateSalesOrderStatut(string userId, string orderId, string statutCode, string applicationContent, string financialContent, string managerContent);
-
         Task<List<dynamic>> GetSalesOrderCategoriesByUserIdAsync(string userId, string type);
     }
 }

@@ -19,7 +19,7 @@ namespace LjDataAccess
         public virtual DbSet<User> User { get; set; }
 
         public virtual DbSet<Warehouse> Warehouse { get; set; }
-        
+
         public virtual DbSet<Accmbk> Accmbk { get; set; }
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<Acctrn> Acctrn { get; set; }
@@ -140,7 +140,7 @@ namespace LjDataAccess
                 entity.Property(v => v.Id).HasColumnName("LTRN_LTR");
                 entity.Property(v => v.Name).HasColumnName("DESC_LTR");
             });
-            
+
 
             modelBuilder.Entity<Accmbk>(entity =>
             {

@@ -1,5 +1,4 @@
-﻿using LjData.Models;
-using LjDataAccess.Interfaces;
+﻿using LjDataAccess.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,12 +20,6 @@ namespace LjDataAccess.Repositories
                 name = p.TypeLtb + " - " + p.DescLtb
             });
             return limit != -1 ? result.Take(limit).ToList<dynamic>() : result.ToList<dynamic>();
-        }
-
-        public List<Loctb> GetClientsListByType(string type)
-        {
-            List<Loctb> result = context.Loctb.Where(p => p.TypeLtb == type).OrderBy(p => p.TypeLtb).ToList();
-            return result;
         }
 
         private string GetClientType(string typeId)

@@ -21,5 +21,6 @@
     - NUnit 
     - EF CORE InMemory context 
 ## TODO: 
+- Add log for all save services
 - Add transaction for save service 
 - Migrate the api to rest api 

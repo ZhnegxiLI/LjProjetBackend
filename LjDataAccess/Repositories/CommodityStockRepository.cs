@@ -39,7 +39,7 @@ namespace LjDataAccess.Repositories
                              Unit = g.Key.UnitIt,
                              CommodityTypeLabel = db.Itemtype.Where(x => x.CmpnPty == g.Key.TypeIt).Select(x => x.DescPty).FirstOrDefault(),
                              ProductionDetail = (from pd in db.Ivnloc
-                                                 from w in db.Warehouse.Where(x=>x.Id == pd.LocnIvl).DefaultIfEmpty()
+                                                 from w in db.Warehouse.Where(x => x.Id == pd.LocnIvl).DefaultIfEmpty()
                                                  where pd.PartIvl == g.Key.PartIvn
                                                  select new CommodityStockProductDetail()
                                                  {

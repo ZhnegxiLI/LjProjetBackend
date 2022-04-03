@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LjWebApplication.Controllers
 {
-    [Route("api/[controller]/{action}/{id?}")]
+    [Route("api/[controller]")]
     //[ApiController]
     [Authorize]
     public class SalesOrderController : Controller
@@ -19,6 +19,7 @@ namespace LjWebApplication.Controllers
             _saleOrderRepository = salesOrderRepository;
         }
         // GET: SalesOrder
+        [Route("GetSalesOrderByUserId")]
         [HttpGet]
         public async Task<JsonResult> GetSalesOrderByUserId(string userId, int? categoryId, string type, int step, int begin)
         {
@@ -27,6 +28,7 @@ namespace LjWebApplication.Controllers
             return Json(result);
         }
 
+        [Route("GetSalesOrderValidationList")]
         [HttpPost]
         public async Task<JsonResult> GetSalesOrderValidationList(int? categoryId, string type)
         {
@@ -35,6 +37,7 @@ namespace LjWebApplication.Controllers
             return Json(result);
         }
 
+        [Route("GetSalesOrderByOrderId")]
         [HttpGet]
         public async Task<JsonResult> GetSalesOrderByOrderId(string orderId)
         {
@@ -44,6 +47,7 @@ namespace LjWebApplication.Controllers
             return Json(result);
         }
 
+        [Route("InsertSalesOrderByOrderId")]
         [HttpPost]
         public async Task<JsonResult> InsertSalesOrderByOrderId([FromBody] InsertOrderParam criteria)
         {
@@ -60,6 +64,7 @@ namespace LjWebApplication.Controllers
             return Json(ret);
         }
 
+        [Route("GetSalesOrderCategoriesByUserId")]
         [HttpGet]
         public async Task<JsonResult> GetSalesOrderCategoriesByUserId(string userId, string type)
         {
@@ -72,6 +77,8 @@ namespace LjWebApplication.Controllers
             return Json(result);
         }
 
+
+        [Route("GetSalesOrderValidationContent")]
         [HttpGet]
         public async Task<JsonResult> GetSalesOrderValidationContent(string orderId)
         {
@@ -93,7 +100,7 @@ namespace LjWebApplication.Controllers
             public string statutCode { get; set; }
         }
 
-
+        [Route("UpdateSalesOrderStatut")]
         [HttpPost]
         public async Task<JsonResult> UpdateSalesOrderStatut([FromBody] updateCriteria criteria)
         {
@@ -117,6 +124,7 @@ namespace LjWebApplication.Controllers
             return Json(result);
         }
 
+        [Route("AdvancedSalesOrderSearch")]
         [HttpPost]
         public async Task<JsonResult> AdvancedSalesOrderSearch([FromBody] AdvancedSalesOrderSearchParam param)
         {
