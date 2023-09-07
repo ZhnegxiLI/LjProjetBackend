@@ -22,5 +22,9 @@
     - EF CORE InMemory context 
 ## TODO: 
 - Add log for all save services
-- Add transaction for save service 
-- Migrate the api to rest api 
+- Add transaction for save service
+- Migrate the api to rest api
+
+# Deploiement:
+- If you want to deploy it to UAT(Staging), just need to review your deploiment on action
+- If you want to deploy it to Prod, please create a new tag
